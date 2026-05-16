@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.course.mapper.CourseviewMapper">
+
+    <!-- 페이징 처리된 강의 목록을 가져오는 쿼리 -->
+    <select id="getCourseListWithPagination" resultType="com.kosmo.course.dto.CourseviewDTO">
+        SELECT
+        c.course_id,
+        c.title,
+        u.nickname,
+        c.price,
+        c.image,
+        c.summary,
+        COALESCE(AVG(r.course_rating), 0) AS averageCourseRating  <!-- 평균 강의 별점 -->
+        FROM courses c
+        JOIN users u ON c.user_id = u.id
+        LEFT JOIN reviews r ON c.course_id = r.course_id  <!-- reviews 테이블을 LEFT JOIN -->
+        <where>
+            <!-- 검색어가 있을 경우 제목에 검색어 포함된 강의만 선택 -->
+            <if test="searchQuery != ''">
+                AND c.title LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        </where>
+        GROUP BY c.course_id  <!-- 강의별로 그룹화 -->
+        LIMIT #{start}, #{end}  <!-- 페이징 처리 -->
+    </select>
+
+    <!-- 검색어를 반영하여 전체 강의 수를 구하는 쿼리 -->
+    <select id="getTotalCourseCount" resultType="int">
+        SELECT COUNT(*)
+        FROM courses c
+        JOIN users u ON c.user_id = u.id
+        <where>
+            <!-- 검색어가 있을 경우 제목에 검색어 포함된 강의만 선택 -->
+            <if test="searchQuery != ''">
+                AND c.title LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

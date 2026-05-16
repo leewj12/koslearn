@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>게시글 상세 보기</title>
+    <style>
+        html, body {
+     background-color: #d0f4d7;
+     height: 100%;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+ }
+
+ .container {
+     flex: 1; /* 상단 바를 제외하고 나머지 공간 차지 */
+     display: flex;
+     gap: 20px; /* 게시글과 댓글 사이의 간격 */
+     padding: 20px;
+     box-sizing: border-box;
+     overflow: hidden; /* 불필요한 스크롤 방지 */
+ }
+ .title.editable {
+    background-color: transparent; /* 흰색 박스 대신 투명 배경 */
+    border: none; /* 기본 테두리 제거 */
+    font-size: 24px; /* 폰트 크기 증가 */
+    font-weight: bold; /* 글자 두께 증가 */
+    color: #333; /* 텍스트 색상 */
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+ .post-section, .comments-section {
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* 게시글과 댓글이 화면 크기를 초과하면 스크롤 활성화 */
+}
+
+ .meta {
+     display: flex;
+     justify-content: space-between;
+     margin: 10px 0;
+     font-size: 14px;
+     color: #555;
+ }
+
+ #category {
+     width: 20%;
+     padding: 10px;
+     margin: 10px 0;
+     border: 1px solid #ccc;
+     border-radius: 6px;
+     font-size: 14px;
+ }
+textarea {
+    resize: none;
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+ .content textarea {
+     width: 100%;
+     height: 200px;
+     padding: 10px;
+     font-size: 14px;
+     border: 1px solid #ccc;
+     border-radius: 6px;
+     resize: none;
+     margin: 10px 0;
+ }
+
+ .attachment img {
+     display: block;
+     max-width: 100px;
+     margin: 10px 0;
+     border-radius: 6px;
+ }
+
+ .file-input-container {
+     display: flex;
+     flex-direction: column;
+     margin-top: 10px;
+ }
+
+ .file-input-container input[type="file"] {
+     margin-top: 5px;
+ }
+
+ .file-input-container img {
+     max-width: 100px;
+     margin-top: 10px;
+     border-radius: 6px;
+ }
+
+ .btn-container {
+     margin-top: 20px;
+     display: flex;
+     justify-content: flex-end;
+     gap: 10px;
+ }
+
+ .btn-container .btn {
+     padding: 10px 15px;
+     font-size: 14px;
+     border-radius: 6px;
+     font-weight: bold;
+     cursor: pointer;
+ }
+
+ .edit-btn {
+     background-color: #ffc107;
+     border: none;
+     color: #ffffff;
+ }
+
+ .edit-btn:hover {
+     background-color: #e0a800;
+ }
+
+ .save-btn {
+     background-color: #28a745;
+     border: none;
+     color: #ffffff;
+     display:none;
+ }
+
+ .save-btn:hover {
+     background-color: #218838;
+ }
+
+ .delete-btn {
+     background-color: #dc3545;
+     border: none;
+     color: #ffffff;
+     font-size: 12px;
+     padding: 5px 10px;
+     border-radius: 4px;
+ }
+
+ .delete-btn:hover {
+     background-color: #c82333;
+ }
+
+ .download-section {
+     margin-top: 20px;
+ }
+
+ .download-btn {
+     display: inline-block;
+     margin-right: 10px;
+     padding: 10px 15px;
+     font-size: 14px;
+     color: #ffffff;
+     background-color: #007bff;
+     text-decoration: none;
+     border-radius: 6px;
+     text-align: center;
+ }
+
+ .download-btn:hover {
+     background-color: #0056b3;
+ }
+
+ .no-attachment-msg {
+     font-size: 14px;
+     color: #555;
+ }
+
+.post-section {
+    flex: 3; /* 게시글 영역 비율 */
+    background-color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.comments-section {
+    flex: 1; /* 댓글 영역 비율 */
+    background-color: #f8f9fa;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.comments-section form {
+    margin-bottom: 20px;
+}
+
+ .comments-section textarea {
+     width: 100%;
+     height: 100px;
+     padding: 10px;
+     font-size: 14px;
+     border: 1px solid #ccc;
+     border-radius: 6px;
+     resize: none;
+     margin-bottom: 10px;
+ }
+
+ .comment-submit-btn {
+     padding: 10px 15px;
+     font-size: 14px;
+     color: #ffffff;
+     background-color: #28a745;
+     border: none;
+     border-radius: 6px;
+     cursor: pointer;
+     align-self: flex-end; /* 버튼을 오른쪽 정렬 */
+ }
+
+ .comment-submit-btn:hover {
+     background-color: #218838;
+ }
+
+.comments-list {
+    flex: 1;
+    overflow-y: auto; /* 댓글이 많을 경우 스크롤 가능 */
+}
+
+
+ .comment {
+     padding: 10px;
+     border: 1px solid #ddd;
+     border-radius: 6px;
+     margin-bottom: 10px;
+     background-color: #ffffff;
+ }
+
+ .comment-meta {
+     font-size: 12px;
+     color: #555;
+     margin-bottom: 5px;
+ }
+
+ .comment-content {
+     font-size: 14px;
+     margin-bottom: 5px;
+ }
+
+ .comment-actions {
+     text-align: right;
+ }
+
+    </style>
+
+</head>
+<body>
+<!-- Header Fragment 삽입 -->
+<div th:insert="fragments/header :: header"></div>
+<div class="container">
+    <div class="post-section">
+        <form action="/community/edit" method="post" enctype="multipart/form-data">
+            <!-- 게시글 제목 -->
+            <input type="text" name="title" class="title editable" th:value="${post.title}" readonly />
+
+            <!-- 작성자 및 작성일 -->
+            <div class="meta">
+                <div>작성자: <span th:text="${#authentication.principal.username}">작성자 이름</span></div>
+                <div>작성일: <span th:text="${post.createdAtFormatted}">작성일 </span></div>
+            </div>
+
+            <select id="category" name="category" required>
+                <option value="" disabled selected>카테고리를 선택하세요</option>
+                <option value="질문답변">질문답변</option>
+                <option value="고민상담">고민상담</option>
+                <option value="진로상담">진로상담</option>
+                <option value="팀프로젝트">팀프로젝트</option>
+                <option value="채용">채용</option>
+                <option value="블로그">블로그</option>
+            </select>
+
+            <!-- 게시글 내용 -->
+            <div class="content">
+                <textarea name="content" class="editable" readonly th:text="${post.content}">게시글 본문 내용</textarea>
+            </div>
+
+            <input type="hidden" name="postId" th:value="${post.postId}">
+
+            <!-- 첨부파일 -->
+            <div class="attachment">
+            <span th:if="${post.originFileName != null}">
+                <img th:if="${#strings.endsWith(post.originFileName, '.jpg') or #strings.endsWith(post.originFileName, '.png') or #strings.endsWith(post.originFileName, '.gif')}"
+                     th:src="@{'/communityupload/files/'+ ${post.uuidFileName}}" alt="첨부파일" />
+            </span>
+            </div>
+
+            <!-- 이미지 업로드 필드 -->
+            <div  class="file-input-container" style="display:none">
+                <label for="imageUpload">이미지 첨부:</label>
+                <input type="file"  id="imageUpload" name="fileName" accept="image/*" onchange="handleFileSelect(event)">
+            </div>
+
+
+            <div class="btn-container">
+                <button type="button" class="btn edit-btn" onclick="enableEditing()">수정</button>
+                <button type="submit" class="btn save-btn" onclick="saveChanges()">저장</button>
+        </form>
+        <form action="/community/delete" method="post" onsubmit="return confirmDelete(event)">
+            <button type="submit" class="btn delete-btn">삭제</button>
+            <input type="hidden" name="postId" th:value="${post.postId}">
+        </form>
+
+    </div>
+
+    <div class="download-section">
+        <th:block th:if="${post.originFileName != null}">
+            <a th:if="${#strings.endsWith(post.originFileName, '.jpg') or
+                   #strings.endsWith(post.originFileName, '.png') or
+                   #strings.endsWith(post.originFileName, '.gif')}"
+               th:href="@{'/communityupload/files/' + ${post.uuidFileName}}"
+               download
+               class="download-btn">
+                이미지 파일 다운로드
+            </a>
+
+            <a th:if="${!(#strings.endsWith(post.originFileName, '.jpg') or
+                       #strings.endsWith(post.originFileName, '.png') or
+                       #strings.endsWith(post.originFileName, '.gif'))}"
+               th:href="@{'/communityupload/file/' + ${post.uuidFileName}}"
+               download
+               class="download-btn">
+                일반 파일 다운로드
+            </a>
+        </th:block>
+
+        <p th:if="${post.originFileName == null}" class="no-attachment-msg">
+        </p>
+    </div>
+</div>
+
+<!-- 댓글 섹션 -->
+<div class="comments-section">
+    <!-- 댓글 작성 -->
+    <form action="/community/comment" method="post">
+        <textarea name="content" placeholder="댓글을 입력하세요..." required></textarea>
+        <input type="hidden" name="postId" th:value="${post.postId}">
+        <input type="hidden" name="username" th:value="${#authentication.principal.username}">
+        <button type="submit" class="btn comment-submit-btn">댓글 작성</button>
+    </form>
+
+    <!-- 작성된 댓글 목록 -->
+    <div class="comments-list">
+        <div class="comment" th:each="comment : ${comments}">
+            <div class="comment-meta">
+                <span th:text="${comment.username}">작성자</span>
+            </div>
+            <div class="comment-content" th:text="${comment.content}">댓글 내용</div>
+            <!-- 삭제 버튼 추가 -->
+            <form action="/delete" method="post" onsubmit="return deleteReview(event)">
+                <div class="comment-actions" th:if="${comment.username == #authentication.principal.username}">
+                    <input type="hidden" name="postId" th:value="${post.postId}">
+                    <input type="hidden" name="review_id" th:value="${comment.review_id}">
+                    <button class="delete-btn" type="submit">삭제</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script>
+    function enableEditing() {
+        document.querySelectorAll('.editable').forEach((field) => {
+            field.removeAttribute('readonly');
+            field.style.backgroundColor = '#ffffff';
+        });
+
+        document.querySelector('.edit-btn').style.display = 'none';
+        document.querySelector('.save-btn').style.display = 'inline-block';
+        document.querySelector('.file-input-container').style.display = 'inline-block';
+
+
+    }
+
+    function saveChanges() {
+        alert('수정된 내용을 저장합니다.');
+    }
+
+    function confirmDelete(event) {
+        if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+            // "예"를 누르면 폼이 제출됩니다.
+            return true; // 폼 제출
+        } else {
+            // "아니요"를 누르면 폼 제출을 막습니다.
+            event.preventDefault(); // 폼 제출 방지
+            alert('삭제가 취소되었습니다.');
+            return false; // 폼 제출 안함
+        }
+    }
+
+    function handleFileSelect(event) {
+        const fileInput = event.target;
+        const previewImage = fileInput.nextElementSibling;
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+
+</script>
+</html>

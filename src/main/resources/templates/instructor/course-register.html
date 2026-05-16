@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강사 마이페이지 - 강의 등록</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="/templates/instructor/style.css" rel="stylesheet">
+  <style>
+    /* 기본 설정 */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* 사이드바 스타일 */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 250px;
+        background: linear-gradient(180deg, #4e73df, #1e3d8c); /* 블루 그라디언트 */
+        color: #fff;
+        padding-top: 20px;
+        box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    /* 메뉴 항목 스타일 */
+    .sidebar a {
+        padding: 15px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #fff;
+        display: block;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        transition: padding-left 0.3s ease;
+    }
+
+    /* 메뉴 항목 호버 효과 */
+    .sidebar a:hover {
+        background-color: #1e70d2;
+        padding-left: 30px;
+    }
+
+    /* 콘텐츠 영역 스타일 */
+    .content {
+        margin-left: 260px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    /* 콘텐츠 제목 스타일 */
+    .content h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* 강의 등록 폼 스타일 */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        width: 100%;
+    }
+
+    /* 길이 조절: input, textarea의 폭을 적절하게 조정 */
+    .form-control {
+        max-width: 500px;  /* 최대폭을 500px로 설정 */
+        width: 100%;
+    }
+
+    textarea {
+        max-width: 500px;
+        width: 100%;
+    }
+
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 200px;
+        }
+
+        .content {
+            margin-left: 0;
+        }
+
+        .sidebar a {
+            font-size: 16px;
+        }
+    }
+
+    /* 모바일 사이드바 토글 버튼 */
+    @media (max-width: 576px) {
+        .sidebar {
+            position: absolute;
+            left: -250px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar a {
+            font-size: 14px;
+            padding-left: 20px;
+        }
+
+        .sidebar-toggle {
+            display: block;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 30px;
+        }
+    }
+
+    /* 입력 필드 간격과 버튼 스타일 개선 */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* 추가된 강의 URL과 파일 업로드 폼 스타일 */
+    .form-group input[type="file"] {
+        padding: 5px;
+    }
+
+    /* 버튼 스타일 */
+    .btn-custom {
+        background-color: #4e73df;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-custom:hover {
+        background-color: #365eab;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- 모바일용 사이드바 토글 버튼 -->
+<div class="sidebar-toggle d-block d-md-none">
+  <i class="bi bi-list"></i>
+</div>
+
+<!-- 네비게이션바 (사이드바) -->
+<div class="sidebar">
+  <a href="/home"><i class="bi bi-house-door"></i> 홈으로 돌아가기</a>
+  <a href="/instructor/myinstructor"><i class="bi bi-house-door"></i> 강사 홈페이지</a>
+  <a href="/instructor/profile-register"><i class="bi bi-person-plus"></i> 강사 프로필 등록</a>
+  <a href="/instructor/profile-update"><i class="bi bi-person-circle"></i> 강사 정보 수정</a>
+  <a href="/instructor/course-register"><i class="bi bi-file-earmark-plus"></i> 강의 등록</a>
+  <a href="#"><i class="bi bi-pencil-square"></i> 테스트</a>
+  <a href="#"><i class="bi bi-upload"></i> 문제 올리기</a>
+  <a href="#"><i class="bi bi-chat-dots"></i> Q&A 관리</a>
+  <a href="/course-detail"><i class="bi bi-info-circle"></i> 강의 상세보기</a>
+</div>
+
+
+<!-- 강의 등록 콘텐츠 (중앙) -->
+<div class="content">
+  <h2>코스런 강의 등록</h2>
+  <p>새로운 강의를 등록할 수 있습니다.</p>
+
+  <!-- 강의 등록 폼 -->
+  <form action="/instructor/course-register" method="post" enctype="multipart/form-data">
+    <!-- Hidden Fields for instructorId and userId -->
+    <input type="hidden" id="instructor-id" name="instructorId" value="">
+    <input type="hidden" id="user-id" name="userId" th:value="${#authentication.principal.id}">
+
+    <div class="form-group">
+      <label for="course-title">강의 제목</label>
+      <input type="text" class="form-control" id="course-title" name="title" placeholder="강의 제목을 입력하세요" required>
+    </div>
+    <div class="form-group">
+      <label for="course-description">강의 설명</label>
+      <textarea class="form-control" id="course-description" name="description" rows="4" placeholder="강의에 대한 설명을 입력하세요" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="course-summary">강의 간단 설명</label>
+      <textarea class="form-control" id="course-summary" name="summary" rows="3" placeholder="강의의 간단한 설명을 입력하세요" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="course-price">강의 가격</label>
+      <input type="number" class="form-control" id="course-price" name="price" placeholder="강의 가격을 입력하세요" required>
+    </div>
+
+    <div class="form-group">
+      <label for="course-url">강의 URL</label>
+      <input type="url" class="form-control" id="course-url" name="url" placeholder="강의 URL을 입력하세요" required>
+    </div>
+
+    <!-- 추가된 썸네일 URL 입력 필드 -->
+    <div class="form-group">
+      <label for="thumbnail-url">썸네일 URL</label>
+      <input type="url" class="form-control" id="thumbnail-url" name="thumbnailUrl" placeholder="썸네일 URL을 입력하세요" required>
+    </div>
+
+    <div class="form-group">
+      <label for="course-materials">강의 자료실 (파일 업로드)</label>
+      <input type="file" class="form-control" id="course-materials" name="courseMaterials" multiple>
+    </div>
+    <div class="form-group">
+      <label for="course-category">강의 카테고리</label>
+      <select class="form-control" id="course-category" name="category" required>
+        <option value="">카테고리 선택</option>
+        <option value="programming">프로그래밍</option>
+        <option value="design">디자인</option>
+        <option value="marketing">마케팅</option>
+        <option value="data-science">데이터 사이언스</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="course-image">강의 이미지</label>
+      <input type="file" class="form-control" id="course-image" name="courseImage">
+    </div>
+    <div class="form-group">
+      <label for="course-level">난이도</label>
+      <select class="form-control" id="course-level" name="level" required>
+        <option value="초급">초급</option>
+        <option value="중급">중급</option>
+        <option value="고급">고급</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-custom">강의 등록</button>
+  </form>
+</div>
+
+<!-- 부트스트랩 JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+      // 사이드바 토글 버튼 (모바일용)
+      $(".sidebar-toggle").click(function() {
+          $(".sidebar").toggleClass("show");
+      });
+  });
+
+  // 강사 ID를 가져와서 강의 등록 폼에 전달하기
+  document.addEventListener("DOMContentLoaded", async () => {
+    const userId = document.getElementById("user-id").value;
+
+    try {
+      const response = await fetch(`/instructor/getInstructorId?userId=${encodeURIComponent(userId)}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      // 강사 ID를 숨겨진 필드에 세팅
+      document.getElementById("instructor-id").value = data.instructor_Id;
+
+    } catch (error) {
+      alert('먼저 강사프로필 등록을 해주셔야합니다!');
+    }
+  });
+</script>
+
+</body>
+</html>

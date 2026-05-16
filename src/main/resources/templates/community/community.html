@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>커뮤니티</title>
+  <link rel="stylesheet" th:href="@{/css/header/header.css}">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- 이미지 아이콘 부트스트랩 -->
+  <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.hearder1 {
+    background-color: #007bff;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 4px solid #0056b3;
+}
+
+.header1 h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.header1 input#search {
+    width: 60%;
+    max-width: 400px;
+    padding: 12px;
+    border: none;
+    border-radius: 20px;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+.search-form {
+    margin-top: 10px; /* 제목과 검색창 사이 간격 */
+    display: flex;
+    justify-content: center; /* 검색창 가운데 정렬 */
+    gap: 10px; /* 입력 필드와 버튼 간격 */
+    width: 100%; /* 검색창 전체 너비로 확장 */
+    max-width: 500px; /* 검색창 최대 너비 설정 */
+}
+
+.search-form input {
+    flex: 1; /* 입력 필드가 가능한 공간 차지 */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-form .btn {
+    padding: 8px 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.search-form .btn:hover {
+    background-color: #0056b3;
+}
+
+.header1 button.btn {
+    background-color: #ffc107;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #333;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.header1 button.btn:hover {
+    background-color: #e0a800;
+}
+
+/* 네비게이션 스타일 */
+.navigation ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 30px; /* 리스트 간격 */
+
+}
+
+.navigation ul li a {
+  color: black;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold; /* 글씨 두껍게 */
+  padding: 5px 15px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  letter-spacing: 1px; /* 글자 간격 */
+  display: flex;
+  align-items: center;
+  gap: 8px; /* 아이콘과 글씨 간격 */
+  border-radius: 5px;
+}
+
+.navigation ul li a i {
+  color: black; /* 아이콘 색상 */
+}
+
+/* Hover 효과 */
+.navigation ul li a:hover {
+  color: #FF5733; /* Hover 시 텍스트 색상 */
+  background-color: #f0f0f0; /* Hover 시 배경색 */
+  border-radius: 5px;
+}
+
+
+
+.post-section h2 {
+    font-size: 1.8rem;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.board-header {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.board-header h2 {
+    font-size: 1.8rem;
+    color: #444;
+    margin-bottom: 0;
+}
+
+.write-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.write-btn:hover {
+    background-color: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #007bff;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.pagination a {
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #ddd;
+    color: #333;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+/* Pagination specific styles */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.page-btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    background-color: #f1f1f1;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.page-btn:hover {
+    background-color: #ddd;
+}
+
+.page-numbers {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.page-number-btn {
+    padding: 8px 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #007BFF;
+    text-decoration: none;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page-number-btn:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+.page-number-btn.active {
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    border-color: #007BFF;
+}
+
+.page-number-btn:disabled {
+    color: #aaa;
+    border-color: #ccc;
+    background-color: #f9f9f9;
+    pointer-events: none;
+}
+
+.page-number-btn span {
+    display: inline-block;
+    line-height: 1.4;
+}
+
+.page-btn.disabled, .page-number-btn.disabled {
+    pointer-events: none;
+    background-color: #e9ecef;
+    color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .pagination-container {
+        flex-direction: column;
+    }
+
+    .page-numbers {
+        display: flex;
+        gap: 5px;
+    }
+}
+
+.custom-select {
+    font-size: 1rem;
+    padding: 10px 12px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.custom-select:focus {
+    border-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 91, 187, 0.5);
+    outline: none;
+}
+
+.custom-select option {
+    font-size: 1rem;
+}
+
+.file-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.title {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+
+    .search-write-container {
+    display: flex;
+    justify-content: space-between; /* 양쪽으로 정렬 */
+    align-items: center; /* 세로 정렬 */
+    gap: 10px; /* 검색칸과 버튼 간격 */
+}
+
+.search-write-container .search-form {
+    flex: 1; /* 검색 폼이 버튼을 제외한 나머지 공간 차지 */
+    display: flex;
+    gap: 10px; /* 입력 필드와 버튼 간격 */
+}
+
+.search-write-container .write-btn {
+    margin: 0; /* 버튼의 외부 여백 초기화 */
+}
+
+  </style>
+</head>
+<body>
+<!-- Header Fragment 삽입 -->
+<div th:insert="fragments/header :: header"></div>
+
+
+
+
+<!-- 게시판 -->
+<div class="container">
+  <div class="board-header">
+    <h2 class="board-title">커뮤니티 게시판</h2>
+    <div class="search-write-container">
+      <form th:action="@{/community/list}" method="get" class="search-form">
+        <select id="filterType" name="filterType" class="form-select custom-select">
+          <option value="all">전체</option>
+          <option value="title">제목</option>
+          <option value="category">카테고리</option>
+          <option value="username">작성자</option>
+        </select>
+        <input type="text" name="query" id="search" placeholder="검색...">
+        <button type="submit" class="btn">검색</button>
+      </form>
+      <button class="btn write-btn" onclick="window.location.href='/community/post';">글쓰기</button>
+    </div>
+  </div>
+  <nav class="navigation">
+    <ul class="nav-list"><li>
+      <a href="#" onclick="filtercategory('질문답변')">
+        <i class="bi bi-question-circle"></i> 질문답변
+      </a>
+    </li>
+      <li>
+        <a href="#" onclick="filtercategory('고민상담')">
+          <i class="bi bi-chat-dots"></i> 고민상담
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="filtercategory('진로상담')">
+          <i class="bi bi-compass"></i> 진로상담
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="filtercategory('팀프로젝트')">
+          <i class="bi bi-people"></i> 팀프로젝트
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="filtercategory('채용')">
+          <i class="bi bi-briefcase"></i> 채용
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="filtercategory('블로그')">
+          <i class="bi bi-journal"></i> 블로그
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <table class="community-table">
+    <thead>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>카테고리</th>
+      <th>등록일</th>
+      <th>작성자</th>
+      <th>조회수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${posts}">
+      <td th:text="${post.postId}"></td>
+      <td>
+        <a th:href="@{/community/communityview/{postId}(postId=${post.postId})}" style="color:black; text-decoration: none;">
+          <span th:text="${post.title}" class="title"></span>
+        </a>
+        <span th:if="${post.createdAtFormattedNew != null and post.createdAtFormattedNew == #dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+        <span class="new" style="color:red">New</span>
+      </span>
+        <img th:if="${post.originFileName != null}" th:src="@{/communityupload/files/img.png}" class="file-icon">
+      </td>
+      <td th:text="${post.category}"></td>
+      <td th:text="${post.createdAtFormatted}"></td>
+      <td th:text="${post.username}"></td>
+      <td th:text="${post.read_view}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- 페이지네이션 -->
+  <div class="pagination-container">
+    <a th:href="@{/community/list(currentPage=1, filterType=${filterType}, query=${query}, category=${selectedCategory})}"
+       class="page-btn" th:classappend="${paging.currentPage == 1} ? 'disabled'">맨 앞</a>
+    <a th:href="@{/community/list(currentPage=${paging.startPage - 1}, filterType=${filterType}, query=${query}, category=${selectedCategory})}"
+       class="page-btn" th:classappend="${paging.startPage == 1} ? 'disabled'">이전</a>
+    <div class="page-numbers">
+                <span th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+                    <a th:href="@{/community/list(currentPage=${i}, filterType=${filterType}, query=${query}, category=${selectedCategory})}"
+                       class="page-number-btn" th:classappend="${paging.currentPage == i} ? 'active'">
+                        <span th:text="${i}"></span>
+                    </a>
+                </span>
+    </div>
+    <a th:href="@{/community/list(currentPage=${paging.endPage + 1}, filterType=${filterType}, query=${query}, category=${selectedCategory})}"
+       class="page-btn" th:classappend="${paging.endPage == paging.totalPages} ? 'disabled'">다음</a>
+    <a th:href="@{/community/list(currentPage=${paging.totalPages}, filterType=${filterType}, query=${query}, category=${selectedCategory})}"
+       class="page-btn" th:classappend="${paging.currentPage == paging.totalPages} ? 'disabled'">맨 뒤</a>
+  </div>
+</div>
+
+
+</body>
+
+<script>
+  async function filtercategory(category, page = 1) {
+    selectedCategory = category;  // 카테고리 선택 저장
+
+    const filterType = document.querySelector("#filterType").value; // 필터 타입
+    const query = document.querySelector("#search").value; // 검색어
+
+    try {
+        // 카테고리와 페이지 번호, 필터타입과 검색어를 URL 파라미터로 보내서 서버에서 게시물 데이터를 가져옴
+        const response = await fetch(`/community/filter?category=${category}&page=${page}&filterType=${filterType}&query=${query}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const posts = data.posts;
+            const totalPages = data.totalPages;
+
+            // 게시물 목록 업데이트
+            const tableBody = document.querySelector('table tbody');
+            tableBody.innerHTML = '';  // 기존 게시물 목록을 지움
+
+            posts.forEach(post => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${post.postId}</td>
+                    <td><a href="/community/communityview/${post.postId}" style="color:black; text-decoration: none;">${post.title}</a></td>
+                    <td>${post.category}</td>
+                    <td>${post.createdAtFormattedNew}</td>
+                    <td>${post.username}</td>
+                    <td>${post.read_view}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // 페이지네이션 업데이트
+            updatePagination(page, totalPages);
+        }
+    } catch (error) {
+        console.error("게시물을 불러오는 중 오류가 발생했습니다:", error);
+    }
+}
+  function updatePagination(currentPage, totalPages) {
+    const paginationContainer = document.querySelector('.pagination-container');
+    paginationContainer.innerHTML = '';  // 기존 페이지네이션 초기화
+
+    // 페이지 버튼 추가 로직 (맨 앞, 이전, 페이지 번호, 다음, 맨 뒤)
+    const createPageButton = (pageNumber, label, isActive = false, isDisabled = false) => {
+        const button = document.createElement('a');
+        button.href = '#';
+        button.innerText = label;
+        button.classList.add('page-btn');
+
+        if (isActive) {
+            button.classList.add('active');  // 활성화된 페이지에는 active 클래스 추가
+        }
+
+        if (isDisabled) {
+            button.classList.add('disabled');  // 비활성화된 페이지에는 disabled 클래스 추가
+        }
+
+        button.onclick = (event) => {
+            event.preventDefault();
+            if (!isDisabled) {
+                filtercategory(selectedCategory, pageNumber);  // 비활성화되지 않은 버튼에만 클릭 이벤트 적용
+            }
+        };
+        return button;
+    };
+
+    // 맨 앞, 이전, 페이지 번호, 다음, 맨 뒤 버튼
+    paginationContainer.appendChild(createPageButton(1, '맨 앞', false, currentPage === 1));
+    paginationContainer.appendChild(createPageButton(currentPage - 1, '이전', false, currentPage === 1));
+
+    for (let i = 1; i <= totalPages; i++) {
+        paginationContainer.appendChild(createPageButton(i, i, i === currentPage));
+    }
+
+    paginationContainer.appendChild(createPageButton(currentPage + 1, '다음', false, currentPage === totalPages));
+    paginationContainer.appendChild(createPageButton(totalPages, '맨 뒤', false, currentPage === totalPages));
+}
+</script>
+</html>

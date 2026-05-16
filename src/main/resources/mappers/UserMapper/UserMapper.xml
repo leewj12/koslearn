@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.user.mapper.UserMapper">
+
+    <!-- 회원 정보 삽입 -->
+    <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (username, password, name, nickname, phone_number, email, gender, role, terms_agreement, marketing_agreement)
+        VALUES (#{username}, #{password}, #{name}, #{nickname}, #{phone_number}, #{email}, #{gender}, 'ADMIN', #{termsAgreement}, #{marketingAgreement})
+    </insert>
+
+    <select id="findUserByUsername" parameterType="String" resultType="user">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <select id="checkUsername" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM users WHERE username = #{username}
+    </select>
+
+    <select id="findUserByUserid" parameterType="long" resultType="user">
+        SELECT * FROM users WHERE id=#{id}
+    </select>
+
+    <update id="updateUser" parameterType="user">
+        UPDATE users
+        SET name=#{name}, nickname=#{nickname}, email=#{email}, phone_number=#{phone_number}
+        WHERE id=#{id}
+    </update>
+
+    <insert id="saveUserImage" parameterType="com.kosmo.user.dto.UsersImageDTO">
+        INSERT INTO users_image (user_id, origin_filename, hashing_filename, filesize)
+        VALUES (#{userId}, #{origin_filename}, #{hashing_filename}, #{filesize})
+    </insert>
+
+    <update id="updateUserImage" parameterType="com.kosmo.user.dto.UsersImageDTO">
+        UPDATE users_image
+        SET origin_filename=#{origin_filename}, hashing_filename=#{hashing_filename}, filesize=#{filesize}
+        WHERE user_id=#{userId}
+    </update>
+
+    <select id="findUserImageById" parameterType="long" resultType="com.kosmo.user.dto.UsersImageDTO">
+        SELECT * FROM users_image WHERE user_id=#{userId}
+    </select>
+
+    <select id="countByUsername" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM users WHERE username = #{username}
+    </select>
+
+    <select id="findUsernameByDetails" resultType="string">
+        SELECT username
+        FROM users
+        WHERE name = #{name} AND email = #{email} AND phone_number = #{phone_number}
+    </select>
+
+
+
+</mapper>

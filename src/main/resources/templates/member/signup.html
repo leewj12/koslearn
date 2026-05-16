@@ -1,0 +1,621 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코스런 회원가입</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            padding-top: 50px;
+            font-family: 'Arial', sans-serif;
+        }
+        .form-container {
+            max-width: 550px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: left; /* Left align the text in the form */
+            margin-bottom: 30px; /* Add margin at the bottom of the card */
+        }
+        .form-container h3 {
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            border-radius: 5px;
+            padding: 12px;
+            font-size: 14px;
+            width: 100%;
+            border: 1px solid #ced4da;
+            box-sizing: border-box;
+        }
+        .input-group .form-control {
+            border-radius: 5px;
+        }
+        .btn-primary {
+            width: 100%;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 5px;
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .login-link {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .signup-msg {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .divider {
+            margin: 20px 0;
+        }
+        .divider span {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .divider hr {
+            border: 0;
+            border-top: 1px solid #ccc;
+            width: 50%;
+            margin: auto;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .checkbox-group {
+            font-size: 14px;
+            color: #6c757d;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .form-check {
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .input-group button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input-group button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h3>코스런 회원가입</h3>
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Message after the form -->
+    <div class="signup-msg">
+        <span>코스런을 이용하려면 회원가입이 필요합니다.</span>
+    </div>
+
+    <form id="signupForm" action="/signup" method="POST" onsubmit="return validateForm()">
+        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+
+        <!-- 아이디 (Username) -->
+        <div class="form-group mb-3">
+            <label for="username">아이디</label> <span class="validation-icon" style="margin-left: 10px;"></span> <!-- 체크/X 표시를 위한 공간 -->
+            <div class="input-group">
+                <input type="text" class="form-control" id="username" name="username" placeholder="아이디를 입력하세요" required>
+                <button type="button" class="btn btn-success" id="checkUsernameBtn">중복 확인</button>
+            </div>
+            <small id="usernameFeedback" class="form-text"></small>
+            <small id="usernameError" class="form-text text-danger"></small>
+        </div>
+
+        <!-- 비밀번호 (Password) -->
+        <div class="form-group mb-3">
+            <label for="password">비밀번호</label> <span class="validation-icon" style="margin-left: 10px;"></span> <!-- 체크/X 표시를 위한 공간 -->
+            <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            <small id="passwordError" class="form-text text-danger"></small>
+        </div>
+
+        <!-- 비밀번호 확인 (Confirm Password) -->
+        <div class="form-group mb-3">
+            <label for="confirmPassword">비밀번호 확인</label> <span class="validation-icon" style="margin-left: 10px;"></span> <!-- 체크/X 표시를 위한 공간 -->
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 입력하세요" required>
+            <small id="confirmPasswordError" class="form-text text-danger"></small>
+        </div>
+
+        <!-- 이름 (Full Name) -->
+        <div class="form-group mb-3">
+            <label for="name">이름</label> <span class="validation-icon" style="margin-left: 10px;"></span> <!-- 체크/X 표시를 위한 공간 -->
+            <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" required>
+            <small id="nameError" class="form-text text-danger"></small>
+        </div>
+
+        <!-- 닉네임 (Nickname) -->
+        <div class="form-group mb-3">
+            <label for="nickname">닉네임</label> <span class="validation-icon" style="margin-left: 10px;"></span> <!-- 체크/X 표시를 위한 공간 -->
+            <input type="text" class="form-control" id="nickname" name="nickname" placeholder="닉네임을 입력하세요" required>
+            <small id="nicknameError" class="form-text text-danger"></small>
+        </div>
+
+        <!-- 연락처 (Phone Number) -->
+        <div class="form-group mb-3">
+            <label for="phoneNumber">연락처</label> <span class="validation-icon" style="margin-left: 10px;"></span> <!-- 체크/X 표시를 위한 공간 -->
+            <input type="tel" class="form-control" id="phoneNumber" name="phone_number" placeholder="연락처를 입력하세요" required>
+            <small id="phoneError" class="form-text text-danger"></small>
+        </div>
+
+        <!-- 이메일 (Email) -->
+        <div class="form-group mb-3">
+            <label for="email">이메일</label> <span class="validation-icon" style="margin-left: 10px;"></span> <!-- 체크/X 표시를 위한 공간 -->
+            <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요" required>
+            <small id="emailError" class="form-text text-danger"></small>
+        </div>
+
+        <!-- 성별 (Gender) -->
+        <div class="form-group mb-3">
+            <label for="gender">성별</label>
+            <select class="form-control" id="gender" name="gender">
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+            </select>
+        </div>
+
+        <!-- Information Agreement Checkbox -->
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="termsAgreement" required>
+            <label class="form-check-label checkbox-group" for="termsAgreement">정보 동의서에 동의합니다.</label>
+        </div>
+
+        <!-- Marketing Agreement Checkbox -->
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="marketingAgreement" required>
+            <label class="form-check-label checkbox-group" for="marketingAgreement">마케팅 동의서에 동의합니다.</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="signupBtn" class="btn btn-primary">회원가입</button>
+
+        <!-- Login Link -->
+        <div class="login-link">
+            <span>이미 계정이 있나요? </span>
+            <a href="/login">로그인</a>
+        </div>
+    </form>
+
+    <div class="footer">
+        <span>회원가입 후, 다양한 기능을 이용하실 수 있습니다.</span>
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js for functionality -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script>
+    //자동 완성 기능 삭제
+    document.querySelectorAll('input').forEach(input => {
+        input.setAttribute('autocomplete', 'off');
+    });
+
+    let isUsernameChecked = false;  // 중복 확인이 완료되었는지 체크
+    let isUsernameTaken = false;    // 아이디가 이미 사용 중인지를 체크
+
+    // 체크 표시와 X 표시 추가 (실시간으로 유효성 검사 후)
+    function showValidationIcon(inputElement, isValid) {
+        const parent = inputElement.closest('.form-group');  // 해당 input의 부모 .form-group 찾기
+        const icon = parent.querySelector('.validation-icon'); // .validation-icon 클래스를 가진 요소 찾기
+
+        if (isValid) {
+            icon.textContent = '✔'; // 체크 표시
+            icon.style.color = 'green';  // 체크는 녹색
+        } else {
+            icon.textContent = '❌'; // X 표시
+            icon.style.color = 'red';  // X는 빨간색
+        }
+    }
+
+    // 아이디 입력 실시간 검사를 위한 이벤트 처리
+    document.getElementById('username').addEventListener('input', function () {
+        const username = this.value.trim();  // 입력값 가져오기
+        const usernameFeedback = document.getElementById('usernameFeedback'); // 중복 확인 피드백을 위한 DOM 요소
+        const usernameError = document.getElementById('usernameError'); // 아이디 오류 메시지를 표시할 요소
+        const usernameInput = document.getElementById('username'); // 아이디 입력 요소
+
+        // 입력값이 비어있으면, 아무 것도 표시하지 않음
+        if (!username) {
+            usernameFeedback.innerText = ''; // 피드백 초기화
+            usernameFeedback.classList.remove("text-success", "text-danger"); // 피드백 스타일 초기화
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            return;
+        }
+
+        // 아이디에 공백이 포함되어 있으면 경고 메시지 표시
+        if (/\s+/.test(username)) {
+            usernameFeedback.innerText = '아이디는 공백 없이 입력해야 합니다.';
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디에 특수문자가 포함되어 있으면 경고 메시지 표시
+        if (/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ\uac00-\ud7af]/.test(username)) {  // 영문자와 숫자 외의 문자 포함 검사
+            usernameFeedback.innerText = '아이디는 특수문자를 포함할 수 없습니다.';
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디가 한글을 포함하고 있으면 오류 메시지 출력
+        if (/[\uac00-\ud7af]/.test(username)) { // 한글이 포함된 경우
+            usernameFeedback.innerText = "아이디는 한글을 포함할 수 없습니다.";
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디가 자음만으로 이루어져 있는지 확인
+        if (/^[ㄱ-ㅎ]+$/.test(username)) {
+            usernameFeedback.innerText = "아이디는 자음만 사용할 수 없습니다.";
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디가 모음만으로 이루어져 있는지 확인
+        if (/^[ㅏ-ㅣ]+$/.test(username)) {
+            usernameFeedback.innerText = "아이디는 모음만 사용할 수 없습니다.";
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 영문자와 숫자가 혼합된 아이디는 유효하지만 아직 중복 버튼 누르지 않았기에 제외
+        const mixedRegex = /^[a-zA-Z0-9]+$/; // 영문자와 숫자만 허용
+        if (mixedRegex.test(username)) {
+            usernameFeedback.innerText = "";
+            usernameFeedback.classList.remove("text-danger");
+            usernameFeedback.classList.remove("text-success");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+        } else {
+            usernameFeedback.innerText = '';  // 유효하지 않으면 피드백 비우기
+            usernameError.innerText = '';  // 아이디 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+        }
+    });
+
+    // 아이디 중복 확인 버튼 클릭 이벤트 처리
+    document.getElementById('checkUsernameBtn').addEventListener('click', function () {
+        const username = document.getElementById('username').value.trim();
+        const usernameFeedback = document.getElementById('usernameFeedback'); // 중복 확인 피드백을 위한 DOM 요소
+        const usernameError = document.getElementById('usernameError'); // 아이디 오류 메시지를 표시할 요소
+        const usernameInput = document.getElementById('username'); // 아이디 입력 요소
+
+        // 아이디가 비어있으면 경고 메시지 표시
+        if (!username) {
+            usernameFeedback.innerText = "아이디를 입력하세요.";
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디에 공백이 포함되어 있으면 경고 메시지 표시
+        if (/\s+/.test(username)) {
+            usernameFeedback.innerText = '아이디는 공백 없이 입력해야 합니다.';
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디에 특수문자가 포함되어 있으면 경고 메시지 표시
+        if (/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ\uac00-\ud7af]/.test(username)) {  // 영문자와 숫자 외의 문자 포함 검사
+            usernameFeedback.innerText = '아이디는 특수문자를 포함할 수 없습니다.';
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디가 한글을 포함하고 있으면 오류 메시지 출력
+        if (/[\uac00-\ud7af]/.test(username)) { // 한글이 포함된 경우
+            usernameFeedback.innerText = "아이디는 한글을 포함할 수 없습니다.";
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디가 자음만으로 이루어져 있는지 확인
+        if (/^[ㄱ-ㅎ]+$/.test(username)) {
+            usernameFeedback.innerText = "아이디는 자음만 사용할 수 없습니다.";
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 아이디가 모음만으로 이루어져 있는지 확인
+        if (/^[ㅏ-ㅣ]+$/.test(username)) {
+            usernameFeedback.innerText = "아이디는 모음만 사용할 수 없습니다.";
+            usernameFeedback.classList.remove("text-success");
+            usernameFeedback.classList.add("text-danger");
+            usernameError.innerText = ''; // 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+            return;
+        }
+
+        // 영문자와 숫자가 혼합된 아이디는 유효하므로 처리
+        const mixedRegex = /^[a-zA-Z0-9]+$/; // 영문자와 숫자만 허용
+        if (mixedRegex.test(username)) {
+            // 서버에 중복 확인 요청 (fetch 사용)
+            fetch("/check-username?username=" + encodeURIComponent(username))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        // 중복된 아이디
+                        usernameFeedback.innerText = "이미 사용 중인 아이디입니다.";
+                        usernameFeedback.classList.remove("text-success");
+                        usernameFeedback.classList.add("text-danger");
+                        showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+                    } else {
+                        // 사용 가능한 아이디
+                        usernameFeedback.innerText = "사용 가능한 아이디입니다.";
+                        usernameFeedback.classList.remove("text-danger");
+                        usernameFeedback.classList.add("text-success");
+                        showValidationIcon(usernameInput, true);  // 아이콘을 ✔로 표시
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    usernameFeedback.innerText = "중복 확인 중 문제가 발생했습니다. 다시 시도해주세요.";
+                    usernameFeedback.classList.remove("text-success");
+                    usernameFeedback.classList.add("text-danger");
+                    showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+                });
+        } else {
+            usernameFeedback.innerText = '';  // 유효하지 않으면 피드백 비우기
+            usernameError.innerText = '';  // 아이디 오류 메시지 초기화
+            showValidationIcon(usernameInput, false);  // 아이콘을 X로 표시
+        }
+    });
+
+    // 비밀번호 입력란에 실시간 유효성 검사 추가
+    document.getElementById('password').addEventListener('input', function () {
+        const password = this.value; // 입력한 비밀번호 가져오기
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,16}$/; // 비밀번호 유효성 검사 정규식 (영문, 숫자, 특수문자 포함 8-16자)
+        const passwordError = document.getElementById('passwordError');
+        const passwordInput = document.getElementById('password'); // 비밀번호 입력 요소
+
+        // 비밀번호가 유효하지 않으면 경고 메시지 표시
+        if (password && !password.match(passwordRegex)) {
+            passwordError.innerText = '비밀번호는 8-16자리로 영문, 숫자, 특수문자가 포함되어야 합니다.';
+            passwordError.classList.add("text-danger");
+            showValidationIcon(passwordInput, false);  // 아이콘을 X로 표시
+        } else {
+            passwordError.innerText = ''; // 유효한 비밀번호일 경우 경고 메시지 제거
+            showValidationIcon(passwordInput, true);  // 아이콘을 ✔로 표시
+        }
+    });
+
+    // 비밀번호 확인 입력란에 실시간 유효성 검사 추가
+    document.getElementById('confirmPassword').addEventListener('input', function () {
+        const confirmPassword = this.value; // 입력한 비밀번호 확인 값 가져오기
+        const password = document.getElementById('password').value; // 비밀번호 값 가져오기
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        const confirmPasswordInput = document.getElementById('confirmPassword'); // 비밀번호 확인 입력 요소
+
+        // 비밀번호와 확인 비밀번호가 일치하지 않으면 경고 메시지 표시
+        if (confirmPassword && confirmPassword !== password) {
+            confirmPasswordError.innerText = '비밀번호가 일치하지 않습니다.';
+            confirmPasswordError.classList.add("text-danger");
+            showValidationIcon(confirmPasswordInput, false);  // 아이콘을 X로 표시
+        } else {
+            confirmPasswordError.innerText = ''; // 일치하면 경고 메시지 제거
+            showValidationIcon(confirmPasswordInput, true);  // 아이콘을 ✔로 표시
+        }
+    });
+
+    // 이름 입력란에 실시간 유효성 검사 추가
+    document.getElementById('name').addEventListener('input', function () {
+        const name = this.value.trim(); // 입력한 이름 가져오기
+        const nameRegex = /^[a-zA-Z가-힣]{2,20}$/; // 이름 유효성 검사 정규식 (영문 또는 한글, 2-20자)
+        const nameError = document.getElementById('nameError');
+        const nameInput = document.getElementById('name'); // 이름 입력 요소
+
+        // 이름이 유효하지 않으면 경고 메시지 표시
+        if (name && !name.match(nameRegex)) {
+            nameError.innerText = '이름은 2-20자 사이의 한글 또는 영문만 가능합니다.';
+            nameError.classList.add("text-danger");
+            showValidationIcon(nameInput, false);  // 아이콘을 X로 표시
+        } else {
+            nameError.innerText = ''; // 유효한 이름일 경우 경고 메시지 제거
+            showValidationIcon(nameInput, true);  // 아이콘을 ✔로 표시
+        }
+    });
+
+    // 닉네임 입력란에 실시간 유효성 검사 추가
+    document.getElementById('nickname').addEventListener('input', function () {
+        const nickname = this.value.trim(); // 입력한 닉네임 가져오기
+        const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,10}$/; // 닉네임 유효성 검사 정규식 (영문, 숫자, 한글 포함, 2-10자)
+        const nicknameError = document.getElementById('nicknameError');
+        const nicknameInput = document.getElementById('nickname'); // 닉네임 입력 요소
+
+        // 닉네임이 유효하지 않으면 경고 메시지 표시
+        if (nickname && !nickname.match(nicknameRegex)) {
+            nicknameError.innerText = '닉네임은 2-10자 사이의 영문, 숫자, 한글만 가능합니다.';
+            nicknameError.classList.add("text-danger");
+            showValidationIcon(nicknameInput, false);  // 아이콘을 X로 표시
+        } else {
+            nicknameError.innerText = ''; // 유효한 닉네임일 경우 경고 메시지 제거
+            showValidationIcon(nicknameInput, true);  // 아이콘을 ✔로 표시
+        }
+    });
+
+    // 이메일 입력란에 실시간 유효성 검사 추가
+    document.getElementById('email').addEventListener('input', function () {
+        const email = this.value.trim(); // 입력한 이메일 가져오기
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; // 이메일 유효성 검사 정규식
+        const emailError = document.getElementById('emailError');
+        const emailInput = document.getElementById('email'); // 이메일 입력 요소
+
+        // 이메일이 유효하지 않으면 경고 메시지 표시
+        if (email && !email.match(emailRegex)) {
+            emailError.innerText = '유효한 이메일을 입력해주세요.';
+            emailError.classList.add("text-danger");
+            showValidationIcon(emailInput, false);  // 아이콘을 X로 표시
+        } else {
+            emailError.innerText = ''; // 유효한 이메일일 경우 경고 메시지 제거
+            showValidationIcon(emailInput, true);  // 아이콘을 ✔로 표시
+        }
+    });
+
+    // 전화번호 입력란에 실시간 유효성 검사 추가
+    document.getElementById('phoneNumber').addEventListener('input', function () {
+        const phoneNumber = this.value.trim(); // 입력한 전화번호 가져오기
+        const phoneRegex = /^\d{10,11}$/; // 전화번호 유효성 검사 정규식 (숫자 10자리 또는 11자리)
+        const phoneError = document.getElementById('phoneError');
+        const phoneInput = document.getElementById('phoneNumber'); // 전화번호 입력 요소
+
+        // 전화번호가 유효하지 않으면 경고 메시지 표시
+        if (phoneNumber && !phoneNumber.match(phoneRegex)) {
+            phoneError.innerText = '전화번호는 10-11자리 숫자여야 합니다.';
+            phoneError.classList.add("text-danger");
+            showValidationIcon(phoneInput, false);  // 아이콘을 X로 표시
+        } else {
+            phoneError.innerText = ''; // 유효한 전화번호일 경우 경고 메시지 제거
+            showValidationIcon(phoneInput, true);  // 아이콘을 ✔로 표시
+        }
+    });
+
+    function validateForm(event) {
+        event.preventDefault(); // 폼 제출 시 페이지 새로고침을 방지
+
+        let isValid = true; // 유효성 검사 결과 (기본값: 유효)
+
+        // 아이디 검증
+        const username = document.getElementById('username').value.trim();
+        const usernameFeedback = document.getElementById('usernameFeedback'); // 중복 확인 피드백을 위한 DOM 요소
+        const usernameError = document.getElementById('usernameError'); // 아이디 오류 메시지를 표시할 요소
+
+        // 아이디가 비어있으면 또는 중복 확인을 하지 않은 경우
+        if (!username) {
+            usernameError.innerText = '아이디를 입력해주세요.';
+            isValid = false;
+        } else if (!isUsernameChecked) {
+            usernameError.innerText = '중복 확인 버튼을 눌러주세요.'; // 중복 확인을 하지 않았을 경우 메시지 표시
+            isValid = false;
+        } else if (/\s/.test(username)) { // 공백이 포함되어 있을 경우
+            usernameError.innerText = '아이디에 공백이 포함될 수 없습니다.';
+            isValid = false;
+        } else if (/[\uac00-\ud7af]/.test(username)) { // 한글이 포함되어 있을 경우 (유니코드 한글 범위)
+            usernameError.innerText = '아이디는 한글을 포함할 수 없습니다.';
+            isValid = false;
+        } else if (/^[ㄱ-ㅎ]+$/.test(username)) { // 자음만 입력된 경우
+            usernameError.innerText = '아이디는 자음만 사용할 수 없습니다.';
+            isValid = false;
+        } else if (/^[ㅏ-ㅣ]+$/.test(username)) { // 모음만 입력된 경우
+            usernameError.innerText = '아이디는 모음만 사용할 수 없습니다.';
+            isValid = false;
+        } else if (isUsernameTaken) {
+            usernameError.innerText = '이미 사용된 아이디입니다. 다시 입력해주세요.'; // 이미 사용된 아이디 처리
+            isValid = false;
+        } else {
+            usernameError.innerText = ''; // 아이디가 유효하면 에러 메시지 제거
+        }
+
+        // 이름 검증
+        const name = document.getElementById('name').value.trim();
+        const nameRegex = /^[a-zA-Z가-힣]{2,20}$/;
+        if (!name.match(nameRegex)) {
+            document.getElementById('nameError').innerText = '이름은 2-20자 사이의 한글 또는 영문만 가능합니다.';
+            isValid = false;
+        } else {
+            document.getElementById('nameError').innerText = ''; // 이름이 유효하면 에러 메시지 제거
+        }
+
+        // 닉네임 검증
+        const nickname = document.getElementById('nickname').value.trim();
+        const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,10}$/;
+        if (!nickname.match(nicknameRegex)) {
+            document.getElementById('nicknameError').innerText = '닉네임은 2-10자 사이의 영문, 숫자, 한글만 가능합니다.';
+            isValid = false;
+        } else {
+            document.getElementById('nicknameError').innerText = ''; // 닉네임이 유효하면 에러 메시지 제거
+        }
+
+        // 이메일 검증
+        const email = document.getElementById('email').value.trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!email.match(emailRegex)) {
+            document.getElementById('emailError').innerText = '유효한 이메일을 입력해주세요.';
+            isValid = false;
+        } else {
+            document.getElementById('emailError').innerText = ''; // 이메일이 유효하면 에러 메시지 제거
+        }
+
+        // 전화번호 검증
+        const phoneNumber = document.getElementById('phoneNumber').value.trim();
+        const phoneRegex = /^\d{10,11}$/;
+        if (!phoneNumber.match(phoneRegex)) {
+            document.getElementById('phoneError').innerText = '전화번호는 10-11자리 숫자여야 합니다.';
+            isValid = false;
+        } else {
+            document.getElementById('phoneError').innerText = ''; // 전화번호가 유효하면 에러 메시지 제거
+        }
+
+        // 유효하지 않으면 false 반환
+        return isValid;
+    }
+</script>
+</body>
+</html>

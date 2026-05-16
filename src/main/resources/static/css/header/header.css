@@ -1,0 +1,131 @@
+/* 상단바 */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 114px; /* 높이 고정 */
+    padding: 0 30px; /* 좌우 패딩만 설정 */
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+header .logo {
+    cursor: pointer;
+}
+
+header .logo h1 {
+    font-size: 33px;
+    line-height: 70px; /* 높이에 맞춰 가운데 정렬 */
+    margin: 0; /* 여백 제거 */
+    font-weight: bold; /* 굵기 설정 */
+}
+
+header .logo a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header .logo a:hover {
+    color: #f39c12;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    height: 100%; /* 상단바 높이에 맞춤 */
+}
+
+header nav ul li {
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 10px;
+    line-height: 70px; /* 상단바 높이에 맞춰 가운데 정렬 */
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #f39c12;
+}
+
+/* 햄버거 메뉴 */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+}
+
+@media (max-width: 768px) {
+    header {
+        height: 60px; /* 모바일 높이 고정 */
+        padding: 0 20px; /* 모바일에서 좌우 패딩 줄임 */
+    }
+
+    header nav {
+        display: none;
+        width: 100%;
+        position: absolute;
+        top: 60px; /* 모바일 상단바 높이에 맞춤 */
+        left: 0;
+        background-color: #333;
+        padding: 10px 0;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header nav ul li {
+        margin-left: 0;
+        margin-bottom: 15px;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    header nav.active {
+        display: block;
+    }
+}
+
+/* 아이콘과 텍스트 간격 설정 */
+nav ul li a i {
+  margin-right: 8px;  /* 아이콘과 텍스트 사이 간격 */
+  font-size: 1.2em;  /* 아이콘 크기 조정 */
+}
+
+/* 아이콘 크기 */
+nav ul li a i {
+  font-size: 1.3em;
+  color: white;
+}
+
+nav ul li a:hover i {
+  color: #f39c12;  /* 마우스 오버 시 아이콘 색상 */
+}
+

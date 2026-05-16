@@ -1,0 +1,411 @@
+/* 기본 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff; /* 전체 배경색 */
+}
+
+/* 상단바 */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+header .logo {
+    cursor: pointer;
+}
+
+header .logo h1 {
+    font-size: 33px;
+}
+
+header .logo a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header .logo a:hover {
+    color: #f39c12;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+header nav ul li {
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #f39c12;
+}
+
+/* 햄버거 메뉴 */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+}
+
+@media (max-width: 768px) {
+    header nav {
+        display: none;
+        width: 100%;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background-color: #333;
+        padding: 10px 0;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header nav ul li {
+        margin-left: 0;
+        margin-bottom: 15px;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    header nav.active {
+        display: block;
+    }
+}
+
+/* 이미지 슬라이더 */
+.slider {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    margin-top: 30px; /* 배너 이미지 위쪽 여백을 추가하여 내리기 */
+}
+
+.slider img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    transition: opacity 1s ease;
+}
+
+.slider img.hidden {
+    opacity: 0;
+}
+
+.slider-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: scale(0.95); /* 살짝 축소 효과 */
+    transition: opacity 1s ease, transform 1s ease;
+    z-index: 0; /* 다른 이미지 아래로 배치 */
+}
+
+.slider-img.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    z-index: 0;
+}
+
+.slider-img.visible {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 1; /* 보이는 이미지 위로 배치 */
+}
+
+/* 메인 배너 */
+.main-banner {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #fff;
+    color: #333;
+}
+
+.main-banner h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.main-banner button {
+    padding: 12px 25px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.main-banner button:hover {
+    background-color: #e67e22;
+}
+
+/* 검색 바 */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.search-bar input {
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 500px;
+    background-color: transparent;
+}
+
+.search-bar button {
+    padding: 12px 25px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.search-bar button:hover {
+    background-color: #e67e22;
+}
+
+/* 카테고리 섹션 */
+.categories {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.category-list {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 120px;
+}
+
+.category-card:hover {
+    transform: scale(1.1);
+}
+
+.category-card img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.category-card h3 {
+    font-size: 15px;
+    color: #333;
+    margin: 0;
+}
+
+/* 추천 강의 및 특별 강의 섹션 */
+.courses, .special-courses {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #fff;
+    margin-bottom: 40px;
+}
+
+.course-list, .special-course-list {
+    display: flex;
+    justify-content: space-between; /* 간격 균등 배치 */
+    align-items: stretch;
+    gap: 15px; /* 강의 카드 간 간격 */
+    width: 100%; /* 전체 화면 폭 */
+    max-width: 1500px; /* 최대 폭 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+/* 강의 카드 스타일 수정 */
+.course-card, .special-course-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 19%;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column; /* 세로 방향 배치 */
+    justify-content: space-between; /* 버튼을 아래로 고정 */
+    height: 300px; /* 카드의 높이 고정 */
+}
+
+.course-card:hover, .special-course-card:hover {
+    transform: scale(1.05);
+}
+
+.course-card img, .special-course-card img {
+    width: 100%; /* 카드 폭에 맞춤 */
+    height: 150px; /* 고정된 높이 설정 */
+    object-fit: cover; /* 비율 유지하며 크기에 맞게 자르기 */
+    border-radius: 5px; /* 모서리 둥글게 유지 */
+    aspect-ratio: 16 / 9; /* 비율 고정 (선택 사항) */
+}
+
+.course-card h3, .special-course-card h3 {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.course-card p, .special-course-card p {
+    min-height: 50px; /* 최소 높이 설정 */
+    line-height: 1.5; /* 줄 간격 설정 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 최대 2줄 표시 */
+    -webkit-box-orient: vertical;
+}
+
+.course-card button, .special-course-card button {
+    padding: 10px 20px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    margin-top: auto; /* 버튼을 항상 아래쪽으로 고정 */
+}
+
+.course-card button:hover, .special-course-card button:hover {
+    background-color: #e67e22;
+}
+
+/* 서비스 섹션 */
+.service-container {
+    max-width: 100%; /* 최대 폭을 화면 전체로 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+    margin-bottom: 20px;
+    padding: 10px; /* 최소 패딩으로 조정 */
+    text-align: center;
+}
+
+.service-cards {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-evenly; /* 카드 간격 균등 분배 */
+    gap: 15px; /* 카드 간 간격 최소화 */
+    flex-wrap: nowrap; /* 줄바꿈 방지 */
+    overflow-x: auto; /* 화면에 맞지 않으면 가로 스크롤 */
+}
+
+.service-card {
+    flex: 0 0 30%; /* 각 카드가 화면의 30%를 차지 */
+    max-width: 30%; /* 최대 크기 제한 */
+    min-width: 280px; /* 최소 크기 설정 */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+    display: flex; /* Flexbox 레이아웃 적용 */
+    flex-direction: column; /* 세로 방향 배치 */
+    justify-content: space-between; /* 요소 간 여백 분배 */
+    height: 300px; /* 카드 높이 고정 */
+    box-sizing: border-box;
+}
+
+.service-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+    flex-grow: 1; /* 본문 내용이 가변적으로 공간을 채움 */
+}
+
+.service-card a {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #f39c12;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: auto; /* 버튼을 항상 하단에 고정 */
+}
+
+.service-card a:hover {
+    background-color: #e67e22;
+}
+
+.service-title{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+  .hidden {
+        display: none;
+    }

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>권한 없음</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        color: #333;
+        text-align: center;
+        padding-top: 50px;
+        overflow: hidden;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 0 auto;
+        opacity: 0; /* 처음에는 숨김 처리 */
+        transform: translateY(30px); /* 위에서 아래로 내려오는 효과 */
+        animation: fadeInUp 1s ease-out forwards; /* 애니메이션 추가 */
+    }
+
+    h1 {
+        color: #e74c3c;
+        opacity: 0; /* 처음에는 숨김 */
+        animation: fadeIn 1s ease-out 0.5s forwards; /* 0.5초 후에 서서히 나타남 */
+    }
+
+    p {
+        font-size: 16px;
+        color: #555;
+        opacity: 0; /* 처음에는 숨김 */
+        animation: fadeIn 1s ease-out 1s forwards; /* 1초 후에 서서히 나타남 */
+    }
+
+    a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+        opacity: 0;
+        animation: fadeIn 1s ease-out 1.5s forwards; /* 1.5초 후에 서서히 나타남 */
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* FadeIn 애니메이션: 서서히 나타나는 효과 */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* FadeInUp 애니메이션: 아래에서 위로 올라오는 효과 */
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>권한이 없습니다!</h1>
+  <p>이 페이지에 접근할 권한이 없습니다. <br>
+    관리자에게 문의하거나, 다른 페이지로 이동하세요.</p>
+  <p><a href="/" th:href="@{/}">홈으로 가기</a></p>
+</div>
+</body>
+</html>

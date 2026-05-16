@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kosmo.notice.mapper.NoticeMapper">
+
+    <!-- 공지사항 저장 -->
+    <insert id="saveNotice" parameterType="com.kosmo.notice.dto.NoticeDTO">
+        INSERT INTO notice
+        (user_id, title, content, original_thumbnail_image, hashed_thumbnail_image,
+        original_banner_image, hashed_banner_image, created_at, updated_at)
+        VALUES
+        (#{userId}, #{title}, #{content},
+        #{originalThumbnailImage}, #{hashedThumbnailImage},
+        #{originalBannerImage}, #{hashedBannerImage}, NOW(), NOW());
+    </insert>
+
+    <!-- 페이징된 공지사항 목록을 가져오는 쿼리 -->
+    <select id="getNoticeListWithPagination" resultType="com.kosmo.notice.dto.NoticeDTO">
+        SELECT
+        n.notice_id AS noticeid,
+        n.user_id AS userId,
+        u.username,
+        n.title,  <!-- title 컬럼이 존재하는지 확인 -->
+        n.content,
+        n.original_thumbnail_image AS originalThumbnailImage,
+        n.hashed_thumbnail_image AS hashedThumbnailImage,
+        n.original_banner_image AS originalBannerImage,
+        n.hashed_banner_image AS hashedBannerImage,
+        n.created_at AS createdAt,
+        n.updated_at,
+        n.view_count AS views_count
+        FROM notice n
+        JOIN users u ON n.user_id = u.id
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <!-- 검색 옵션에 따라 조건을 다르게 설정 -->
+                    <when test="searchOption == 'title'">
+                        AND n.title LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchOption == 'content'">
+                        AND n.content LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchOption == 'all'">
+                        AND (n.title LIKE CONCAT('%', #{searchKeyword}, '%')
+                        OR n.content LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <otherwise>
+                        AND n.title LIKE CONCAT('%', #{searchKeyword}, '%') <!-- 기본값: title 검색 -->
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY n.created_at DESC
+        LIMIT #{start}, #{end}
+    </select>
+
+    <!-- 전체 공지사항 수를 가져오는 쿼리 -->
+    <select id="getTotalNoticeCount" resultType="int">
+        SELECT COUNT(*)
+        FROM notice n
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <!-- 검색 옵션에 따라 조건을 다르게 설정 -->
+                    <when test="searchOption == 'title'">
+                        AND n.title LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchOption == 'content'">
+                        AND n.content LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchOption == 'all'">
+                        AND (n.title LIKE CONCAT('%', #{searchKeyword}, '%')
+                        OR n.content LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <otherwise>
+                        AND n.title LIKE CONCAT('%', #{searchKeyword}, '%') <!-- 기본값: title 검색 -->
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+
+    <select id="noticeview" resultType="com.kosmo.notice.dto.NoticeDTO" parameterType="Long">
+        SELECT
+        n.notice_id AS noticeid,
+        n.title,
+        n.content,
+        n.view_count AS views_count, -- DTO랑 같아야하는데 틀렸음..
+        n.original_banner_image AS originalBannerImage, -- 배너 이미지 원본 파일명
+        n.hashed_banner_image AS hashedBannerImage, -- 해싱된 배너 이미지 파일명
+        n.created_at AS createdAt,
+        u.username -- 유저명
+        FROM
+        notice n
+        JOIN
+        Users u ON n.user_id = u.id
+        WHERE
+        n.notice_id = #{id}
+    </select>
+
+
+
+    <!-- 공지사항 증가  -->
+    <update id="increaseViews" parameterType="long">
+        UPDATE notice
+        SET view_count = view_count + 1
+        WHERE notice_id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.admin.mapper.AdminCourselistMapper">
+
+    <!-- 모든 강의 리스트 조회 -->
+    <select id="Courselist" resultType="com.kosmo.admin.dto.AdminCourselistDTO">
+        SELECT
+        course_id AS courseId,
+        user_id AS userId,
+        title,
+        description,
+        summary,
+        url,
+        thumbnail_url AS thumbnailUrl,
+        category,
+        level,
+        image,
+        materials,
+        original_materials AS originalMaterials,
+        price,
+        created_at AS createdAt
+        FROM courses
+    </select>
+
+    <!-- Delete Course by ID -->
+    <delete id="deleteCourse" parameterType="long">
+        DELETE FROM courses
+        WHERE course_id = #{courseId}
+
+    </delete>
+
+    <select id="Coursedetail" resultType="com.kosmo.admin.dto.AdminCourselistDTO">
+        SELECT
+        course_id AS courseId,
+        user_id AS userId,
+        title,
+        description,
+        summary,
+        url,
+        thumbnail_url AS thumbnailUrl,
+        category,
+        level,
+        image,
+        materials,
+        original_materials AS originalMaterials,
+        price,
+        created_at AS createdAt
+        FROM courses
+        WHERE course_id = #{courseId}
+    </select>
+
+
+
+
+</mapper>

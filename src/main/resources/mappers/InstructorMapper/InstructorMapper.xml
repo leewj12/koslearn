@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.instructor.mapper.InstructorMapper">
+
+    <!-- 강사 프로필 등록 -->
+    <insert id="insertInstructor" parameterType="com.kosmo.instructor.dto.InstructorDTO">
+        INSERT INTO instructors (biography, introduction, greeting, user_id, origin_filename,hashing_filename,filesize)
+        VALUES (#{biography}, #{introduction}, #{greeting}, #{userId}, #{origin_filename},#{hashing_filename},#{filesize})
+    </insert>
+
+    <select id="getUserInfo" parameterType="long" resultType="com.kosmo.instructor.dto.GetUserDTO">
+        SELECT DISTINCT
+        u.username,
+        u.nickname,
+        u.name,
+        u.phone_number,
+        u.email,
+        u.gender,
+        u.created_at AS createdAt  <!-- 쉼표 추가 -->
+        FROM users u
+        LEFT JOIN instructors i ON u.id = i.user_id
+        WHERE u.id = #{userId}
+    </select>
+
+    <!-- 강사 전체 정보 가져오기 -->
+    <select id="getUserInfoAll" parameterType="long" resultType="com.kosmo.instructor.dto.InstructorAllDTO">
+        SELECT
+        u.username,
+        u.name,
+        u.nickname,
+        u.phone_number,
+        u.email,
+        u.gender,
+        u.created_at AS createdAt,
+        i.biography,
+        i.introduction,
+        i.greeting,
+        i.origin_filename,
+        i.hashing_filename,
+        i.filesize
+        FROM
+        users u
+        JOIN
+        instructors i
+        ON
+        u.id = i.user_id
+        WHERE
+        u.id = #{userId}
+    </select>
+
+    <!-- InstructorMapper.xml -->
+
+    <!-- 기존에 있던 쿼리들... -->
+
+    <!-- 유저 ID로 강사 ID 조회 -->
+    <select id="getInstructorId" parameterType="long" resultType="com.kosmo.instructor.dto.InstructorIdDTO">
+        SELECT inst.instructor_id
+        FROM Instructors AS inst
+        JOIN users AS u ON inst.user_id = u.id
+        WHERE u.id = #{userId}
+    </select>
+
+    <select id="getInstructorByUserId" parameterType="long" resultType="com.kosmo.instructor.dto.InstructorDTO">
+        SELECT * FROM instructors WHERE user_id = #{userId}
+    </select>
+
+    <update id="updateInstructor" parameterType="com.kosmo.instructor.dto.InstructorDTO">
+        UPDATE instructors
+        SET biography = #{biography},
+        introduction = #{introduction},
+        greeting = #{greeting},
+        origin_filename = #{origin_filename},
+        hashing_filename=#{hashing_filename},
+        filesize=#{filesize}
+        WHERE user_id = #{userId}
+    </update>
+
+
+    <insert id="CourseDatasave" parameterType="com.kosmo.instructor.dto.CourseDataDTO">
+        <!-- 강의 정보 삽입 -->
+        INSERT INTO courses (
+        instructor_id, user_id, title, description, summary, url, thumbnail_url, category, level, image,
+        original_image_name, image_size, materials, original_materials, price
+        ) VALUES (
+        #{instructorId},
+        #{userId},
+        #{title},
+        #{description},
+        #{summary},
+        #{url},
+        #{thumbnailUrl},  <!-- 썸네일 URL 삽입 -->
+        #{category},
+        #{level},
+        #{image},  <!-- UUID 파일명 -->
+        #{originalImageName},  <!-- 원본 이미지 파일명 -->
+        #{imageSize},  <!-- 이미지 파일 크기 -->
+        #{materialsString},  <!-- 하나의 문자열로 삽입 (UUID 파일명들) -->
+        #{originalMaterialsString},  <!-- 원본 첨부파일 이름들 (쉼표로 구분된 원본 파일명들) -->
+        #{price}
+        );
+    </insert>
+
+
+    <!-- 유저 ID로 강의 개수를 조회하는 쿼리 -->
+    <select id="getCourseCountByUserId" resultType="int">
+        SELECT COUNT(c.course_id) AS course_count
+        FROM courses c
+        WHERE c.user_id = #{userId}
+    </select>
+
+    <!-- 유저 ID로 강사 평점 평균을 조회하는 쿼리 -->
+    <select id="getInstructorRatingByUserId" resultType="Double">
+        SELECT COALESCE(AVG(r.instructor_rating), 0.0) AS avg_instructor_rating
+        FROM reviews r
+        JOIN courses c ON r.course_id = c.course_id
+        WHERE c.user_id = #{userId}
+    </select>
+
+
+
+    <select id="courselist" parameterType="Long" resultType="com.kosmo.instructor.dto.CourseDataDTO">
+        SELECT
+        c.course_id AS courseId,                     <!-- 강의 ID -->
+        c.title AS title,                           <!-- 강의 제목 -->
+        c.description AS description,               <!-- 강의 설명 -->
+        c.summary AS summary,                       <!-- 강의 간단 설명 -->
+        c.url AS url,                               <!-- 강의 URL -->
+        c.thumbnail_url AS thumbnailUrl,            <!-- 썸네일 URL -->
+        c.category AS category,                     <!-- 강의 카테고리 -->
+        c.image AS image,                           <!-- 이미지 파일명 (UUID) -->
+        c.original_image_name AS originalImageName,  <!-- 원본 이미지 파일명 -->
+        c.image_size AS imageSize,                  <!-- 이미지 크기 -->
+        c.level AS level,                           <!-- 강의 난이도 -->
+        c.created_at AS createdAt,                  <!-- 등록일 -->
+        c.instructor_id AS instructorId,            <!-- 강사 ID -->
+        c.user_id AS userId,                        <!-- 사용자 ID -->
+        c.materials AS materials,                   <!-- 첨부파일 (UUID 파일명들) -->
+        c.original_materials AS originalMaterials,   <!-- 첨부파일 원본 이름들 -->
+        c.price AS price                            <!-- 강의 가격 -->
+        FROM courses c
+        WHERE c.user_id = #{userId}
+    </select>
+
+
+
+
+
+
+
+
+</mapper>

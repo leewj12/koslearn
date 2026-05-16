@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.cart.mapper.CartViewMapper">
+
+    <select id="getCartItemsByUserId" resultType="com.kosmo.cart.dto.CartItemDTO">
+        SELECT c.cart_id, c.user_id, c.course_id,
+        co.title, co.description, co.image, co.summary, co.price,
+        u.nickname AS instructor_nickname  <!-- 강사 닉네임 추가 -->
+        FROM cart c
+        JOIN courses co ON c.course_id = co.course_id  <!-- 장바구니에 담긴 강의 정보 -->
+        JOIN instructors i ON co.instructor_id = i.instructor_id  <!-- 강사 정보 -->
+        JOIN users u ON i.user_id = u.id  <!-- 강사 정보의 사용자의 닉네임을 가져옴 -->
+        WHERE c.user_id = #{userId}  <!-- 구매자(user_id)로 장바구니 항목을 조회 -->
+    </select>
+</mapper>

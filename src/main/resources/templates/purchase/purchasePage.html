@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- 이미지 아이콘 부트스트랩 -->
+<style>
+    /* 기본 레이아웃 */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+    }
+
+    /* 컨테이너 */
+    .container {
+        max-width: 1400px; /* 너비를 넓히기 위해 1200px -> 1400px로 변경 */
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        font-size: 32px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    h4 {
+        font-size: 24px;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    .mb-4 {
+        margin-bottom: 30px;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 30px;
+        border-collapse: collapse;
+        background-color: #fff;
+    }
+
+    .table th, .table td {
+        padding: 15px;
+        text-align: center;
+        border: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+    .table th {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table td img {
+        max-width: 100px;
+        height: auto;
+    }
+
+    /* 체크박스 및 버튼 디자인 */
+    input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+    }
+
+    .btn {
+        font-size: 16px;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    /* 결제 금액 표시 */
+    #totalPrice {
+        font-size: 20px;
+        font-weight: bold;
+        color: #d9534f;
+    }
+
+    /* 결제 모달 디자인 */
+    .modal-dialog {
+        max-width: 90%; /* 모달 너비를 90%로 확장 */
+        width: 1200px; /* 최대 1200px 너비 설정 */
+    }
+
+    .modal-content {
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    #paymentIframe {
+        width: 100%;
+        height: 500px;
+        border: none;
+    }
+
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 28px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        .table th, .table td {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        #totalPrice {
+            font-size: 18px;
+        }
+    }
+
+
+
+</style>
+
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container mt-5">
+    <h2>코스런 장바구니</h2>
+
+
+    <!-- 구매자 정보 -->
+    <div class="mb-4">
+        <h4>구매자 정보</h4>
+        <p><strong>이름:</strong> <span id="userName">로딩 중...</span></p>
+        <p><strong>이메일:</strong> <span id="userEmail">로딩 중...</span></p>
+        <p><strong>연락처:</strong> <span id="userPhoneNumber">로딩 중...</span></p>
+    </div>
+
+    <!-- 강의 목록 테이블 -->
+    <h4>장바구니에 담긴 강의들</h4>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th><input type="checkbox" id="selectAll"> 전체 선택/해제</th>
+            <th>강의 이미지</th>
+            <th>강의 제목</th>
+            <th>강의 요약</th>
+            <th>강의 강사</th>
+            <th>강의 가격</th>
+            <th>취소</th>
+        </tr>
+        </thead>
+        <tbody id="courseList">
+        <!-- AJAX로 강의 목록을 동적으로 추가할 부분 -->
+        </tbody>
+    </table>
+
+    <!-- 총 가격 표시 -->
+    <div class="mb-4">
+        <h4>총 결제 금액: <span id="totalPrice">0</span> 원</h4>
+    </div>
+
+    <!-- 결제 버튼 -->
+    <button class="btn btn-primary" id="paymentButton">결제하기</button>
+</div>
+
+<!-- 결제 모달 (이너프레임을 포함한) -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">결제 창</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- iframe으로 결제 페이지 로딩 -->
+                <iframe id="paymentIframe" src="" width="100%" height="500px" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 사용자 ID를 숨긴 입력 필드로 저장 -->
+<input type="hidden" id="user-id" th:value="${#authentication.principal.id}">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // 페이지가 로드되면 사용자 정보와 장바구니 항목을 서버에서 가져오기
+    window.onload = async function() {
+        const userId = document.getElementById("user-id").value; // 사용자 ID 가져오기
+
+        try {
+            // 1. 사용자 정보 가져오기
+            const userInfoResponse = await fetch(`/getUserInfo/${userId}`);
+
+            if (userInfoResponse.ok) {
+                const userInfo = await userInfoResponse.json();
+                document.getElementById("userName").innerText = userInfo.name;
+                document.getElementById("userEmail").innerText = userInfo.email;
+                document.getElementById("userPhoneNumber").innerText = userInfo.phone_number;
+            } else {
+                throw new Error("사용자 정보를 불러오는 데 실패했습니다.");
+            }
+
+            // 2. 장바구니 항목 가져오기
+            const cartItemsResponse = await fetch(`/cart/items/${userId}`);
+
+            if (cartItemsResponse.ok) {
+                const cartItems = await cartItemsResponse.json();
+                const courseList = document.getElementById("courseList");
+
+                cartItems.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><input type="checkbox" class="itemCheckbox" data-id="${item.course_id}" data-price="${item.price}" data-title="${item.title}"></td>
+                        <td><img src="/courseimages/${item.image}" alt="강의 이미지" style="width: 100px; height: auto;"></td>
+                        <td>${item.title}</td>
+                        <td>${item.summary}</td>
+
+                        <td>${item.instructor_Nickname}</td>
+                        <td>${item.price.toLocaleString()}</td> <!-- 가격에 천 단위 쉼표 추가 --
+
+                        <td>
+                            <!-- 강의 ID를 hidden input으로 추가 -->
+                            <input type="hidden" class="courseId" value="${item.course_id}">
+                            <button class="btn btn-danger btn-sm deleteButton">삭제</button>
+                        </td> <!-- 삭제 버튼 -->
+                    `;
+                    courseList.appendChild(row);
+                });
+
+                // 장바구니 항목 가격 계산
+                updateTotalPrice();
+            } else {
+                throw new Error("장바구니 항목을 불러오는 데 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("오류 발생:", error);
+            alert(error.message);
+        }
+    };
+
+    // 총 가격 계산 함수
+    function updateTotalPrice() {
+        let totalPrice = 0;
+        const selectedItems = document.querySelectorAll('.itemCheckbox:checked');
+
+        selectedItems.forEach(checkbox => {
+            totalPrice += parseInt(checkbox.dataset.price);
+        });
+
+        // 총 가격을 천 단위로 쉼표 추가
+        document.getElementById("totalPrice").innerText = totalPrice.toLocaleString();
+    }
+
+    // 체크박스 클릭 시 총 가격 업데이트
+    document.getElementById("courseList").addEventListener("change", function(event) {
+        if (event.target.classList.contains("itemCheckbox")) {
+            updateTotalPrice();
+        }
+    });
+
+    // 전체 선택/해제
+    document.getElementById("selectAll").addEventListener("change", function(event) {
+        const checkboxes = document.querySelectorAll('.itemCheckbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = event.target.checked;
+        });
+        updateTotalPrice(); // 전체 선택 후 가격 업데이트
+    });
+
+    // 개별 항목 삭제
+    document.getElementById("courseList").addEventListener("click", async function(event) {
+        if (event.target.classList.contains("deleteButton")) {
+            const row = event.target.closest('tr');  // 클릭한 버튼의 부모 행(tr)을 찾음
+
+            // courseId를 가져오는 부분
+            const courseId = row.querySelector('.courseId').value;  // course_id를 hidden input에서 가져옴
+            const userId = document.getElementById("user-id").value; // 사용자 ID 가져오기
+
+            // 삭제 확인 메시지
+            const confirmDelete = confirm("정말로 강의 수강신청을 취소하겠습니까??");
+            if (!confirmDelete) return;  // 사용자가 취소하면 함수 종료
+
+            try {
+                // URL에 강의 ID와 사용자 ID를 포함시켜 DELETE 요청을 보냄
+                const response = await fetch(`/cart/remove/${courseId}/${userId}`, {
+                    method: 'DELETE',  // DELETE 메서드를 사용하여 삭제 요청
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    // 서버에서 삭제 성공 시, 클라이언트에서 해당 항목 삭제
+                    row.remove();
+                    updateTotalPrice(); // 삭제 후 가격 업데이트
+                } else {
+                    alert("항목 삭제에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error('삭제 요청 중 오류 발생:', error);
+                alert("항목 삭제에 실패했습니다.");
+            }
+        }
+    });
+
+    // 결제 버튼 클릭 시 결제 처리 (iframe을 사용하여 이너 페이지로 로드)
+document.getElementById("paymentButton").addEventListener("click", function() {
+    const userId = document.getElementById("user-id").value; // 사용자 ID 가져오기
+
+    // 체크된 항목들을 가져오기
+    const selectedItems = [];
+    const checkboxes = document.querySelectorAll('.itemCheckbox:checked');
+    checkboxes.forEach(checkbox => {
+        selectedItems.push({
+            id: checkbox.dataset.id,        // 강의 ID
+            price: checkbox.dataset.price,  // 강의 가격
+            title: checkbox.dataset.title   // 강의 제목 (추가된 부분)
+        });
+    });
+
+    if (selectedItems.length === 0) {
+        alert("결제할 항목을 선택해주세요.");
+        return;
+    }
+
+    // 결제 확인 메시지
+    const confirmPayment = confirm("결제를 진행하시겠습니까?");
+    if (!confirmPayment) return;  // 사용자가 취소하면 함수 종료
+
+    // 결제 페이지를 iframe으로 표시: 선택된 항목의 ID와 제목을 쿼리 파라미터로 전달
+    const courseIds = selectedItems.map(item => item.id).join(',');
+    const courseTitles = selectedItems.map(item => item.title).join(',');  // 강의 제목을 쿼리 파라미터로 추가
+    const paymentUrl = `/payment/start/${userId}?courseIds=${courseIds}&courseTitles=${courseTitles}`; // 강의 ID와 제목을 쿼리 파라미터로 전달
+
+    // iframe의 src를 결제 페이지 URL로 설정
+    document.getElementById('paymentIframe').src = paymentUrl;
+
+    // 결제 모달 띄우기
+    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+    paymentModal.show();
+});
+</script>
+</body>
+</html>

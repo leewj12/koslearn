@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.community.mapper.CommunityMapper">
+    <!--  글쓰기  -->
+    <insert id="insertPost" parameterType="com.kosmo.community.dto.CommunityDTO">
+        INSERT INTO community_board (
+        title, category, content, user_id, origin_file_name, file_name, file_size, mode
+        )
+        VALUES (
+        #{title}, #{category}, #{content}, #{userId}, #{originFileName}, #{uuidFileName}, #{fileSize}, #{mode}
+        )
+    </insert>
+    <select id="getPostById" parameterType="long" resultType="com.kosmo.community.dto.CommunityDTO">
+        SELECT post_id as postId, title,category,file_name as uuidFileName, content,read_view, created_at as createdAt, origin_file_name as originFileName,user_id as userId
+        FROM community_board WHERE post_id=#{postId}
+    </select>
+    <update id="increaseViewCount" parameterType="long">
+        UPDATE community_board
+        SET read_view = read_view + 1
+        WHERE post_id = #{postId}
+    </update>
+    <select id="getViewCount" resultType="int">
+        SELECT read_view
+        FROM community_board
+        WHERE post_id = #{postId}
+    </select>
+    <update id="updateboard" parameterType="com.kosmo.community.dto.CommunityDTO">
+        UPDATE community_board
+        SET title=#{title},
+        content=#{content},
+        category=#{category},
+        file_name=#{uuidFileName},
+        file_size=#{fileSize},
+        origin_file_name=#{originFileName}
+        WHERE post_id=#{postId}
+    </update>
+    <delete id="deleteboard" parameterType="long">
+        DELETE FROM community_board
+        WHERE post_id = #{postId}
+    </delete>
+    <select id="getCommunityBycategory" resultType="com.kosmo.community.dto.CommunityDTO">
+        SELECT
+        post_id AS postId,
+        title,
+        category,
+        c.file_name AS uuidFileName,
+        content,
+        read_view,
+        c.created_at AS createdAt,
+        c.origin_file_name AS originFileName,
+        c.user_id AS userId,
+        u.username  -- users 테이블에서 username을 가져옵니다
+        FROM community_board c
+        JOIN users u ON c.user_id = u.id  -- users 테이블과 JOIN
+        WHERE category = #{category}
+        ORDER BY c.created_at DESC
+    </select>
+    <select id="selectPostsByCategory" resultType="com.kosmo.community.dto.CommunityDTO">
+        SELECT u.username,post_id as postId, title,category,c.file_name as uuidFileName, content,read_view, c.created_at as createdAt, c.origin_file_name as originFileName,c.user_id as userId
+        FROM community_board c
+        JOIN users u ON c.user_id = u.id
+        WHERE category = #{category}
+        ORDER BY c.created_at DESC
+        LIMIT #{startPost}, #{postsPerPage}
+    </select>
+    <select id="countPostsByCategory" resultType="int">
+        SELECT COUNT(*)
+        FROM community_board
+        WHERE category = #{category}
+    </select>
+    <select id="selectPostsByFilter" resultType="com.kosmo.community.dto.CommunityDTO">
+        SELECT post_id as postId, title,category,file_name as uuidFileName, content,read_view, created_at as createdAt, origin_file_name as originFileName,user_id as userId
+        FROM community_board
+        <where>
+            <if test="filterType == 'title'">
+                AND title LIKE CONCAT('%', #{query}, '%')
+            </if>
+            <if test="filterType == 'category'">
+                AND category LIKE CONCAT('%', #{query}, '%')
+            </if>
+            <if test="filterType == 'username'">
+                AND username LIKE CONCAT('%', #{query}, '%')
+            </if>
+        </where>
+        ORDER BY created_at DESC
+        LIMIT #{startPost}, #{postsPerPage}
+    </select>
+    <insert id="insertreview" parameterType="com.kosmo.community.dto.CommunityReviewDTO">
+        INSERT INTO communityreview (username,content,postId) VALUES (#{username},#{content},#{postId})
+    </insert>
+    <select id="getReviewBypostId" parameterType="long" resultType="com.kosmo.community.dto.CommunityReviewDTO">
+        SELECT * FROM communityreview where postId=#{postId}
+    </select>
+    <delete id="deletereview" parameterType="long">
+        DELETE FROM communityreview where review_id=#{review_id}
+    </delete>
+</mapper>

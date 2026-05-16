@@ -1,0 +1,28 @@
+server:
+  port: 9090
+  servlet:
+    jsp:
+      init-parameters:
+        development: true
+  devtools:
+    livereload:
+      enabled: true
+
+spring:
+  profiles:
+    active: dev, local
+
+  # 정적 리소스 경로 설정
+  resources:
+    static-locations:
+      - classpath:/static/
+      - classpath:/images/
+      - classpath:/courseimages/
+      - classpath:/Instructorimages/
+      - classpath:/userimages/
+      - classpath:/homeimages/
+      - classpath:/coursefiles/
+      - classpath:/notice/
+      - classpath:/communityupload/
+      - classpath:/fragments/
+

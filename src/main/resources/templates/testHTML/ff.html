@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>강의 목록</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* 네비게이션 바 */
+    nav {
+        position: fixed; /* 화면 상단에 고정 */
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: #343a40;
+        padding: 10px 0;
+    }
+
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin: 0 15px;
+    }
+
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    /* 콘텐츠 영역 */
+    .content-container {
+        margin-top: 70px; /* 네비게이션 바 높이만큼 여백을 주어 아래로 밀기 */
+        padding: 20px;
+    }
+
+    /* 강의 목록 스타일 */
+    .course-list {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr); /* 한 줄에 5개씩 */
+        gap: 20px;
+        padding: 20px;
+        width: 100%;
+    }
+
+    .course-item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        display: flex;
+        flex-direction: column; /* 아이템을 세로로 정렬 */
+        justify-content: space-between; /* 아이템 간의 공간을 동일하게 배분 */
+    }
+
+    .course-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-item img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover; /* 이미지 크기 조정 */
+        border-radius: 8px;
+    }
+
+    .course-item h3 {
+        font-size: 1.4em;
+        color: #333;
+        margin-top: 10px;
+        font-weight: 600;
+    }
+
+    .course-item p {
+        font-size: 1.1em;
+        color: #555;
+        margin-top: 10px;
+    }
+
+    .course-item .price {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #f39c12;
+        margin-top: 15px;
+    }
+
+    .course-item button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .course-item button:hover {
+        background-color: #0056b3;
+    }
+
+    .pagination {
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        background-color: #f8f9fa;
+        border-color: #ddd;
+        color: #6c757d;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+    .page-link {
+        cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 네비게이션 바 -->
+<nav>
+  <ul>
+    <li><a href="/home">홈</a></li>
+    <li><a href="/">카테고리</a></li>
+    <li><a href="/course/view">강의보기</a></li>
+    <li><a href="/community">커뮤니티</a></li>
+    <li><a href="/login" sec:authorize="!isAuthenticated()">로그인</a></li>
+    <li><a href="/signup" sec:authorize="!isAuthenticated()">회원가입</a></li>
+    <li><a href="/my/mypage" sec:authorize="hasRole('ROLE_STUDENT') or hasRole('ROLE_ADMIN')">마이페이지</a></li>
+    <li><a href="/instructor/myinstructor" sec:authorize="hasRole('ROLE_INSTRUCTOR') or hasRole('ROLE_ADMIN')">강사 마이페이지</a></li>
+    <li><a href="/admin/users" sec:authorize="hasRole('ROLE_ADMIN')">회원 관리</a></li>
+    <li><a href="/logout" sec:authorize="isAuthenticated()">로그아웃</a></li>
+    <li sec:authorize="isAuthenticated()">
+      <span>환영합니다, <span th:text="${#authentication.name}"></span>님!</span>
+    </li>
+  </ul>
+</nav>
+
+<!-- 콘텐츠 영역 -->
+<div class="content-container">
+  <!-- 강의 목록 -->
+  <div class="course-list">
+    <div th:each="course : ${paging.courseviewList}" class="course-item">
+      <img th:src="@{'/courseimages/' + ${course.image}}" alt="강의 이미지">
+      <h3 th:text="${course.title}"></h3>
+      <p th:text="${course.summary}"></p>
+      <p th:text="${course.nickname}"></p>
+      <p class="price" th:text="${course.price} + '원'"></p>
+      <a th:href="@{'/course/' + ${course.title}}">
+        <button>강의 시작</button>
+      </a>
+    </div>
+  </div>
+
+  <!-- 페이지네이션 -->
+  <div class="pagination">
+    <ul class="pagination">
+      <!-- 이전 페이지 -->
+      <li class="page-item" th:classappend="${paging.currentPage == 1} ? 'disabled'">
+        <a class="page-link" th:href="@{/course/view(currentPage=${paging.currentPage - 1})}">&laquo; 이전</a>
+      </li>
+
+      <!-- 페이지 그룹 내의 페이지들 (1~5, 6~10 등의 페이지들) -->
+      <li class="page-item" th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:classappend="${paging.currentPage == i} ? 'active'">
+        <a class="page-link" th:href="@{/course/view(currentPage=${i})}" th:text="${i}"></a>
+      </li>
+
+      <!-- 다음 페이지 -->
+      <li class="page-item" th:classappend="${paging.currentPage == paging.totalPages} ? 'disabled'">
+        <a class="page-link" th:href="@{/course/view(currentPage=${paging.currentPage + 1})}">다음 &raquo;</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

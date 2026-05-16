@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kosmo.admin.mapper.AdminPaymentMapper">
+
+    <!-- 모든 결제 정보 조회 -->
+    <!-- 결제 내역을 가져오는 쿼리 -->
+    <select id="payinfo" resultType="com.kosmo.admin.dto.AdminPaymentDTO">
+        SELECT
+        p.payment_id,               <!-- 결제 ID -->
+        p.amount,                   <!-- 결제 금액 -->
+        u.username,                 <!-- 사용자 이름 -->
+        c.title,                    <!-- 강의 제목 -->
+        p.payment_date,             <!-- 결제 일시 -->
+        p.payment_method,           <!-- 결제 방법 -->
+        p.payment_status            <!-- 결제 상태 -->
+        FROM
+        payments p                  <!-- 결제 테이블 (별칭 p) -->
+        JOIN users u ON p.user_id = u.id       <!-- 사용자 테이블 (별칭 u) -->
+        JOIN courses c ON p.course_id = c.course_id;  <!-- 강의 테이블 (별칭 c) -->
+    </select>
+
+</mapper>

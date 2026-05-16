@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.cart.mapper.CartMapper">
+
+    <!-- 강의 이름으로 courseId 찾기 -->
+    <select id="findCourseIdByName" resultType="Long">
+        SELECT course_id
+        FROM courses
+        WHERE title = #{lectureName}
+    </select>
+
+    <!-- 장바구니에 추가 -->
+    <insert id="addToCart">
+        INSERT INTO cart (user_id, course_id)
+        VALUES (#{userId}, #{courseId})
+    </insert>
+
+    <!-- 장바구니에 이미 해당 강의가 있는지 확인 -->
+    <select id="checkIfCourseInCart" resultType="Integer">
+        SELECT COUNT(*)
+        FROM cart
+        WHERE user_id = #{userId} AND course_id = #{courseId}
+    </select>
+
+    <delete id="removeItem">
+        DELETE FROM cart
+        WHERE course_id = #{courseId} AND user_id = #{userId}
+    </delete>
+
+
+</mapper>

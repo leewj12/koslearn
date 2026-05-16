@@ -1,0 +1,86 @@
+/* 초기화 */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* 푸터 */
+footer {
+    margin: 0 !important;
+    padding: 40px 0 !important;
+    width: 100% !important;
+    position: relative; /* 고정이 필요하면 fixed로 변경 */
+    background-color: #333;
+    color: white;
+    box-sizing: border-box;
+}
+
+/* 컨테이너 설정 */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #f39c12;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-section ul li {
+    margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #f39c12;
+}
+
+/* 하단 저작권 */
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #555;
+    padding-top: 10px;
+    color: #777;
+    font-size: 13px;
+}
+
+/* 하단 회사 정보 */
+.footer-company-info {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #555;
+    color: #777;
+    font-size: 12px;
+    text-align: left;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+}

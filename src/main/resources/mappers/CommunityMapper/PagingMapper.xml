@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.community.mapper.PagingMapper">
+
+    <!-- PagingMapper.xml -->
+    <select id="listCommunity" parameterType="com.kosmo.community.dto.PagingDTO" resultType="com.kosmo.community.dto.CommunityDTO">
+        SELECT
+        cb.post_id AS postId,
+        cb.title,
+        cb.category,
+        cb.content,
+        u.username AS username,
+        cb.read_view AS read_view,
+        cb.file_size AS fileSize,
+        cb.origin_file_name AS originFileName,
+        cb.file_name AS uuidFileName,
+        cb.mode,
+        cb.created_at AS createdAt,
+        cb.updated_at AS updatedAt
+        FROM community_board cb
+        JOIN users u ON cb.user_id = u.id
+        <where>
+            <if test="filterType != null and filterType != 'all'">
+                AND ${filterType} LIKE CONCAT('%', #{query}, '%')
+            </if>
+            <if test="filterType == 'all'">
+                AND (cb.title LIKE CONCAT('%', #{query}, '%')
+                OR cb.content LIKE CONCAT('%', #{query}, '%')
+                OR u.username LIKE CONCAT('%', #{query}, '%')
+                OR cb.category LIKE CONCAT('%', #{query}, '%'))
+            </if>
+            <!-- 카테고리 필터링 추가 -->
+            <if test="category != null and category != 'all'">
+                AND cb.category = #{category}  <!-- 선택된 카테고리로 필터링 -->
+            </if>
+        </where>
+        ORDER BY cb.created_at DESC
+        LIMIT #{start}, #{pageSize} <!-- 페이징 처리 -->
+    </select>
+
+
+
+    <!-- 전체 데이터 수를 반환하는 쿼리 -->
+    <select id="getTotalCount" resultType="int">
+        SELECT COUNT(*)
+        FROM community_board cb
+        JOIN users u ON cb.user_id = u.id
+        <where>
+            <if test="filterType != null and filterType != 'all'">
+                <![CDATA[
+            AND ${filterType} LIKE CONCAT('%', #{query}, '%')
+            ]]>
+            </if>
+            <if test="filterType == 'all'">
+                <![CDATA[
+            AND (cb.title LIKE CONCAT('%', #{query}, '%')
+            OR cb.content LIKE CONCAT('%', #{query}, '%')
+            OR u.username LIKE CONCAT('%', #{query}, '%')
+            OR cb.category LIKE CONCAT('%', #{query}, '%'))
+            ]]>
+            </if>
+            <!-- 카테고리 필터링 추가 -->
+            <if test="category != null and category != 'all'">
+                AND cb.category = #{category}  <!-- 선택된 카테고리로 필터링 -->
+            </if>
+        </where>
+    </select>
+
+
+
+
+</mapper>

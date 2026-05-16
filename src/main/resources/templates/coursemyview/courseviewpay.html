@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의 상세 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- 부트스트랩 아이콘 -->
+    <style>
+        /* 기존 header 스타일 포함 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 114px;
+            padding: 0 30px;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo {
+            cursor: pointer;
+        }
+
+        header .logo h1 {
+            font-size: 33px;
+            line-height: 70px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        header nav ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 5px 15px;
+            line-height: 70px;
+            transition: color 0.3s ease;
+        }
+
+        header nav ul li a:hover {
+            color: #f39c12;
+        }
+
+        /* 강의 상세 페이지 레이아웃 */
+        .content {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+            gap: 20px; /* 메인 내용과 사이드바 사이의 간격 추가 */
+        }
+
+        /* 왼쪽: 강의 상세보기 */
+        .course-detail {
+            flex: 0 0 80%; /* 왼쪽 영역 크기를 늘림 */
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-detail h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .course-detail p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #555;
+        }
+
+        .course-detail iframe {
+            width: 100%;  /* 유튜브 비디오 가로 크기를 100%로 설정 */
+            height: 700px; /* 유튜브 비디오 세로 크기 증가 */
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        /* 강의 제목 카드 */
+        .course-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .course-card h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin: 0 0 10px;
+        }
+
+        /* 오른쪽: 네비게이션 바 */
+        .sidebar {
+            flex: 0 0 15%; /* 가로 크기만 줄임 */
+            background-color: #333;
+            color: white;
+            padding: 20px 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 90vh; /* 네비게이션 바 높이 늘리기 */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .sidebar h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 20px; /* 링크 간격을 늘려서 떨어지게 함 */
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px; /* 글씨 크기 증가 */
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+
+        .sidebar ul li a:hover {
+            color: #f39c12;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .course-detail, .sidebar {
+                flex: 0 0 100%;
+                margin: 10px 0;
+            }
+
+            .sidebar {
+                flex: 0 0 100%;
+                padding: 20px 10px;
+                height: auto; /* 모바일에서 세로 길이가 자동으로 조정되게 */
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 상단바 삽입 부분 -->
+<div th:insert="fragments/header :: header"></div>
+
+<!-- 강의 상세 내용과 오른쪽 네비게이션 바 -->
+<div class="content">
+    <!-- 강의 상세보기 -->
+    <div class="course-detail">
+        <!-- 강의 제목 카드 -->
+        <div class="course-card">
+            <h1 th:text="${course.title}">강의 제목: 웹 개발 기초</h1>
+            <p th:text="${course.summary}">강의 요약: HTML, CSS를 사용하여 웹 페이지를 만드는 방법을 학습합니다.</p>
+        </div>
+
+        <!-- 유튜브 비디오 -->
+        <iframe th:src="@{${course.url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <p th:text="${course.description}">
+            이 강의는 HTML과 CSS의 기본적인 사용법을 배운 후, 웹 페이지를 실제로 만들고 디자인하는 방법을 소개합니다. 웹의 기초부터 시작하여 반응형 웹 디자인까지 다루며, 실무에서 바로 사용할 수 있는 기술을 제공합니다. 강의를 통해 자신만의 웹 사이트를 구축할 수 있습니다.
+        </p>
+    </div>
+
+    <!-- 오른쪽 네비게이션 바 -->
+    <div class="sidebar">
+        <h3>커리큘럼 & 커뮤니케이션</h3>
+        <ul>
+            <li><a href="#"><i class="bi bi-info-circle"></i>강의 개요</a></li>
+            <li><a th:href="@{/coursefiles/{materials}(materials=${course.materials})}" download><i class="bi bi-download"></i>강의자료 다운</a></li>
+            <li><a href="#"><i class="bi bi-question-circle"></i>자주 묻는 질문</a></li>
+            <li><a href="/course/reviews"><i class="bi bi-star"></i>수강생 리뷰</a></li>
+            <li><a href="#"><i class="bi bi-envelope"></i>강사 연락처</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>진행 중인 강의</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/header/header.css}">
+  <style>
+    /* 강의 카드 스타일 */
+    .course-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 25px;  /* 더 넓은 여백 */
+        margin-bottom: 20px;
+        background-color: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);  /* 더 강한 shadow */
+    }
+
+    .course-card img {
+        width: 100%;
+        height: 250px;  /* 이미지 크기 확대 */
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .course-card .course-title {
+        font-size: 1.3rem;  /* 제목 크기 확대 */
+        font-weight: bold;
+        color: #333;
+        margin-top: 15px;
+        margin-bottom: 20px;
+    }
+
+    .course-card .course-description {
+        font-size: 1rem;  /* 설명 글씨 크기 확대 */
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .course-card .course-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: auto;
+    }
+
+    .course-card .btn {
+        width: 48%;
+    }
+
+    /* 강의 목록 그리드 시스템: 3개씩 보이도록 크기 조정 */
+    .courses-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: flex-start;
+    }
+
+    .courses-list .col-md-4 {
+        flex: 0 0 32%;  /* 한 카드의 너비를 32%로 설정하여 한 줄에 3개씩 표시 */
+        max-width: 32%;
+    }
+
+    @media (max-width: 1024px) {
+        .courses-list .col-md-4 {
+            flex: 0 0 48%;  /* 화면 크기가 중간일 때 2개씩 보이게 조정 */
+            max-width: 48%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .courses-list .col-md-4 {
+            flex: 0 0 100%;  /* 모바일에서는 1개씩 표시 */
+            max-width: 100%;
+        }
+    }
+
+    /* 왼쪽 사이드바 스타일 */
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        top: 114px; /* 상단 네비게이션 바 바로 아래에 위치하도록 수정 */
+        left: 0;
+        background-color: #2c3e50;
+        padding-top: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        color: white;
+        box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+    }
+
+    .sidebar a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        font-size: 16px;
+        padding: 12px 20px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+        background-color: #f39c12;
+    }
+
+    .sidebar .active {
+        background-color: #e67e22;
+    }
+
+    /* 카테고리 섹션 스타일 */
+    .category-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .category-bar a {
+        background-color: #34495e;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-align: center;
+        width: 100px;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+
+    .category-bar a:hover {
+        background-color: #f39c12;
+    }
+
+    .category-bar a i {
+        font-size: 1.5rem;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* 필터링 영역 */
+    .filter-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .filter-container select, .filter-container input {
+        margin-right: 10px;
+        width: 45%;
+    }
+
+    /* 진행 중인 강의와 환영 메시지 스타일 */
+    .welcome-message {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+
+    .welcome-message i {
+        font-size: 1.3rem;
+        color: #f39c12;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+  </style>
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+
+<!-- 왼쪽 사이드바 -->
+<div class="sidebar">
+  <a href="/my/mypage">내 프로필</a>
+  <a href="/my/profile-update">내 프로필 수정</a>
+  <a href="/my/courses" class="active">진행 중인 강의</a>
+  <a href="#">수료한 강의</a>
+  <a href="/cart/purchase">나의 장바구니</a>
+  <a href="/mypay/pay">나의 결제내역</a>
+</div>
+
+<!-- 메인 콘텐츠 영역 -->
+<div class="container mt-5" style="margin-left: 270px;">
+  <div class="welcome-message">
+    <h2>진행 중인 강의</h2>
+    <span>환영합니다, <span th:text="${#authentication.name}"></span>님!</span>
+    <i class="bi bi-person-check"></i>
+  </div>
+
+  <!-- 강의 목록이 존재하지 않을 때 -->
+  <div id="no-courses-message">
+    <p>현재 진행 중인 강의가 없습니다.</p>
+  </div>
+
+  <!-- 강의 목록이 있을 때 -->
+  <div id="courses-list" class="courses-list"></div> <!-- 강의 목록 추가할 공간 -->
+
+  <!-- user-id를 저장하는 hidden input -->
+  <input type="hidden" id="user-id" th:value="${#authentication.principal.id}">
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async function() {
+    const userId = document.getElementById('user-id').value;
+
+    // 강의 목록을 받아오는 함수
+    async function fetchCourses() {
+      try {
+        const response = await fetch(`/my/paycourses?userId=${userId}`);
+
+        if (response.ok) {
+          const courses = await response.json();
+
+          if (courses.length > 0) {
+            const coursesList = document.getElementById('courses-list');
+            coursesList.innerHTML = '';  // 기존 강의 목록 비우기
+
+            courses.forEach(course => {
+              const courseCard = `
+                <div class="col-md-4">
+                  <div class="course-card">
+                    <img src="/courseimages/${course.image}" alt="강의 이미지">
+                    <div class="course-title">${course.title}</div>
+                    <div class="course-description">${course.nickname}</div>
+                    <div class="course-actions">
+                      <a href="/course/myview/${course.course_id}" class="btn btn-primary"><i class="bi bi-eye"></i> 강의 보기</a>
+                      <a href="/course/my/review/${course.course_id}" class="btn btn-warning"><i class="bi bi-star-fill" style="color: gold;"></i> 별점 주기</a>
+                    </div>
+                  </div>
+                </div>
+              `;
+              coursesList.innerHTML += courseCard;
+            });
+
+            document.getElementById('no-courses-message').style.display = 'none';
+          } else {
+            document.getElementById('no-courses-message').style.display = 'block';
+          }
+        } else {
+          console.error('강의 목록을 가져오는 데 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('에러가 발생했습니다:', error);
+      }
+    }
+
+    fetchCourses();
+  });
+</script>
+
+</body>
+</html>

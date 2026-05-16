@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의 상세 페이지</title>
+    <style>
+        /* 기본 스타일링 */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        /* 네비게이션 바 */
+        nav {
+            background-color: #007bff;
+            padding: 10px 0;
+            color: white;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* 컨테이너 스타일 */
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 강의 제목 */
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* 비디오 플레이어 스타일 */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 비율 */
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 강의 정보 */
+        .course-info {
+            margin-top: 20px;
+        }
+
+        .course-info h2 {
+            font-size: 22px;
+            color: #007bff;
+        }
+
+        .course-info p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* 진행 상황 바 */
+        .progress-bar-wrapper {
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #ddd;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .progress-bar .progress {
+            width: 0%; /* 시작 진행률 */
+            height: 100%;
+            background-color: #007bff;
+            border-radius: 5px;
+        }
+
+        .progress-bar .percentage {
+            position: absolute;
+            top: -20px;
+            right: 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* 버튼 스타일 */
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 강의 목록 버튼 */
+        .btn {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .progress-bar {
+                height: 5px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- 네비게이션 바 -->
+<nav>
+    <a href="home.html">홈</a>
+    <a href="course-list.html">강의 목록</a>
+    <a href="profile.html">내 프로필</a>
+</nav>
+
+<!-- 컨텐츠 시작 -->
+<div class="container">
+    <h1>웹 개발 기초 강의</h1>
+
+    <!-- 유튜브 비디오 재생 부분 -->
+    <div class="video-wrapper">
+        <!-- 여기에 유튜브 비디오 URL을 삽입 -->
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <!-- 강의 정보 -->
+    <div class="course-info">
+        <h2>강의 내용</h2>
+        <p>이 강의는 웹 개발의 기초부터 배우는 과정입니다. HTML, CSS, JavaScript를 사용하여 첫 번째 웹사이트를 만들어봅니다. 이 과정은 초보자를 위한 강의입니다.</p>
+    </div>
+
+    <!-- 진행 상황 -->
+    <div class="progress-bar-wrapper">
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+            <div class="percentage" id="percentage">0%</div>
+        </div>
+    </div>
+
+    <!-- 버튼들 -->
+    <a href="course-list.html" class="back-button">강의 목록으로 돌아가기</a>
+    <a href="quiz.html" class="btn">퀴즈 풀기</a>
+    <a href="next-course.html" class="btn">다음 강의</a>
+</div>
+
+<!-- JavaScript: 진행률 바 업데이트 -->
+<script>
+    // 진행률 바는 비디오 재생과 상호작용이 불가하므로, 이 부분은 수동으로 업데이트할 수 있습니다.
+    // 예시로, 40%로 설정된 경우를 사용하겠습니다.
+    let progress = 40; // 이 값은 실제로는 비디오 플레이어에서 비디오가 얼마나 진행되었는지에 따라 계산됩니다.
+    const progressBar = document.getElementById('progressBar');
+    const percentageText = document.getElementById('percentage');
+
+    // 진행률 바 업데이트
+    progressBar.style.width = progress + '%';
+    percentageText.textContent = progress + '%';
+</script>
+
+</body>
+</html>

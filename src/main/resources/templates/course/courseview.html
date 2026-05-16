@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>강의 목록</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- 이미지 아이콘 부트스트랩 -->
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+
+    <style>
+        /* 전체 페이지 스타일 */
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* 콘텐츠 영역 */
+        .content-container {
+            margin-top: 10px;
+            padding: 20px;
+        }
+
+        /* 카테고리 섹션 */
+        .category-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px; /* 간격 확대 */
+            padding: 15px 20px; /* 높이 증가 */
+            border-bottom: 1px solid #e6e6e6;
+            margin-bottom: 0px !important; /* 강제로 마진 제거 */
+            background-color: #f9f9f9;
+        }
+
+        .category-bar a {
+            text-align: center;
+            text-decoration: none;
+            color: #555;
+            font-size: 1rem; /* 폰트 크기 증가 */
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .category-bar a:hover {
+            color: #007bff;
+        }
+
+        .category-bar i {
+            font-size: 1.8rem; /* 아이콘 크기 증가 */
+            margin-bottom: 5px;
+        }
+
+        /* 검색바 섹션 */
+        .search-form .input-group {
+            max-width: 700px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            gap: 5px; /* 검색창과 카테고리 사이 간격 줄이기 */
+        }
+
+        .search-form .form-control {
+            flex: 3;
+            height: 38px;
+        }
+
+        .search-form .custom-select {
+            flex: 1;
+            height: 38px;
+        }
+
+        /* 강의 목록 스타일 */
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 한 줄에 5개 */
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .course-item {
+            border: 1px solid #e6e6e6;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .course-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .course-item .details {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* 좌측 정렬 */
+            gap: 10px;
+        }
+
+        .course-item h3 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .course-item .author {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .course-item .price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #e67e22;
+        }
+
+        .course-item .rating-likes {
+            display: flex;
+            gap: 15px; /* 별점과 좋아요 사이 간격 */
+        }
+
+        .course-item .rating-likes .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #f1c40f;
+        }
+
+        .course-item .rating-likes .likes {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #e74c3c;
+        }
+
+        .course-item .action-buttons {
+            display: flex;
+            justify-content: flex-start; /* 버튼 좌측 정렬 */
+            gap: 10px;
+        }
+
+        .course-item .action-buttons button {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .course-item .action-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .course-item .action-buttons .cart-btn {
+            background-color: #28a745;
+        }
+
+        .course-item .action-buttons .cart-btn:hover {
+            background-color: #218838;
+        }
+
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #007bff;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #f8f9fa;
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<!-- 카테고리 섹션 -->
+<div class="category-bar">
+    <a href="#">
+        <i class="bi bi-code-slash"></i>
+        <p>웹 개발</p>
+    </a>
+    <a href="#">
+        <i class="bi bi-bar-chart-line"></i>
+        <p>데이터 과학</p>
+    </a>
+    <a href="#">
+        <i class="bi bi-palette"></i>
+        <p>디자인</p>
+    </a>
+    <a href="#">
+        <i class="bi bi-megaphone"></i>
+        <p>마케팅</p>
+    </a>
+    <a href="#">
+        <i class="bi bi-cpu"></i>
+        <p>AI/머신러닝</p>
+    </a>
+    <a href="#">
+        <i class="bi bi-briefcase"></i>
+        <p>경영</p>
+    </a>
+    <a href="#">
+        <i class="bi bi-mortarboard"></i>
+        <p>자기계발</p>
+    </a>
+    <a href="#">
+        <i class="bi bi-graph-up-arrow"></i>
+        <p>엑셀</p>
+    </a>
+</div>
+
+<!-- 콘텐츠 영역 -->
+<div class="content-container">
+    <!-- 검색 폼 -->
+    <div class="search-form mb-4">
+        <form action="/course/view" method="get">
+            <div class="input-group">
+                <select class="custom-select" name="category">
+                    <option value="">카테고리</option>
+                    <option value="web">웹 개발</option>
+                    <option value="data">데이터 과학</option>
+                    <option value="design">디자인</option>
+                    <option value="marketing">마케팅</option>
+                    <option value="ai">AI/머신러닝</option>
+                    <option value="management">경영</option>
+                    <option value="selfdev">자기계발</option>
+                    <option value="excel">엑셀</option>
+                </select>
+                <input type="text" name="searchQuery" class="form-control" placeholder="검색어 입력" th:value="${searchQuery}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">검색</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 강의 목록 -->
+    <div class="course-list">
+        <div th:each="course : ${paging.courseviewList}" class="course-item">
+            <img th:src="@{'/courseimages/' + ${course.image}}" alt="강의 이미지">
+            <div class="details">
+                <h3 th:text="${course.title}"></h3>
+                <div class="author" th:text="${course.nickname}"></div>
+                <div class="price" th:text="${course.price}"></div>
+                <div class="rating-likes">
+                    <div class="rating">
+                        <i class="bi bi-star-fill"></i>
+                        <span th:text="${course.averageCourseRating}"></span>
+                    </div>
+                    <a href="/like" class="likes" id="likeButton">
+                        <i class="bi bi-heart-fill"></i>
+                        <span id="likeCount">100 좋아요</span>
+                    </a>
+                </div>
+                <div class="action-buttons">
+                    <a th:href="@{'/course/' + ${course.title}}">
+                        <button>강의 구매</button>
+                    </a>
+
+                    <a href="#" class="cart-btn" data-course="${course.title}">
+                        <button class="cart-btn">장바구니</button>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${paging.currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/course/view(currentPage=${paging.currentPage - 1}, searchQuery=${searchQuery})}">&laquo; 이전</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:classappend="${paging.currentPage == i} ? 'active'">
+                <a class="page-link" th:href="@{/course/view(currentPage=${i}, searchQuery=${searchQuery})}" th:text="${i}"></a>
+            </li>
+            <li class="page-item" th:classappend="${paging.currentPage == paging.totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/course/view(currentPage=${paging.currentPage + 1}, searchQuery=${searchQuery})}">다음 &raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 모든 가격 요소에 대해 처리
+        var priceElements = document.querySelectorAll('.price');
+
+        priceElements.forEach(function(priceElement) {
+            // 가격 텍스트를 가져옴 (예: "10000")
+            var price = priceElement.innerText.trim();
+
+            // 숫자로 변환하여 3자리마다 콤마 추가
+            var formattedPrice = parseInt(price.replace(/,/g, '')) // 콤마를 제거하고 숫자로 변환
+                                    .toLocaleString(); // 3자리마다 콤마 추가
+
+            // ₩ 기호와 원 단위 추가
+            var finalPrice = '₩ ' + formattedPrice + ' 원';
+
+            // 포맷된 가격을 다시 요소에 넣음
+            priceElement.innerText = finalPrice;
+        });
+    });
+
+</script>
+
+
+
+
+</body>
+</html>

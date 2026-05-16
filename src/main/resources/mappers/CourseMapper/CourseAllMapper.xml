@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.course.mapper.CourseAllMapper">
+
+    <!--
+        강의 제목에 맞는 강의 정보와 강사 정보를 조회하는 SQL 쿼리
+        - 'title' 매개변수를 받아서 해당 제목과 일치하는 강의 및 강사 정보를 조회합니다.
+        - 쿼리 결과는 CourseviewDTO 객체로 매핑됩니다.
+    -->
+    <select id="couresallview" parameterType="String" resultType="com.kosmo.course.dto.CourseAllviewDTO">
+        <!--
+            SELECT 쿼리 설명:
+            - courses 테이블과 instructors, users 테이블을 조인하여 강의 및 강사 정보를 가져옵니다.
+            - 결과는 CourseviewDTO로 매핑됩니다.
+        -->
+        SELECT
+        c.title,                          <!-- 강의 제목 -->
+        c.description,                    <!-- 강의 설명 -->
+        c.summary,                        <!-- 강의 간단 설명 -->
+        c.image,  <!-- 강의 이미지 -->
+        c.thumbnail_url AS thumbnail,         <!-- 강의 썸네일 추가 (새로 추가된 필드) -->
+        c.level,                          <!-- 강의 난이도 -->
+        c.created_at AS createdAt,        <!-- 강의 등록일 -->
+        c.price,                          <!-- 강의 가격 -->
+        c.category,                       <!-- 강의 카테고리 -->
+        i.biography,                      <!-- 강사의 경력 -->
+        i.introduction,                   <!-- 강사의 소개 -->
+        i.greeting,                       <!-- 강사의 인사말 -->
+        i.hashing_filename,                <!-- 강사의 이미지 파일명 -->
+        u.name AS instructorName          <!-- 강사 이름 (users 테이블에서 가져옴) -->
+        FROM courses c
+        LEFT JOIN Instructors i ON c.instructor_id = i.instructor_id  <!-- 강의와 강사를 연결하는 조인 -->
+        LEFT JOIN users u ON i.user_id = u.id  <!-- 강사 이름을 가져오기 위해 users 테이블과 조인 -->
+        WHERE c.title = #{title} <!-- 입력받은 강의 제목과 일치하는 강의 검색 -->
+    </select>
+
+</mapper>

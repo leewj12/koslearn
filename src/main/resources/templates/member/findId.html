@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비밀번호 찾기</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* 기본 스타일 */
+    body {
+        font-family: 'Arial', sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: gradientBackground 10s ease infinite; /* 배경 애니메이션 */
+        background: linear-gradient(45deg, #ff7f50, #ff6347, #ff8c00, #ff4500); /* 밝은 주황색 그라데이션 배경 */
+        background-size: 400% 400%; /* 배경 크기 확대 */
+    }
+
+    /* 배경 그라데이션 애니메이션 설정 */
+    @keyframes gradientBackground {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .container {
+        max-width: 500px;
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 12px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #ff7f50; /* 배경과 동일한 주황색 */
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+       border-color: #ff7f50; /* 버튼 색상과 동일한 주황색 */
+    }
+
+    .text-center {
+        margin-top: 20px;
+    }
+
+    .text-center a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .text-center a:hover {
+        text-decoration: underline;
+    }
+
+    /* 모바일 반응형 디자인 */
+    @media (max-width: 576px) {
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>코스런 아이디 찾기</h2>
+  <form action="/find-id" method="POST">
+    <div class="form-group">
+      <label for="name">이름</label>
+      <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" required>
+    </div>
+    <div class="form-group">
+      <label for="email">이메일</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요" required>
+    </div>
+    <div class="form-group">
+      <label for="phone_number">전화번호</label>
+      <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="전화번호를 입력하세요" required>
+    </div>
+    <button type="submit" class="btn">아이디 찾기</button>
+  </form>
+
+  <div class="text-center">
+    <p>이미 코스런 계정이 있으신가요? <a href="/login">코스런 로그인</a></p>
+  </div>
+</div>
+
+</body>
+</html>

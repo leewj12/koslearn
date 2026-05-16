@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+
+  <!-- Spring Boot 내의 static 폴더에서 CSS 파일을 로드 -->
+  <link rel="stylesheet" th:href="@{/css/testcss/styles.css}">
+</head>
+<body>
+
+<h1>안녕하세요!</h1>
+<button id="myButton">클릭하세요!</button>
+
+<!-- Spring Boot 내의 static 폴더에서 JS 파일을 로드 -->
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

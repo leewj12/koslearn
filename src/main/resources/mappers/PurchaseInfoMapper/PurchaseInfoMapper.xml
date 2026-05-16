@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.purchase.mapper.PurchaseInfoMapper">
+
+    <select id="getPurchaseInfo" resultType="com.kosmo.purchase.dto.PurchaseInfoDTO">
+        SELECT
+        c.cart_id AS cartId,
+        c.user_id AS userId,
+        c.course_id AS courseId,
+        u.name AS name,
+        u.email AS email,
+        u.phone_number AS phone_number,  <!-- 사용자 전화번호 -->
+        co.title AS title,
+        co.price AS price,  <!-- 강의 가격 -->
+        us.nickname AS nickname  <!-- 강사 닉네임 -->
+        FROM cart c
+        JOIN users u ON c.user_id = u.id  <!-- 구매자 정보 -->
+        JOIN courses co ON c.course_id = co.course_id  <!-- 강의 정보 -->
+        JOIN users us ON co.user_id = us.id  <!-- 강사 정보 (courses 테이블의 user_id로 연결) -->
+        WHERE c.user_id = #{userId}
+        AND c.course_id IN
+        <foreach item="courseId" collection="courseIds" open="(" separator="," close=")">
+            #{courseId}
+        </foreach>
+    </select>
+
+
+    <insert id="insertPaymentInfo" parameterType="com.kosmo.purchase.dto.PayDTO">
+        INSERT INTO Payments (user_id, course_id, amount, payment_date, payment_status)
+        <foreach collection="courseIds" item="courseId" index="index" separator="),(" open="VALUES (" close=")">
+            #{userId}, #{courseId}, #{amounts[${index}]}, NOW(), 'SUCCESS'
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteCartItems" parameterType="com.kosmo.purchase.dto.PayDTO">
+        DELETE FROM Cart
+        WHERE user_id = #{userId}
+        AND course_id IN
+        <foreach collection="courseIds" item="courseId" open="(" separator="," close=")">
+            #{courseId}
+        </foreach>
+    </delete>
+
+
+
+</mapper>

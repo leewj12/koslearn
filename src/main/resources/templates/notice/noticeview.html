@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 상세보기</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <style>
+        /* 공지사항 카드 스타일 */
+        .notice-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        .notice-card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 15px;
+        }
+
+        .notice-card-body {
+            padding: 30px;
+            background-color: #f8f9fa;
+        }
+
+        /* 배너 이미지 가운데 정렬 */
+        .banner-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+
+        /* 공지사항 내용 스타일 */
+        .notice-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        /* 작성자, 조회수 스타일 */
+        .notice-info {
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:insert="~{fragments/header :: header}"></div>
+
+<!-- 공지사항 상세 내용 -->
+<div class="container mt-5">
+    <div class="card notice-card">
+        <div class="card-header notice-card-header">
+            <h4 class="card-title" th:text="${noticeviewall.title}">공지 제목</h4>
+        </div>
+        <div class="card-body notice-card-body">
+            <p class="notice-info"><strong>작성자:</strong> <span th:text="${noticeviewall.username}">작성자</span></p>
+            <p class="notice-info"><strong>작성일:</strong> <span th:text="${noticeviewall.createdAtFormatted}">2024-12-01</span></p>
+            <p class="notice-info"><strong>조회수:</strong> <span th:text="${noticeviewall.views_count}">조회수</span></p>
+            <hr>
+            <!-- 공지사항 내용 -->
+            <div class="notice-content">
+                <p th:text="${noticeviewall.content}">공지 내용</p>
+            </div>
+
+            <!-- 배너 이미지 -->
+            <div class="d-flex justify-content-center">
+                <img th:src="@{'/notice/' + ${noticeviewall.hashedBannerImage}}" alt="배너 이미지" class="banner-image"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 부트스트랩 JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+/* styles.css */
+
+/* 전체 페이지 스타일 */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(45deg, #6a11cb, #2575fc); /* 그라디언트 배경 */
+    color: #fff; /* 텍스트 색상 */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 중앙에 위치한 컨테이너 */
+.container {
+    background-color: rgba(255, 255, 255, 0.1); /* 반투명한 흰색 배경 */
+    padding: 40px 60px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    backdrop-filter: blur(10px); /* 배경 흐림 효과 */
+}
+
+/* 제목 스타일 */
+h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+/* 버튼 스타일 */
+.button {
+    background-color: #ff7e5f; /* 버튼 배경 */
+    color: white; /* 버튼 텍스트 색상 */
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    margin-top: 30px;
+}
+
+.button:hover {
+    background-color: #feb47b; /* 마우스 오버 시 색상 변경 */
+    transform: scale(1.1); /* 버튼 확대 효과 */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* 버튼 클릭 시 애니메이션 */
+.button:active {
+    transform: scale(0.95); /* 클릭 시 버튼 크기 감소 */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+/* 애니메이션 효과 */
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 10px #ff7e5f, 0 0 20px #ff7e5f, 0 0 30px #feb47b;
+    }
+    100% {
+        text-shadow: 0 0 20px #ff7e5f, 0 0 30px #feb47b, 0 0 40px #feb47b;
+    }
+}
