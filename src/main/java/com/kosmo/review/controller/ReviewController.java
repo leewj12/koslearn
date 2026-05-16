@@ -3,7 +3,6 @@ package com.kosmo.review.controller;
 import com.kosmo.review.dto.ReviewDTO;
 import com.kosmo.review.dto.ReviewInfoDTO;
 import com.kosmo.review.service.ReviewService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
-@Slf4j
 @Controller
 public class ReviewController {
 
@@ -25,10 +23,7 @@ public class ReviewController {
     public String courseReview(@PathVariable("course_id") Long courseId, Model model) {
         // courseId를 활용하여 강의 정보 조회
 
-        log.info("코스아이디확인==============================================================={}",courseId);
         ReviewInfoDTO courseInfo = reviewService.getCourseInfo(courseId);
-
-        log.info("보낼DTO확인================================================================{}",courseInfo);
 
         // 모델에 강의 정보를 추가하여 Thymeleaf에서 사용할 수 있도록 전달
         model.addAttribute("courseInfo", courseInfo);
@@ -63,13 +58,6 @@ public class ReviewController {
             //고쳐야함 로그인으로 가기에 loc
             return "/error/utility"; // 리뷰 작성 불가 시 오류 페이지로 리다이렉트
         }
-
-        // 리뷰 데이터를 처리
-        System.out.println("user id:  " + reviewDTO.getUserId());
-        System.out.println("Course ID: " + reviewDTO.getCourseId());
-        System.out.println("Review Text: " + reviewDTO.getReviewText());
-        System.out.println("Course Rating: " + reviewDTO.getRating());
-        System.out.println("Instructor Rating: " + reviewDTO.getInstructorRating());
 
         // 리뷰 저장
         int result = reviewService.savereview(reviewDTO);

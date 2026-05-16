@@ -118,7 +118,6 @@ public class AdminController {
 
     @GetMapping("admin/users/info")
     public String adminUserInfo(@RequestParam("id") Long id) {
-        System.out.println("Received id: " + id); // 콘솔에 memberId 출력
         return "admin/userInfo"; // 페이지 이동
     }
 }

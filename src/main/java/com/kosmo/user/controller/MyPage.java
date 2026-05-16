@@ -42,7 +42,6 @@ public class MyPage {
                 usersImageDTO.setUserId(userDTO.getId());
                 userService.saverorupdateImage(usersImageDTO);
             } catch (IOException e) {
-                e.printStackTrace();
                 return "파일 업로드 실패";
             }
         }

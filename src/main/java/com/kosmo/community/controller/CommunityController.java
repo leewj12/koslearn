@@ -5,7 +5,6 @@ import com.kosmo.community.dto.CommunityReviewDTO;
 import com.kosmo.community.dto.PagingDTO;
 import com.kosmo.community.service.CommunityService;
 import com.kosmo.community.service.PagingService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@Slf4j
 @Controller
 public class CommunityController {
     @Autowired
@@ -120,7 +118,6 @@ public class CommunityController {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
             model.addAttribute("message", "파일 업로드에 실패했습니다.");
             return "community/communityPost";
         }
@@ -134,12 +131,10 @@ public class CommunityController {
         int n=communityService.getViewCount(postId);
         model.addAttribute("post", post);
         model.addAttribute("comments",communityService.getReviewBypostId(postId));
-        log.info("---------------------------------------------------------------getreview={}",communityService.getReviewBypostId(postId));
         return "community/communityview"; // 게시글 상세 페이지
     }
     @PostMapping("/community/edit")
     public String postboard(CommunityDTO communityDTO,@RequestParam("fileName") MultipartFile file,Model model) {
-        log.info("----------------------------------------------------communityDTO={}", communityDTO);
         // 업로드 경로 설정 (static 디렉토리를 사용)
         String uploadDir = "src/main/resources/communityupload/files";
         Path uploadPath = Paths.get(uploadDir);

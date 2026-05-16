@@ -4,7 +4,6 @@ import com.kosmo.admin.dto.AdminCourselistDTO;
 import com.kosmo.admin.dto.AdminPaymentDTO;
 import com.kosmo.admin.service.AdminCourselistService;
 import com.kosmo.admin.service.AdminPaymentService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-
-@Slf4j
 
 @Controller
 public class AdminManager {
@@ -34,8 +31,6 @@ public class AdminManager {
     @GetMapping("/admin/courselist")
     public String admincourselist(Model model) {
         List<AdminCourselistDTO> courselist = adminCourselistService.Courselist();  // 강의 목록 조회
-        log.info("관리자용 데이터페이지 확인================================{}",courselist);
-
         model.addAttribute("courselist", courselist);  // 강의 목록을 모델에 추가
         return "/admin/admincourselist";  // 뷰로 전달
     }
@@ -44,8 +39,6 @@ public class AdminManager {
     public String adminPayment(Model model) {
         // 결제 정보를 서비스에서 바로 가져옴
         List<AdminPaymentDTO> adminPaymentDTO = adminPaymentService.payinfo();
-        log.info("결제 데이터 확인용=============================================={}", adminPaymentDTO);
-
         // 모델에 데이터를 담을 때 이름을 'adminPaymentList'로 변경
         model.addAttribute("adminPaymentList", adminPaymentDTO);
 
@@ -66,8 +59,6 @@ public class AdminManager {
     @GetMapping("/admin/course/detail/{id}")
     public String detail(@PathVariable("id") Long courseId, Model model) {
         AdminCourselistDTO courseDetail = adminCourselistService.Coursedetail(courseId);
-        log.info("Course Detail Data: {}", courseDetail);
-
         model.addAttribute("course", courseDetail);  // Add the course details to the model
         return "/course/coursedetail";  // Returns the view name
     }
@@ -76,9 +67,6 @@ public class AdminManager {
     public String courseEdit(@PathVariable("id") Long courseId) {
         // Fetch course details using the service
         AdminCourselistDTO courseDetail = adminCourselistService.Coursedetail(courseId);
-
-        // Log the fetched course details for debugging
-        log.info("Course Detail Data: {}", courseDetail);
 
 //        // Add the course details to the model so it can be accessed in the view
 //        model.addAttribute("course", courseDetail);

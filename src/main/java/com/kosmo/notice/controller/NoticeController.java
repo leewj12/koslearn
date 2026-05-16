@@ -3,7 +3,6 @@ package com.kosmo.notice.controller;
 import com.kosmo.notice.dto.NoticeDTO;
 import com.kosmo.notice.dto.NoticePagingDTO;
 import com.kosmo.notice.service.NoticeService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@Slf4j
 @Controller
 public class NoticeController {
 
@@ -105,7 +103,6 @@ public class NoticeController {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
             model.addAttribute("error", "파일 업로드 중 오류가 발생했습니다.");
         }
 
@@ -118,9 +115,6 @@ public class NoticeController {
 
         boolean updated = noticeService.increaseViews(id);
         NoticeDTO noticeviewall = noticeService.noticeview(id);
-
-        log.info("공지사항 내용 테스트입니다===================================={}",noticeviewall);
-
         model.addAttribute("noticeviewall", noticeviewall);  // NoticeDTO 객체를 모델에 추가
         return "/notice/noticeview";
     }

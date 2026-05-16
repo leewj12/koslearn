@@ -62,7 +62,7 @@ public class EmailService {
 
             javaMailSender.send(message);  // 이메일 전송
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("이메일 전송에 실패했습니다.", e);
         }
     }
 }

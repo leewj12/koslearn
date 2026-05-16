@@ -2,14 +2,12 @@ package com.kosmo.instructor.controller;
 
 import com.kosmo.instructor.dto.*;
 import com.kosmo.instructor.service.InstructorService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/instructor")
 public class InstructorRest {
@@ -24,9 +22,7 @@ public class InstructorRest {
     // 사용자 정보 가져오기
     @GetMapping("/getUserInfo")
     public ResponseEntity<GetUserDTO> getUserInfo(@RequestParam Long userId) {
-        System.out.println("Requested User ID: " + userId);
         GetUserDTO getUserDTO = instructorService.getUserInfo(userId);
-        log.info("-------------------------------------------------------==={}", getUserDTO);
         return ResponseEntity.ok(getUserDTO);
     }
 
@@ -35,7 +31,6 @@ public class InstructorRest {
     @GetMapping("/getUserInfoAll")
     public ResponseEntity<InstructorAllDTO> getUserInfoAll(@RequestParam Long userId) {
         InstructorAllDTO instructorAllDTO = instructorService.getUserInfoAll(userId);
-        log.info("-----------------------------------------------------=디비디비={}", instructorAllDTO);
         return ResponseEntity.ok(instructorAllDTO);
     }
 
@@ -50,10 +45,7 @@ public class InstructorRest {
     //강사 강의 수 및 강사 평균평점 가져오기
     @GetMapping("/review")
     public ResponseEntity<InstructorReviewDTO> inreview(@RequestParam Long userId) {
-        log.info("아이디확인=========================================================={}", userId);
         InstructorReviewDTO instructorReviewDTO = instructorService.instructorReview(userId);
-        log.info("강의랑 평점 확인용========================================{}", instructorReviewDTO);
-
         return ResponseEntity.ok(instructorReviewDTO);
     }
 
@@ -61,8 +53,6 @@ public class InstructorRest {
     @GetMapping("/courselist")
     public ResponseEntity<List<CourseDataDTO>> courselist(@RequestParam Long userId) {
         List<CourseDataDTO> courselist = instructorService.courselist(userId);
-        log.info("강의데이터 확인용================================================={}",courselist );
-
         return ResponseEntity.ok(courselist);
 
     }

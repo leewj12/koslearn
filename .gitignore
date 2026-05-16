@@ -7,6 +7,8 @@ build/
 
 ### Sensitive Config ###
 application-local.yml
+.env
+*.bak
 
 ### STS ###
 .apt_generated

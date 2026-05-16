@@ -3,13 +3,11 @@ package com.kosmo.instructor.service;
 import com.kosmo.instructor.dto.*;
 import com.kosmo.instructor.mapper.InstructorMapper;
 import com.kosmo.instructor.service.InstructorService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
 public class InstructorServiceImpl implements InstructorService {
 
@@ -68,9 +66,6 @@ public class InstructorServiceImpl implements InstructorService {
 
         Double instructorRating = instructorMapper.getInstructorRatingByUserId(userId);
 
-
-        log.info("강의개수 조회======================================================{}",courseCount);
-        log.info("별점======================================================{}",instructorRating);
 
         InstructorReviewDTO dto = new InstructorReviewDTO();
         dto.setCourseCount(courseCount);  // 강의 개수 설정

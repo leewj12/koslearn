@@ -3,7 +3,6 @@ package com.kosmo.instructor.controller;
 import com.kosmo.instructor.dto.CourseDataDTO;
 import com.kosmo.instructor.dto.InstructorDTO;
 import com.kosmo.instructor.service.InstructorService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Controller
 public class Instructor {
 
@@ -57,7 +55,6 @@ public class Instructor {
                 instructorDTO.setHashing_filename(hashing_filename);
                 instructorDTO.setFilesize(mfileName.getSize());
             } catch (IOException e) {
-                e.printStackTrace();
                 return "파일 업로드 실패";
             }
         }
@@ -103,7 +100,6 @@ public class Instructor {
                 courseDataDTO.setImageSize(courseImage.getSize());
 
             } catch (IOException e) {
-                e.printStackTrace();
                 return "이미지 파일 업로드 실패";
             }
         }
@@ -128,7 +124,6 @@ public class Instructor {
                     materialsFileNames.add(uuidMaterialFileName);
                     originalMaterialsFileNames.add(materialFileName);
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return "첨부파일 업로드 실패";
                 }
             }
@@ -137,8 +132,6 @@ public class Instructor {
         // 3. 첨부파일 이름을 DTO에 설정 (UUID로 저장된 파일명 리스트)
         courseDataDTO.setMaterials(String.join(",", materialsFileNames));
         courseDataDTO.setOriginalMaterials(String.join(",", originalMaterialsFileNames));
-
-        log.info("DTO 확인용================================={}", courseDataDTO);
 
         // 4. 강의 정보 저장
         instructorService.CourseDatasave(courseDataDTO);

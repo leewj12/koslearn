@@ -38,12 +38,5 @@ spring:
     auth-code-expiration-millis: 1800000
 
 mybatis:
-  # Mapper XML 파일의 경로 설정
   mapper-locations: classpath:mappers/**/*.xml
-  # MyBatis 설정 파일의 경로 설정
   config-location: classpath:config/mybatis-config.xml
-
-  logging:
-    level:
-      org.hibernate.SQL: debug
-      org.hibernate.type: trace
