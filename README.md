@@ -13,7 +13,7 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 4. [아키텍처](#아키텍처)
 5. [실행 방법](#실행-방법)
 6. [Docker 실행](#docker-실행)
-7. [EC2 배포 계획](#ec2-배포-계획)
+7. [EC2 배포](#ec2-배포)
 8. [환경 변수](#환경-변수)
 
 ---
@@ -26,6 +26,7 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 | 개발 기간 | 2024.11 ~ 2024.12 |
 | 서버 포트 | 9090 (로컬) / 8080 (Docker 컨테이너 내부) |
 | 데이터베이스 | MySQL 8.0, 스키마: `project` |
+| 배포 주소 | https://wonjae.cloud |
 
 ---
 
@@ -77,6 +78,7 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 | Build | Gradle |
 | Mail | Spring Mail (Gmail SMTP) |
 | Container | Docker, Docker Compose |
+| Infra | AWS EC2 t3.small, Nginx, Let's Encrypt (HTTPS) |
 
 ---
 
@@ -86,11 +88,14 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 [Browser]
     │
     ▼
-[Spring Boot App :9090]
+[Nginx :80/:443]  ← HTTPS (Let's Encrypt)
+    │
+    ▼
+[Spring Boot App :8080]
     ├── Controller (Thymeleaf MVC)
     ├── RestController (JSON API)
     ├── Service
-    ├── MyBatis Mapper ──── [MySQL]
+    ├── MyBatis Mapper ──── [MySQL :3306]
     └── Spring Security (STUDENT / INSTRUCTOR / ADMIN)
 ```
 
@@ -177,23 +182,21 @@ docker compose down -v       # 컨테이너 + 볼륨 삭제 (DB 초기화)
 
 ---
 
-## EC2 배포 계획
+## EC2 배포
 
-> 현재 로컬 Docker 환경까지 구성 완료. 아래는 추후 AWS EC2 배포 시 적용할 구성입니다.
+- **서버**: AWS EC2 t3.small (Ubuntu 24.04 LTS)
+- **도메인**: [wonjae.cloud](https://wonjae.cloud)
+- **SSL**: Let's Encrypt (Certbot, 자동 갱신)
+- **리버스 프록시**: Nginx (포트 80/443 → 앱 8080)
+- **실행 방식**: Docker Compose (mysql + app 컨테이너)
+- **재시작 정책**: 인스턴스 재부팅 시 crontab으로 자동 기동
 
-### 목표 환경
-
-- AWS EC2 t3.small (2GB RAM)
-- Nginx 리버스 프록시 (포트 80 → 앱 9090)
-- 동일 인스턴스에 proj3, proj4 추가 예정
-
-### 예상 Nginx 설정
+### Nginx 설정
 
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com;
-
+    server_name wonjae.cloud www.wonjae.cloud;
     client_max_body_size 100M;
 
     location / {
@@ -206,7 +209,7 @@ server {
 }
 ```
 
-### 멀티 프로젝트 포트 계획
+### 멀티 프로젝트 포트 계획 (동일 인스턴스)
 
 | 프로젝트 | 앱 포트 |
 |----------|---------|
