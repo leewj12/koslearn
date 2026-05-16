@@ -1,13 +1,14 @@
 services:
   mysql:
     image: mysql:8.0
+    command: --lower-case-table-names=1
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: proj2_db
+      MYSQL_DATABASE: project
       MYSQL_CHARACTER_SET_SERVER: utf8mb4
       MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./src/main/resources/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql

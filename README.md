@@ -13,7 +13,7 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 4. [아키텍처](#아키텍처)
 5. [실행 방법](#실행-방법)
 6. [Docker 실행](#docker-실행)
-7. [EC2 배포](#ec2-배포)
+7. [EC2 배포 계획](#ec2-배포-계획)
 8. [환경 변수](#환경-변수)
 
 ---
@@ -24,8 +24,8 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 |------|------|
 | 프로젝트 유형 | 팀 프로젝트 (포트폴리오) |
 | 개발 기간 | 2024.11 ~ 2024.12 |
-| 서버 포트 | 9090 (로컬) / 8080 (Docker) |
-| 데이터베이스 | MySQL 8.0, 스키마: `proj2_db` |
+| 서버 포트 | 9090 (로컬) / 8080 (Docker 컨테이너 내부) |
+| 데이터베이스 | MySQL 8.0, 스키마: `project` |
 
 ---
 
@@ -77,7 +77,6 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 | Build | Gradle |
 | Mail | Spring Mail (Gmail SMTP) |
 | Container | Docker, Docker Compose |
-| Infra | AWS EC2, Nginx |
 
 ---
 
@@ -87,10 +86,7 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 [Browser]
     │
     ▼
-[Nginx]  ──── 리버스 프록시 (80 → 8080)
-    │
-    ▼
-[Spring Boot App]
+[Spring Boot App :9090]
     ├── Controller (Thymeleaf MVC)
     ├── RestController (JSON API)
     ├── Service
@@ -111,18 +107,18 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 ### 1. 데이터베이스 준비
 
 ```sql
-CREATE DATABASE proj2_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE project CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 `src/main/resources/sql/schema.sql`을 실행하여 테이블을 생성합니다.
 
 ```bash
-mysql -u root -p proj2_db < src/main/resources/sql/schema.sql
+mysql -u root -p project < src/main/resources/sql/schema.sql
 ```
 
 ### 2. 환경 설정
 
-`src/main/resources/application-local.yml`을 생성합니다 (`.gitignore`에 포함, 커밋되지 않습니다).
+`src/main/resources/application-local.yml`을 생성합니다 (`.gitignore`에 포함되어 커밋되지 않습니다).
 
 ```yaml
 spring:
@@ -150,7 +146,7 @@ spring:
 
 ### 사전 요구사항
 
-- Docker Desktop (또는 Docker Engine + Docker Compose)
+- Docker Desktop
 
 ### 1. 환경 변수 파일 준비
 
@@ -181,38 +177,22 @@ docker compose down -v       # 컨테이너 + 볼륨 삭제 (DB 초기화)
 
 ---
 
-## EC2 배포
+## EC2 배포 계획
 
-### 환경
+> 현재 로컬 Docker 환경까지 구성 완료. 아래는 추후 AWS EC2 배포 시 적용할 구성입니다.
 
-- AWS EC2 t3.small (Ubuntu 22.04)
-- OpenJDK 17, Docker, Nginx
+### 목표 환경
 
-### 1. EC2 기본 설정
+- AWS EC2 t3.small (2GB RAM)
+- Nginx 리버스 프록시 (포트 80 → 앱 9090)
+- 동일 인스턴스에 proj3, proj4 추가 예정
 
-```bash
-sudo apt update && sudo apt install -y docker.io docker-compose-plugin nginx
-sudo usermod -aG docker $USER
-```
-
-### 2. 프로젝트 복사 및 실행
-
-```bash
-git clone <repo-url>
-cd koslearn
-cp .env.example .env && vi .env   # 실제 값 입력
-
-docker compose up -d --build
-```
-
-### 3. Nginx 리버스 프록시 설정
-
-`/etc/nginx/sites-available/koslearn` 생성:
+### 예상 Nginx 설정
 
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com;   # 도메인 또는 EC2 퍼블릭 IP
+    server_name your-domain.com;
 
     client_max_body_size 100M;
 
@@ -226,47 +206,23 @@ server {
 }
 ```
 
-```bash
-sudo ln -s /etc/nginx/sites-available/koslearn /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-```
+### 멀티 프로젝트 포트 계획
 
-### 4. HTTPS 설정 (Let's Encrypt)
-
-```bash
-sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d your-domain.com
-```
-
-### 5. 보안 그룹 (AWS 콘솔)
-
-| 포트 | 프로토콜 | 허용 대상 |
-|------|----------|-----------|
-| 22 | TCP | 내 IP |
-| 80 | TCP | 0.0.0.0/0 |
-| 443 | TCP | 0.0.0.0/0 |
-
-> 9090 포트는 외부에 열지 않습니다. Nginx를 통해서만 접근합니다.
-
-### 멀티 프로젝트 운영 (proj3, proj4 예정)
-
-같은 EC2에 여러 프로젝트를 올릴 경우 각 앱 포트를 다르게 설정합니다.
-
-| 프로젝트 | 앱 포트 | Nginx 경로 |
-|----------|---------|------------|
-| proj2 (KosLearn) | 9090 | `/` 또는 서브도메인 |
-| proj3 | 9091 | 서브도메인 또는 `/proj3/` |
-| proj4 | 9092 | 서브도메인 또는 `/proj4/` |
+| 프로젝트 | 앱 포트 |
+|----------|---------|
+| proj2 (KosLearn) | 9090 |
+| proj3 | 9091 |
+| proj4 | 9092 |
 
 ---
 
 ## 환경 변수
 
+`.env.example`을 복사하여 `.env`를 생성한 뒤 실제 값을 입력합니다.
+
 | 변수명 | 설명 |
 |--------|------|
 | `MYSQL_ROOT_PASSWORD` | MySQL root 비밀번호 |
-| `DB_USERNAME` | DB 접속 계정 (docker 환경: `root`) |
-| `DB_PASSWORD` | DB 접속 비밀번호 |
 | `MAIL_HOST` | SMTP 서버 (예: `smtp.gmail.com`) |
 | `MAIL_USERNAME` | 발신 이메일 주소 |
 | `MAIL_PASSWORD` | Gmail 앱 비밀번호 |
