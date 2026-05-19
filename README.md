@@ -199,7 +199,7 @@ GitHub 레포 → Settings → Secrets and variables → Actions에서 아래 3�
 |----|-----|
 | `EC2_HOST` | EC2 퍼블릭 IP 또는 도메인 |
 | `EC2_USER` | `ubuntu` |
-| `EC2_SSH_KEY` | EC2 접속용 `.pem` 파일 내용 전체 (`-----BEGIN RSA PRIVATE KEY-----` 포함) |
+| `EC2_SSH_KEY` | `.pem` 파일을 base64 인코딩한 값 (`base64 -i key.pem \| tr -d '\n'`) |
 
 ### EC2 사전 설정 (최초 1회)
 
@@ -217,7 +217,7 @@ vi .env
 
 1. GitHub Actions 러너에서 `./gradlew bootJar` 빌드
 2. 빌드된 JAR을 EC2의 `~/koslearn/app.jar`로 SCP
-3. SSH로 `docker compose up -d --build` 실행
+3. SSH로 `git pull origin main && docker compose up -d --build` 실행
 
 ### 업로드 파일 영속성
 
@@ -241,14 +241,14 @@ vi .env
 - **SSL**: Let's Encrypt (Certbot, 자동 갱신)
 - **리버스 프록시**: Nginx (포트 80/443 → 앱 8080)
 - **실행 방식**: Docker Compose (mysql + app 컨테이너)
-- **재시작 정책**: 인스턴스 재부팅 시 crontab으로 자동 기동
+- **재시작 정책**: `restart: unless-stopped` (컨테이너 자동 재기동)
 
 ### Nginx 설정
 
 ```nginx
 server {
     listen 80;
-    server_name wonjae.cloud www.wonjae.cloud;
+    server_name koslearn.wonjae.cloud;
     client_max_body_size 100M;
 
     location / {
