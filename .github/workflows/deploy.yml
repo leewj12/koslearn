@@ -31,5 +31,5 @@ jobs:
           JAR=$(find build/libs -name "*.jar" -not -name "*plain*" | head -1)
           scp -i key.pem -o StrictHostKeyChecking=no "$JAR" "$EC2_USER@$EC2_HOST:~/koslearn/app.jar"
           ssh -i key.pem -o StrictHostKeyChecking=no "$EC2_USER@$EC2_HOST" \
-            "cd ~/koslearn && docker compose up -d --build"
+            "cd ~/koslearn && git pull origin main && docker compose up -d --build"
           rm -f key.pem
