@@ -177,8 +177,21 @@ MySQL 헬스체크가 통과된 후 앱이 기동됩니다 (약 2~3분 소요).
 
 ```bash
 docker compose down          # 컨테이너 종료 (데이터 유지)
-docker compose down -v       # 컨테이너 + 볼륨 삭제 (DB 초기화)
+docker compose down -v       # 컨테이너 + 볼륨 삭제 (DB + 업로드 파일 초기화)
 ```
+
+### 업로드 파일 영속성
+
+런타임에 업로드된 파일은 Docker named volume에 저장되어 컨테이너 재시작 후에도 유지됩니다.
+
+| 볼륨명 | 컨테이너 내 경로 | 용도 |
+|--------|-----------------|------|
+| `courseimages` | `/app/src/main/resources/courseimages` | 강의 썸네일 이미지 |
+| `coursefiles` | `/app/src/main/resources/coursefiles` | 강의 첨부파일 |
+| `instructor_images` | `/app/src/main/resources/Instructorimages` | 강사 프로필 이미지 |
+| `userimages` | `/app/src/main/resources/userimages` | 사용자 프로필 이미지 |
+| `notice` | `/app/src/main/resources/notice` | 공지사항 첨부파일 |
+| `communityupload` | `/app/src/main/resources/communityupload` | 커뮤니티 첨부파일 |
 
 ---
 
