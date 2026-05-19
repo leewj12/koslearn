@@ -21,6 +21,12 @@ public class WebConfig implements WebMvcConfigurer {
                         "/communityupload/**",
                         "/fragments/**")
                 .addResourceLocations(
+                        "file:src/main/resources/courseimages/",
+                        "file:src/main/resources/coursefiles/",
+                        "file:src/main/resources/Instructorimages/",
+                        "file:src/main/resources/userimages/",
+                        "file:src/main/resources/notice/",
+                        "file:src/main/resources/communityupload/",
                         "classpath:/images/",
                         "classpath:/static/",
                         "classpath:/courseimages/",

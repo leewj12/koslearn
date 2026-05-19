@@ -21,6 +21,7 @@ services:
 
   app:
     build: .
+    restart: unless-stopped
     ports:
       - "9090:8080"
     environment:
@@ -33,6 +34,19 @@ services:
     depends_on:
       projects-mysql:
         condition: service_healthy
+    volumes:
+      - courseimages:/app/src/main/resources/courseimages
+      - coursefiles:/app/src/main/resources/coursefiles
+      - instructor_images:/app/src/main/resources/Instructorimages
+      - userimages:/app/src/main/resources/userimages
+      - notice:/app/src/main/resources/notice
+      - communityupload:/app/src/main/resources/communityupload
 
 volumes:
   mysql_data:
+  courseimages:
+  coursefiles:
+  instructor_images:
+  userimages:
+  notice:
+  communityupload:
