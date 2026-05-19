@@ -26,7 +26,7 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 | 개발 기간 | 2024.11 ~ 2024.12 |
 | 서버 포트 | 9090 (로컬) / 8080 (Docker 컨테이너 내부) |
 | 데이터베이스 | MySQL 8.0, 스키마: `project` |
-| 배포 주소 | https://wonjae.cloud |
+| 배포 주소 | https://koslearn.wonjae.cloud |
 
 ---
 
@@ -160,25 +160,64 @@ cp .env.example .env
 # .env 파일을 열어 비밀번호 및 메일 정보 입력
 ```
 
-### 2. 빌드 및 실행
+### 2. JAR 빌드
+
+```bash
+./gradlew bootJar -x test
+```
+
+### 3. 빌드 및 실행
 
 ```bash
 docker compose up --build
 ```
 
-처음 실행 시 Gradle 빌드와 MySQL 초기화가 함께 진행됩니다.  
-MySQL 헬스체크가 통과된 후 앱이 기동됩니다 (약 2~3분 소요).
+MySQL 헬스체크가 통과된 후 앱이 기동됩니다 (약 1~2분 소요).
 
-### 3. 접속
+### 4. 접속
 
 `http://localhost:9090`
 
-### 4. 종료
+### 5. 종료
 
 ```bash
 docker compose down          # 컨테이너 종료 (데이터 유지)
 docker compose down -v       # 컨테이너 + 볼륨 삭제 (DB + 업로드 파일 초기화)
 ```
+
+---
+
+## CI/CD (GitHub Actions)
+
+`main` 브랜치에 푸시하면 자동으로 빌드 → EC2 배포가 실행됩니다.
+
+### GitHub Secrets 설정
+
+GitHub 레포 → Settings → Secrets and variables → Actions에서 아래 3개를 등록합니다.
+
+| 키 | 값 |
+|----|-----|
+| `EC2_HOST` | EC2 퍼블릭 IP 또는 도메인 |
+| `EC2_USER` | `ubuntu` |
+| `EC2_SSH_KEY` | EC2 접속용 `.pem` 파일 내용 전체 (`-----BEGIN RSA PRIVATE KEY-----` 포함) |
+
+### EC2 사전 설정 (최초 1회)
+
+```bash
+# EC2에서
+mkdir -p ~/koslearn
+cd ~/koslearn
+# .env 파일 작성
+cp /path/to/.env.example .env
+vi .env
+# docker-compose.yml 준비 (git clone 또는 직접 작성)
+```
+
+### 동작 방식
+
+1. GitHub Actions 러너에서 `./gradlew bootJar` 빌드
+2. 빌드된 JAR을 EC2의 `~/koslearn/app.jar`로 SCP
+3. SSH로 `docker compose up -d --build` 실행
 
 ### 업로드 파일 영속성
 
@@ -198,7 +237,7 @@ docker compose down -v       # 컨테이너 + 볼륨 삭제 (DB + 업로드 파�
 ## EC2 배포
 
 - **서버**: AWS EC2 t3.small (Ubuntu 24.04 LTS)
-- **도메인**: [wonjae.cloud](https://wonjae.cloud)
+- **도메인**: [koslearn.wonjae.cloud](https://koslearn.wonjae.cloud)
 - **SSL**: Let's Encrypt (Certbot, 자동 갱신)
 - **리버스 프록시**: Nginx (포트 80/443 → 앱 8080)
 - **실행 방식**: Docker Compose (mysql + app 컨테이너)
