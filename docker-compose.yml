@@ -1,5 +1,5 @@
 services:
-  mysql:
+  projects-mysql:
     image: mysql:8.0
     command: --lower-case-table-names=1
     environment:
@@ -30,7 +30,7 @@ services:
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
     depends_on:
-      mysql:
+      projects-mysql:
         condition: service_healthy
 
 volumes:
