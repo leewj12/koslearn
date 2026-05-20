@@ -1,245 +1,78 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <link rel="stylesheet" th:href="@{/css/header/header.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시판 글쓰기</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            width: 60%;
-            margin: 40px auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 1px solid #ccc;
-        }
-
-        .aa {
-            font-size: 24px;
-            text-align: left;
-            color: #333;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-size: 16px;
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        input[type="text"], input[type="file"], select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 6px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        select {
-            background-color: #fff;
-            font-size: 14px;
-        }
-
-        textarea {
-            height: 200px;
-            resize: vertical;
-            font-size: 14px;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 15px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            width: 48%;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-cancel {
-            background-color: #dc3545;
-        }
-
-        .btn-cancel:hover {
-            background-color: #a71d2a;
-        }
-
-        .btn-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        .back-btn-container {
-            margin-bottom: 20px;
-        }
-
-        .back-btn {
-            background-color: #6c757d;
-            color: #fff;
-            padding: 8px 15px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-
-        .info-text {
-            font-size: 12px;
-            color: #888;
-            margin-top: 5px;
-        }
-        .divider {
-            width: 1px;
-            height: 20px;
-            background-color: #ccc;
-        }
-        #category{
-            width:30%;
-        }
-        #change{
-            width:15%;
-        }
-    </style>
+    <title>글쓰기 - 코스런</title>
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-<!-- Header Fragment 삽입 -->
+
 <div th:insert="fragments/header :: header"></div>
-<div class="container">
-    <h1 class="aa">커뮤니티 글쓰기</h1>
-    <form action="/community/write" method="post" enctype="multipart/form-data">
-        <!-- 제목 입력 -->
-        <div class="form-group">
-            <label for="title">제목</label>
-            <input type="text" id="title" name="title" required placeholder="제목을 입력하세요">
-        </div>
 
-        <!-- 작성자 입력 -->
-        <div class="form-group">
-            <input type="hidden" id="username" name="username" readonly th:value="${#authentication.principal.username}">
-        </div>
+<div style="max-width:720px; margin:0 auto; padding:32px 20px;">
+    <h1 class="page-title">글쓰기</h1>
+    <p class="page-subtitle">커뮤니티에 새 글을 작성하세요</p>
 
-        <!-- 카테고리 선택 -->
-        <div class="form-group">
-            <label for="category">카테고리</label>
-            <select id="category" name="category" required>
-                <option value="" disabled selected>카테고리를 선택하세요</option>
-                <option value="질문답변">질문답변</option>
-                <option value="고민상담">고민상담</option>
-                <option value="진로상담">진로상담</option>
-                <option value="팀프로젝트">팀프로젝트</option>
-                <option value="채용">채용</option>
-                <option value="블로그">블로그</option>
-            </select>
-        </div>
+    <div class="card">
+        <form action="/community/write" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="username" th:value="${#authentication.principal.username}">
+            <input type="hidden" name="userId" th:value="${#authentication.principal.id}">
+            <input type="hidden" name="mode" value="write">
 
+            <div class="form-group">
+                <label class="form-label-custom">제목</label>
+                <input type="text" class="form-input" id="title" name="title" required placeholder="제목을 입력하세요">
+            </div>
 
+            <div class="form-group">
+                <label class="form-label-custom">카테고리</label>
+                <select class="form-input" id="category" name="category" required style="max-width:200px;">
+                    <option value="" disabled selected>선택하세요</option>
+                    <option value="질문답변">질문답변</option>
+                    <option value="고민상담">고민상담</option>
+                    <option value="진로상담">진로상담</option>
+                    <option value="팀프로젝트">팀프로젝트</option>
+                    <option value="채용">채용</option>
+                    <option value="블로그">블로그</option>
+                </select>
+            </div>
 
+            <div class="form-group">
+                <label class="form-label-custom">본문</label>
+                <textarea class="form-input" id="content" name="content" rows="10" placeholder="내용을 입력하세요"></textarea>
+            </div>
 
+            <div class="form-group">
+                <label class="form-label-custom">첨부 파일</label>
+                <input type="file" class="form-input" id="fileName" name="fileName" accept="*/*">
+            </div>
 
-        <!-- 본문 입력 -->
-        <div class="form-group">
-            <label for="content">본문</label>
-            <!-- 서체 변경 -->
-
-            <select id="change" title="서체 변경" onchange="changeFont(event)">
-                <option value="Arial">Arial</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Courier New">Courier New</option>
-                <option value="Verdana">Verdana</option>
-            </select>
-            <textarea id="content" name="content" placeholder="내용을 입력하세요."></textarea>
-        </div>
-        <div class="form-group">
-            <label for="fileName">첨부 파일</label>
-            <input type="file" id="fileName" name="fileName" accept="*/*">
-        </div>
-
-
-        <!-- 버튼 영역 -->
-        <div class="btn-container">
-            <button type="submit" class="btn">작성하기</button>
-            <button type="reset" class="btn btn-cancel">초기화</button>
-        </div>
-
-        <!-- 숨겨진 필드 -->
-        <input type="hidden" id="userId" name="userId" th:value="${#authentication.principal.id}">
-        <input type="hidden" name="mode" value="write">
-    </form>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="submit" class="btn-primary-custom">작성하기</button>
+                <button type="reset" class="btn-secondary-custom">초기화</button>
+                <a href="/community/list" class="btn-secondary-custom">취소</a>
+            </div>
+        </form>
+    </div>
 </div>
-</body>
+
 <script>
-
-    // 서체 변경 핸들러
-    function changeFont(event) {
-        const contentArea = document.getElementById('contentArea');
-        contentArea.style.fontFamily = event.target.value;
+document.getElementById("fileName").addEventListener("change", function () {
+    if (this.files[0] && this.files[0].size > 100 * 1024 * 1024) {
+        alert("파일 크기는 100MB를 초과할 수 없습니다.");
+        this.value = "";
     }
-// 파일 크기 제한 검증 (100MB)
- document.getElementById("fileName").addEventListener("change", function () {
-     const file = this.files[0];
-     if (file.size > 100 * 1024 * 1024) {
-         alert("파일 크기는 5MB를 초과할 수 없습니다.");
-         this.value = "";
-     }
- });
-
- // 폼 검증
- document.querySelector("form").addEventListener("submit", function (event) {
-     const title = document.getElementById("title").value.trim();
-     const category = document.getElementById("category").value;
-     const content = document.getElementById("content").value.trim();
-
-     if (!title || !category || !content) {
-         alert("제목, 카테고리, 본문을 모두 입력해주세요.");
-         event.preventDefault();
-     }
- });
-
+});
+document.querySelector("form").addEventListener("submit", function (e) {
+    var t = document.getElementById("title").value.trim();
+    var c = document.getElementById("category").value;
+    var ct = document.getElementById("content").value.trim();
+    if (!t || !c || !ct) { alert("제목, 카테고리, 본문을 모두 입력해주세요."); e.preventDefault(); }
+});
 </script>
+</body>
 </html>

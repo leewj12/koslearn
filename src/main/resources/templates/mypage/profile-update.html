@@ -1,202 +1,99 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로필 수정 페이지</title>
-    <style>
-        /* 페이지 스타일 */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(to right, #ff7e5f, #feb47b); /* 그라데이션 배경 */
-        }
-
-        /* 프로필 수정 컨테이너 */
-        .profile-edit-container {
-            width: 450px;
-            padding: 30px 40px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-        }
-
-        /* 헤더 스타일 */
-        .profile-edit-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .profile-edit-header h1 {
-            font-size: 28px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        /* 프로필 이미지 */
-        .profile-image {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .profile-image img {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #3498db;
-            margin-bottom: 15px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .profile-image input {
-            margin-top: 10px;
-        }
-
-        /* 폼 스타일 */
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        label {
-            font-size: 15px;
-            font-weight: bold;
-            color: #444;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        select {
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            width: 100%;
-            box-sizing: border-box;
-            background-color: #f9f9f9;
-        }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="tel"]:focus {
-            border-color: #3498db;
-            background-color: #fff;
-        }
-
-        /* 저장 버튼 스타일 */
-        .save-button {
-            padding: 12px;
-            font-size: 16px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .save-button:hover {
-            background-color: #2980b9;
-        }
-    </style>
+    <title>프로필 수정 - 코스런</title>
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-<!-- 프로필 수정 컨테이너 -->
-<div class="profile-edit-container">
-    <!-- 헤더 -->
-    <div class="profile-edit-header">
-        <h1>프로필 수정</h1>
-    </div>
 
-    <!-- 프로필 이미지 -->
+<div th:insert="fragments/header :: header"></div>
 
+<div class="layout-sidebar">
+    <nav class="sidebar">
+        <div class="sidebar-title">마이페이지</div>
+        <a href="/my/mypage"><i class="bi bi-person-circle"></i> 내 프로필</a>
+        <a href="/my/profile-update" class="active"><i class="bi bi-pencil"></i> 프로필 수정</a>
+        <a href="/my/courses"><i class="bi bi-play-btn"></i> 진행 중인 강의</a>
+        <a href="/mypay/pay"><i class="bi bi-receipt"></i> 결제 내역</a>
+        <a href="/cart/purchase"><i class="bi bi-cart"></i> 장바구니</a>
+    </nav>
 
-    <!-- 프로필 수정 폼 -->
-    <form action="/my/profile-update" method="POST" enctype="multipart/form-data">
-        <input type="hidden" id="id" name="id" th:value="${#authentication.principal.id}">
+    <main class="content-area">
+        <h1 class="page-title">프로필 수정</h1>
+        <p class="page-subtitle">회원 정보를 수정하세요</p>
 
-        <div class="profile-image">
-            <img id="image-preview" src="/images/default-image.jpg" alt="프로필 이미지 미리보기">
-            <input type="file" class="form-control" id="profile-image" name="mfilename" accept="image/*">
+        <div class="card" style="max-width: 560px;">
+            <form action="/my/profile-update" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="user-id-input" name="id" th:value="${#authentication.principal.id}">
+
+                <div style="text-align:center; margin-bottom:24px;">
+                    <img id="profilePreview" src="/images/default-image.jpg" alt="프로필" class="profile-avatar">
+                    <div style="margin-top:12px;">
+                        <label for="mfilename" class="btn-secondary-custom" style="cursor:pointer;">
+                            <i class="bi bi-camera"></i> 사진 변경
+                        </label>
+                        <input type="file" id="mfilename" name="mfilename" accept="image/*" style="display:none;" onchange="previewImage(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label-custom">이름</label>
+                    <input type="text" class="form-input" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">닉네임</label>
+                    <input type="text" class="form-input" id="nickname" name="nickname" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">이메일</label>
+                    <input type="email" class="form-input" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">연락처</label>
+                    <input type="text" class="form-input" id="phone_number" name="phone_number" required>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:24px;">
+                    <button type="submit" class="btn-primary-custom">저장하기</button>
+                    <a href="/my/mypage" class="btn-secondary-custom">취소</a>
+                </div>
+            </form>
         </div>
-
-        <label for="name">이름</label>
-        <input type="text" id="name" name="name">
-
-        <label for="nickname">닉네임</label>
-        <input type="text" id="nickname" name="nickname">
-
-        <label for="email">이메일</label>
-        <input type="email" id="email" name="email">
-
-        <label for="phoneNumber">연락처</label>
-        <input type="tel" id="phoneNumber" name="phone_number">
-
-        <button type="submit" class="save-button">저장하기</button>
-    </form>
+    </main>
 </div>
-<input type="hidden" id="user-id" th:value="${#authentication.principal.id}">
 
-</body>
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+    <i class="bi bi-list"></i>
+</button>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // 사용자 ID 가져오기
-        const userIdElement = document.getElementById('user-id');
-        if (!userIdElement) {
-            console.error("user-id 요소를 찾을 수 없습니다. HTML 구조를 확인하세요.");
-            return;
-        }
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profilePreview').src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 
-        const userId = userIdElement.value;
-
-        // AJAX 요청으로 사용자 데이터 가져오기
-        fetch(`/my/getMyInfo?userId=${userId}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('서버 응답이 올바르지 않습니다.');
-            })
-            .then(data => {
-                // 서버에서 받은 데이터를 각 input 필드에 삽입
-                document.getElementById('name').value = data.name || '';
-                document.getElementById('nickname').value = data.nickname || '';
-                document.getElementById('email').value = data.email || '';
-                document.getElementById('phoneNumber').value = data.phone_number || '';
-            })
-            .catch(error => console.error('AJAX 요청 중 오류 발생:', error));
-    });
-
-    // 프로필 이미지 입력 필드 선택
-    const profileImageInput = document.getElementById('profile-image');
-    const imagePreview = document.getElementById('image-preview');
-
-    // 파일 선택 이벤트 처리
-    profileImageInput.addEventListener('change', function (event) {
-        const file = event.target.files[0]; // 선택한 파일 가져오기
-
-        if (file) {
-            const reader = new FileReader(); // FileReader 객체 생성
-
-            // 파일 로드가 완료되었을 때 실행될 함수
-            reader.onload = function (e) {
-                imagePreview.src = e.target.result; // 이미지 미리보기 URL 설정
-            };
-
-            reader.readAsDataURL(file); // 파일을 읽어 데이터 URL로 변환
-        }
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    const userId = document.getElementById('user-id-input').value;
+    fetch('/my/getMyInfo?userId=' + userId)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('nickname').value = data.nickname || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('phone_number').value = data.phone_number || '';
+        })
+        .catch(() => {});
+});
 </script>
+</body>
 </html>

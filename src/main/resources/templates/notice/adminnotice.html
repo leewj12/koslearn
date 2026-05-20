@@ -1,206 +1,61 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항 작성</title>
-    <!-- 부트스트랩 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- 부트스트랩 아이콘 -->
+    <title>공지사항 작성 - 코스런</title>
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f6f9;
-        }
-
-        .container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 1100px; /* 창 크기 확장 */
-            margin: 0 auto;
-            min-height: 100vh; /* 세로값 확장 */
-        }
-
-        h1 {
-            color: #333;
-            font-size: 2rem;
-            margin-bottom: 30px;
-        }
-
-        .form-label {
-            font-weight: bold;
-            color: #555;
-        }
-
-        .form-control {
-            border-radius: 5px;
-            box-shadow: none;
-            border: 1px solid #ddd;
-        }
-
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-        }
-
-        .form-text {
-            color: #6c757d;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 5px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* 버튼들 */
-        .btn-homepage, .btn-back, .btn-admin {
-            width: 200px;
-            margin: 10px 5px;
-            text-align: center;
-        }
-
-        .btn-homepage {
-            background-color: #6c757d;
-            color: #fff;
-        }
-
-        .btn-homepage:hover {
-            background-color: #5a6268;
-        }
-
-        .btn-back {
-            background-color: #28a745;
-            color: #fff;
-        }
-
-        .btn-back:hover {
-            background-color: #218838;
-        }
-
-        .btn-admin {
-            background-color: #fd7e14; /* 주황색으로 변경 */
-            color: #fff;
-        }
-
-        .btn-admin:hover {
-            background-color: #e67e22; /* 조금 더 어두운 주황색 */
-        }
-
-        /* 공지사항 등록, 초기화 버튼 디자인 */
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .action-buttons .btn {
-            width: 150px;
-            margin-right: 10px;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        /* 공지사항 등록 버튼 색상 변경 */
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-        }
-
-        .btn-custom:hover {
-            background-color: #0056b3;
-        }
-
-        /* 초기화 버튼 빨강 */
-        .btn-danger {
-            background-color: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-
-        /* 아이콘 위치 */
-        .btn i {
-            margin-right: 8px;
-        }
-
-        /* 제목, 썸네일, 배너 이미지 업로드 width 조정 */
-        .form-control-sm {
-            width: 100%; /* 본문은 그대로 두고 나머지 폼 필드의 너비 줄이기 */
-        }
-
-        .form-control-title, .form-control-thumbnail, .form-control-banner {
-            width: 50%;
-        }
-
-        /* 추가적인 여백 조정 */
-        .mb-3 {
-            margin-bottom: 20px; /* 각 폼 필드 간 여백 */
-        }
-    </style>
 </head>
 <body>
-<div class="container my-5">
-    <h1 class="text-center mb-4">공지사항 작성</h1>
-    <div class="text-center">
-        <!-- 버튼들 -->
-        <a href="/admin/home" class="btn btn-admin"><i class="bi bi-tools"></i> 관리자 페이지</a>
-        <a href="/" class="btn btn-homepage"><i class="bi bi-house-door"></i> 홈페이지</a>
-        <a href="javascript:history.back()" class="btn btn-back"><i class="bi bi-arrow-left-circle"></i> 뒤로 가기</a>
-    </div>
 
-    <form action="/admin/notice" method="POST" enctype="multipart/form-data">
-        <!-- 제목 -->
-        <div class="mb-3">
-            <label for="title" class="form-label">제목</label>
-            <input type="text" class="form-control form-control-title" id="title" name="title" placeholder="공지사항 제목을 입력하세요" required>
+<div th:insert="fragments/header :: header"></div>
+
+<div class="layout-sidebar">
+    <nav class="sidebar">
+        <div class="sidebar-title">관리자 메뉴</div>
+        <a href="/admin/home"><i class="bi bi-speedometer2"></i> 대시보드</a>
+        <a href="/admin/notice" class="active"><i class="bi bi-pencil-square"></i> 공지사항 작성</a>
+        <a href="/noticeview"><i class="bi bi-bell"></i> 공지사항</a>
+        <a href="/admin/courselist"><i class="bi bi-play-circle"></i> 강의 관리</a>
+        <a href="/admin/payment"><i class="bi bi-credit-card"></i> 결제 관리</a>
+        <a href="/community/list"><i class="bi bi-chat-left-text"></i> 커뮤니티</a>
+        <a href="/my/mypage"><i class="bi bi-person-circle"></i> 마이페이지</a>
+    </nav>
+
+    <main class="content-area">
+        <h1 class="page-title">공지사항 작성</h1>
+        <p class="page-subtitle">새로운 공지사항을 등록하세요</p>
+
+        <div class="card" style="max-width: 720px;">
+            <form th:action="@{/admin/notice}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="form-label-custom">제목</label>
+                    <input type="text" class="form-input" name="title" required placeholder="공지사항 제목을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">내용</label>
+                    <textarea class="form-input" name="content" rows="8" required placeholder="공지사항 내용을 입력하세요"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">썸네일 이미지</label>
+                    <input type="file" class="form-input" name="thumbnailImage" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">배너 이미지</label>
+                    <input type="file" class="form-input" name="bannerImage" accept="image/*">
+                </div>
+                <button type="submit" class="btn-primary-custom" style="margin-top:8px;">공지사항 등록</button>
+            </form>
         </div>
-
-        <!-- 본문 작성 -->
-        <div class="mb-3">
-            <label for="content" class="form-label">본문 작성</label>
-            <textarea class="form-control" id="content" name="content" rows="6" placeholder="공지사항 본문을 작성하세요" required></textarea>
-        </div>
-
-        <!-- 썸네일 이미지 업로드 -->
-        <div class="mb-3">
-            <label for="thumbnailImage" class="form-label">썸네일 이미지 업로드</label>
-            <input type="file" class="form-control form-control-thumbnail" id="thumbnailImage" name="thumbnailImage" accept="image/*">
-            <small class="form-text text-muted">공지사항 목록에 표시될 작은 이미지입니다. (jpg, png, gif)</small>
-        </div>
-
-        <!-- 배너 이미지 업로드 -->
-        <div class="mb-3">
-            <label for="bannerImage" class="form-label">배너 이미지 업로드</label>
-            <input type="file" class="form-control form-control-banner" id="bannerImage" name="bannerImage" accept="image/*">
-            <small class="form-text text-muted">본문에 사용될 큰 이미지를 업로드하세요. (jpg, png, gif)</small>
-        </div>
-
-        <!-- 사용자 ID 숨겨진 필드 -->
-        <input type="hidden" id="user-id" name="userId" th:value="${#authentication.principal.id}">
-
-        <!-- 버튼 -->
-        <div class="text-center action-buttons">
-            <button type="submit" class="btn btn-custom">공지사항 등록</button>
-            <button type="reset" class="btn btn-danger">초기화</button>
-        </div>
-    </form>
+    </main>
 </div>
 
-<!-- 부트스트랩 JS를 사용하지 않으므로 추가하지 않음 -->
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+    <i class="bi bi-list"></i>
+</button>
+
 </body>
 </html>

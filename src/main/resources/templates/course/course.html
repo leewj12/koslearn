@@ -1,436 +1,163 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns="http://www.w3.org/1999/html">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>강의 상세보기</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- 이미지 아이콘 부트스트랩 -->
-  <link rel="stylesheet" th:href="@{/css/header/header.css}">
-  <style>
-  body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f8f9fa;
-  color: #333;
-  }
-
-  /* Course Header */
-.course-header {
-  background: white;
-  color: black;
-  padding: 40px 20px;
-  text-align: left; /* 제목 왼쪽 정렬 */
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 30px; /* 제목과 이미지 간 간격을 위해 마진 추가 */
-}
-
-.course-header h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-
-/* 카테고리, 난이도, 등록일 배치 및 색상 조정 */
-.course-header p {
-  margin-bottom: 15px;
-  font-size: 1rem;
-}
-
-/* 카테고리, 난이도, 등록일 배지를 한 줄로 배치 */
-.course-header .badge {
-  display: inline-block;
-  margin-right: 15px; /* 각 항목 간 간격을 15px로 설정 */
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 20px; /* 배지의 둥근 모서리 */
-}
-
-/* 카테고리 배지 색상 */
-.course-header .badge.category {
-  background-color: #fd7e14; /* 카테고리 배경색 주황색 */
-  color: white;
-}
-
-/* 난이도 배지 색상 */
-.course-header .badge.level {
-  background-color:  #fd7e14; /* 난이도 배경색 초록색 */
-  color: white;
-}
-
-/* 등록일 배지 색상 */
-.course-header .badge.date {
-  background-color: #fd7e14; /* 등록일 배경색 파란색 */
-  color: white;
-}
-
-.course-header .course-price {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #ff5733;
-  margin-top: 20px;
-}
-
-  /* Course Image */
-  .course-image {
-  margin-top: 30px; /* 이미지 상단에 여백 추가 */
-  margin-bottom: 40px; /* 이미지 아래 여백 추가 */
-  }
-
-  .course-image img {
-  width: 100%;
-  border-radius: 10px;
-  }
-
-  /* Course Overview */
-  .course-overview, .course-preview, .course-instructor, .course-reviews, .course-board {
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-  }
-
-  /* Review Item */
-  .review-item {
-  border-bottom: 1px solid #e9ecef;
-  padding: 15px 0;
-  }
-
-  .review-item:last-child {
-  border-bottom: none;
-  }
-
-  .star-rating {
-  color: #ffc107;
-  margin-right: 10px;
-  }
-
-  .media img {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  }
-
-  /* Custom Buttons */
-  .btn-custom {
-  background-color: #28a745; /* 장바구니 추가 버튼을 녹색으로 변경 */
-  color: white;
-  border-radius: 5px;
-  padding: 15px;
-  font-size: 1.2rem;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  }
-
-  .btn-custom:hover {
-  background-color: #218838; /* 장바구니 추가 버튼 호버 색상 */
-  color: white;
-  }
-
-  .btn-custom i {
-  margin-right: 10px;
-  }
-
-  /* 강의 수강신청 버튼 색상 변경 */
-  #purchaseButton {
-  background-color: #007bff; /* 수강신청 버튼을 노란색으로 변경 */
-  color: white;
-  border-radius: 5px;
-  padding: 15px;
-  font-size: 1.2rem;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  }
-
-  #purchaseButton:hover {
-  background-color: #e0a800; /* 수강신청 버튼 호버 색상 */
-  color: white;
-  }
-
-  /* Responsive Grid */
-  .main-content {
-  display: flex;
-  flex-wrap: wrap;
-  }
-
-  .main-content > div {
-  margin-bottom: 20px;
-  }
-
-  .left-column {
-  flex: 2;
-  margin-right: 20px;
-  }
-
-  .right-column {
-  flex: 1;
-  margin-top: 20px;
-  }
-
-  /* Price */
-  .course-price {
-  font-size: 2.2rem; /* 가격 크기를 더 크게 */
-  font-weight: bold;
-  color: #ff5733;
-  margin-top: 20px; /* 가격 상단 여백 추가 */
-  }
-
-  .course-badge {
-  font-size: 1.1rem;
-  margin-right: 10px;
-  }
-
-  /* Embed Video */
-  .course-preview iframe {
-  border-radius: 10px;
-  }
-
-  /* Center text */
-  .text-center {
-  text-align: center;
-  }
-
-  /* 카테고리, 난이도, 등록일 줄바꿈 및 간격 조정 */
-  .course-header p {
-  margin-bottom: 15px; /* 등록일 아래 여백 추가 */
-  font-size: 1rem; /* 폰트 크기 조정 */
-  }
-
-  .right-column .course-header {
-  margin-bottom: 20px; /* 오른쪽 사이드바의 상단 여백을 늘림 */
-  }
-
-  .right-column .course-header .badge {
-  display: block; /* 배지를 block으로 설정하여 줄바꿈 */
-  margin-bottom: 10px; /* 배지 간격 늘리기 */
-  }
-
-    /* 강의 게시판 색상 변경 */
-.course-board {
-    background-color: #f1f1f1; /* 배경색을 연한 회색으로 변경 */
-    color: #333; /* 텍스트 색상을 어두운 회색으로 변경 */
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-/* 게시글 제목 색상 변경 */
-.course-board h3 {
-    color: #007bff; /* 게시글 제목을 파란색으로 변경 */
-}
-
-/* 게시글 텍스트 색상 변경 */
-.course-board p {
-    color: #555; /* 게시글 내용 색상 변경 (연한 회색) */
-}
-
-/* 게시글 버튼 색상 변경 */
-.course-board .btn-custom {
-    background-color: #ffc107; /* 버튼을 노란색으로 변경 */
-    color: white;
-}
-
-.course-board .btn-custom:hover {
-    background-color: #e0a800; /* 버튼 호버 시 색상 변경 */
-}
-
-
-
-
-
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의 상세 - 코스런</title>
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/homecss/footer.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .course-layout { display:grid; grid-template-columns:2fr 1fr; gap:24px; }
+        .course-image img { width:100%; border-radius:12px; margin-bottom:20px; }
+        .badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+        .badge-item { display:inline-block; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; background:rgba(108,99,255,.1); color:#6c63ff; }
+        .course-price { font-size:1.8rem; font-weight:800; color:#6c63ff; margin:16px 0; }
+        .section-card { background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,.06); padding:24px; margin-bottom:20px; }
+        .section-card h3 { font-size:1rem; font-weight:700; color:#1a1a2e; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid #eee; }
+        .instructor-profile { display:flex; gap:16px; align-items:flex-start; }
+        .instructor-profile img { width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid #6c63ff; }
+        .instructor-profile h5 { font-size:15px; font-weight:700; color:#1a1a2e; margin-bottom:4px; }
+        .instructor-profile p { font-size:13px; color:#666; margin-bottom:4px; }
+        .preview-video iframe { width:100%; height:200px; border-radius:10px; border:none; }
+        .review-item { border-bottom:1px solid #f0f0f0; padding:12px 0; }
+        .review-item:last-child { border-bottom:none; }
+        .star-rating { color:#ffc107; margin-right:8px; }
+        .action-btn { display:block; width:100%; padding:14px; border-radius:10px; font-size:15px; font-weight:600; text-align:center; text-decoration:none; cursor:pointer; transition:all .2s; margin-bottom:10px; border:none; }
+        .btn-cart { background:#6c63ff; color:#fff; }
+        .btn-cart:hover { background:#5a52d5; color:#fff; }
+        .btn-enroll { background:rgba(108,99,255,.1); color:#6c63ff; }
+        .btn-enroll:hover { background:rgba(108,99,255,.2); }
+        @media (max-width:768px) { .course-layout { grid-template-columns:1fr; } }
+    </style>
 </head>
 <body>
 <div th:insert="fragments/header :: header"></div>
-<!-- Main Content -->
-<div class="container mt-5">
-  <div class="row main-content">
-    <!-- Left Column -->
-    <div class="col-lg-8 left-column">
-      <div class="course-header">
-        <h1 th:text="${course.title}">강의 제목</h1>
-        <hr>
-        <br>
-        <p th:text="${course.summary}">강의 간단 설명</p>
-      </div>
 
-      <!-- Course Image -->
+<div style="max-width:1100px; margin:0 auto; padding:32px 20px;">
+    <div class="course-layout">
+        <div>
+            <div class="section-card">
+                <h1 class="page-title" th:text="${course.title}">강의 제목</h1>
+                <hr style="border:none; border-top:1px solid #eee; margin:16px 0;">
+                <p style="font-size:15px; color:#555; line-height:1.7;" th:text="${course.summary}">강의 요약</p>
+            </div>
 
+            <div class="course-image">
+                <img th:src="@{'/courseimages/' + ${course.image}}" alt="강의 이미지">
+            </div>
 
+            <div class="section-card" id="overview">
+                <h3>강의 설명</h3>
+                <p style="line-height:1.8; font-size:15px; color:#444;" th:text="${course.description}">강의 상세 설명</p>
+            </div>
 
-      <div class="course-image mb-3">
-        <img th:src="@{'/courseimages/' + ${course.image}}" alt="강의 이미지" class="img-fluid">
-      </div>
+            <div class="section-card" id="reviews">
+                <h3>강의 리뷰</h3>
+                <div class="review-item">
+                    <span class="star-rating">★★★★★</span>
+                    <strong>리뷰 제목 1</strong>
+                    <p style="font-size:14px; color:#555; margin:6px 0;">여기에 리뷰 내용을 입력하세요.</p>
+                    <small style="color:#999;">작성자: 사용자1 | 날짜: 2024-11-24</small>
+                </div>
+                <div class="review-item">
+                    <span class="star-rating">★★★★☆</span>
+                    <strong>리뷰 제목 2</strong>
+                    <p style="font-size:14px; color:#555; margin:6px 0;">또 다른 리뷰 내용을 작성하세요.</p>
+                    <small style="color:#999;">작성자: 사용자2 | 날짜: 2024-11-23</small>
+                </div>
+            </div>
 
-      <!-- Course Overview -->
-      <div class="course-overview" id="overview">
-        <h3>강의 설명</h3>
-        <p th:text="${course.description}">강의 상세 설명</p>
-      </div>
-
-      <!-- Course Reviews -->
-      <div class="course-reviews" id="reviews">
-        <h3>강의 리뷰</h3>
-        <div class="review-item">
-          <span class="star-rating">★★★★★</span>
-          <h5 class="d-inline">리뷰 제목 1</h5>
-          <p>여기에 리뷰 내용을 입력하세요. 강의에 대한 피드백과 의견을 공유합니다.</p>
-          <small>작성자: 사용자1 | 날짜: 2024-11-24</small>
+            <div class="section-card" id="board">
+                <h3>강의 게시판</h3>
+                <p style="font-size:14px; color:#555; margin-bottom:12px;">강의와 관련된 질문이나 토론을 나눌 수 있는 게시판입니다.</p>
+                <a href="#" class="btn-primary-custom"><i class="bi bi-pencil-square"></i> 게시글 작성하기</a>
+            </div>
         </div>
-        <div class="review-item">
-          <span class="star-rating">★★★★☆</span>
-          <h5 class="d-inline">리뷰 제목 2</h5>
-          <p>또 다른 리뷰 내용을 작성하세요. 강의의 장점과 단점을 서술합니다.</p>
-          <small>작성자: 사용자2 | 날짜: 2024-11-23</small>
-        </div>
-      </div>
 
-      <!-- Course Board -->
-      <div class="course-board" id="board">
-        <h3>강의 게시판</h3>
-        <p>강의와 관련된 질문이나 토론을 나눌 수 있는 게시판입니다. 자유롭게 의견을 나누세요.</p>
-        <a href="#" class="btn btn-custom">
-          <i class="fas fa-edit"></i> 게시글 작성하기
-        </a>
-      </div>
+        <div>
+            <div class="section-card" style="text-align:center;">
+                <div class="badge-row" style="justify-content:center;">
+                    <span class="badge-item" th:text="'카테고리: ' + ${course.category}">카테고리</span>
+                    <span class="badge-item" th:text="'난이도: ' + ${course.level}">난이도</span>
+                </div>
+                <p style="font-size:13px; color:#888;"><strong>등록일:</strong> <span th:text="${course.getCreatedAtFormatted()}">등록일</span></p>
+                <div class="course-price" th:text="'₩' + ${course.price}">₩49,000</div>
+            </div>
+
+            <div class="section-card">
+                <h3>강의 미리보기</h3>
+                <div class="preview-video">
+                    <iframe th:src="@{${course.thumbnail}}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="section-card" id="instructor">
+                <h3>강사 프로필</h3>
+                <div class="instructor-profile">
+                    <img th:src="@{'/Instructorimages/' + ${course.hashing_filename}}" alt="강사 프로필">
+                    <div>
+                        <h5 th:text="${course.instructorName}">강사 이름</h5>
+                        <p th:text="${course.biography}">경력</p>
+                        <p th:text="${course.introduction}">소개</p>
+                        <p th:text="${course.greeting}">인사말</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#" class="action-btn btn-cart"><i class="bi bi-cart-plus"></i> 장바구니에 추가</a>
+            <a href="#" id="purchaseButton" class="action-btn btn-enroll"><i class="bi bi-mortarboard"></i> 강의 수강신청하기</a>
+        </div>
     </div>
-
-    <!-- Right Column -->
-    <div class="col-lg-4 right-column">
-      <!-- Course Info -->
-      <div class="course-header mb-3 text-center">
-        <span class="badge badge-info course-badge" th:text="'카테고리: ' + ${course.category}">카테고리: 프로그래밍</span>
-        <span class="badge badge-success course-badge" th:text="'난이도: ' + ${course.level}">난이도: 중급</span>
-        <p><strong>등록일:</strong>
-          <span th:text="${course.getCreatedAtFormatted()}">등록일</span>
-        </p>
-        <h2 class="course-price mt-3" th:text="'₩' + ${course.price}">₩49,000</h2>
-      </div>
-
-      <!-- Course Preview -->
-      <div class="course-preview">
-        <h3>강의 미리보기</h3>
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe th:src="@{${course.thumbnail}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-      </div>
-
-      <!-- Instructor Profile -->
-      <div class="course-instructor" id="instructor">
-        <h3>강사 프로필</h3>
-        <div class="media">
-          <img th:src="@{'/Instructorimages/' + ${course.hashing_filename}}" class="mr-3 rounded-circle" alt="강사 프로필">
-          <div class="media-body">
-            <h5 th:text="${course.instructorName}">강사 이름</h5>
-            <p th:text="${course.biography}">강사의 경력</p>
-            <p th:text="${course.introduction}">강사의 소개</p>
-            <p th:text="${course.greeting}">강사의 인사말</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Buttons with Icons -->
-      <a href="#" class="btn btn-custom btn-block mt-3">
-        <i class="fas fa-cart-plus"></i> 장바구니에 추가
-      </a>
-      <a href="#" id="purchaseButton" class="btn btn-custom btn-block mt-3">
-        <i class="fas fa-shopping-cart"></i> 강의 수강신청하기
-      </a>
-    </div>
-  </div>
 </div>
 
-<!-- 숨겨진 input 필드를 추가하여 Thymeleaf에서 값을 전달 -->
 <input type="hidden" id="user-id"
        th:value="${#authentication != null ? (#authentication.principal instanceof T(com.kosmo.security.CustomUserDetails) ? #authentication.principal.id : 'guest') : 'guest'}" />
 
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+<div th:insert="fragments/footer :: footer"></div>
 
 <script>
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // 현재 URL에서 강의 이름 추출
+document.addEventListener('DOMContentLoaded', function() {
     const currentUrl = window.location.href;
     const lectureName = decodeURIComponent(currentUrl.split('/').pop());
-
-    // purchaseButton의 href 속성 동적으로 설정
     const purchaseButton = document.getElementById('purchaseButton');
     purchaseButton.href = `/cart/purchase?lectureName=${lectureName}`;
-
-    // 사용자 ID 가져오기
     const userId = document.getElementById('user-id').value;
 
-    // 구매 버튼 클릭 시 이벤트 처리
     purchaseButton.addEventListener('click', function(event) {
         if (userId === 'guest') {
-            event.preventDefault(); // 기본 동작을 취소
+            event.preventDefault();
             alert("로그인이 필요한 서비스입니다. 로그인 후 다시 시도해 주세요.");
-            window.location.href = '/login'; // 로그인 페이지로 리디렉션
+            window.location.href = '/login';
         } else {
-            event.preventDefault(); // 기본 동작을 취소
-
-            // 서버로 보낼 데이터 준비
-            const data = {
-                userId: userId,
-                lectureName: lectureName
-            };
-
-            // Fetch API 요청
+            event.preventDefault();
             fetch('/cart/add', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: userId, lectureName: lectureName })
             })
-            .then(response => response.json()) // 응답을 JSON으로 처리
+            .then(response => response.json())
             .then(responseData => {
                 const message = responseData.message;
-
                 if (message.includes('이미')) {
-                    alert(message); // 이미 추가된 경우 메시지 출력
-                    window.location.href = '/cart/purchase'; // 장바구니 페이지로 리디렉션
+                    alert(message);
+                    window.location.href = '/cart/purchase';
                 } else {
-                    // 강의가 장바구니에 추가된 경우
                     alert('강의가 장바구니에 추가되었습니다.');
-                    window.location.href = '/cart/purchase'; // 장바구니 페이지로 이동
+                    window.location.href = '/cart/purchase';
                 }
             })
-            .catch(error => {
-                // 오류 처리
-                alert('오류가 발생했습니다. 다시 시도해 주세요.');
-                console.error('Error:', error);
-            });
+            .catch(error => { alert('오류가 발생했습니다. 다시 시도해 주세요.'); console.error('Error:', error); });
         }
     });
 
-    // 모든 가격 요소에 대해 처리
-    var priceElements = document.querySelectorAll('.course-price');
-
-    priceElements.forEach(function(priceElement) {
-        // 가격 텍스트에서 '₩' 기호 제거 후, 숫자만 추출
-        var priceText = priceElement.innerText.replace('₩', '').trim();
-
-        // 숫자로 변환 후, 3자리마다 콤마 추가
-        var formattedPrice = parseInt(priceText.replace(/,/g, ''))
-            .toLocaleString(); // 3자리마다 콤마 추가
-
-        // '₩' 기호와 포맷된 가격으로 업데이트
-        priceElement.innerText = '₩' + formattedPrice;
+    document.querySelectorAll('.course-price').forEach(function(el) {
+        var text = el.innerText.replace('₩', '').trim();
+        var formatted = parseInt(text.replace(/,/g, '')).toLocaleString();
+        el.innerText = '₩' + formatted;
     });
 });
-
-
 </script>
+</body>
 </html>

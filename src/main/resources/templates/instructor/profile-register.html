@@ -1,223 +1,81 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>강사 마이페이지 - 강사 프로필 등록</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>프로필 등록 - 코스런</title>
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        /* 기본 설정 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* 사이드바 스타일 */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 250px;
-            background: linear-gradient(180deg, #4e73df, #1e3d8c); /* 블루 그라디언트 */
-            color: #fff;
-            padding-top: 20px;
-            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        /* 메뉴 항목 스타일 */
-        .sidebar a {
-            padding: 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #fff;
-            display: block;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            transition: padding-left 0.3s ease;
-        }
-
-        /* 메뉴 항목 호버 효과 */
-        .sidebar a:hover {
-            background-color: #1e70d2;
-            padding-left: 30px;
-        }
-
-        /* 콘텐츠 영역 스타일 */
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05);
-        }
-
-        /* 콘텐츠 제목 스타일 */
-        .content h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        /* 강의 등록 폼 스타일 */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-control {
-            border-radius: 10px;
-            width: 100%;
-        }
-
-        /* 길이 조절: input, textarea의 폭을 적절하게 조정 */
-        .form-control {
-            max-width: 500px;  /* 최대폭을 500px로 설정 */
-            width: 100%;
-        }
-
-        textarea {
-            max-width: 500px;
-            width: 100%;
-        }
-
-        /* 반응형 디자인 */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-            }
-
-            .content {
-                margin-left: 0;
-            }
-
-            .sidebar a {
-                font-size: 16px;
-            }
-        }
-
-        /* 모바일 사이드바 토글 버튼 */
-        @media (max-width: 576px) {
-            .sidebar {
-                position: absolute;
-                left: -250px;
-                width: 100%;
-                transition: all 0.3s ease;
-            }
-
-            .sidebar.show {
-                left: 0;
-            }
-
-            .sidebar a {
-                font-size: 14px;
-                padding-left: 20px;
-            }
-
-            .sidebar-toggle {
-                display: block;
-                cursor: pointer;
-                position: absolute;
-                top: 20px;
-                left: 20px;
-                color: #fff;
-                font-size: 30px;
-            }
-        }
-
-        /* 추가된 강의 URL과 파일 업로드 폼 스타일 */
-        .form-group input[type="file"] {
-            padding: 5px;
-        }
-    </style>
 </head>
 <body>
 
-<!-- 모바일용 사이드바 토글 버튼 -->
-<div class="sidebar-toggle d-block d-md-none">
+<div th:insert="fragments/header :: header"></div>
+
+<div class="layout-sidebar">
+    <nav class="sidebar">
+        <div class="sidebar-title">강사 메뉴</div>
+        <a href="/instructor/myinstructor"><i class="bi bi-house-door"></i> 강사 홈</a>
+        <a href="/instructor/profile-register" class="active"><i class="bi bi-person-plus"></i> 프로필 등록</a>
+        <a href="/instructor/profile-update"><i class="bi bi-pencil"></i> 정보 수정</a>
+        <a href="/instructor/course-register"><i class="bi bi-file-earmark-plus"></i> 강의 등록</a>
+        <a href="/course-detail"><i class="bi bi-info-circle"></i> 강의 상세</a>
+        <a href="/home"><i class="bi bi-arrow-left"></i> 홈으로</a>
+    </nav>
+
+    <main class="content-area">
+        <h1 class="page-title">강사 프로필 등록</h1>
+        <p class="page-subtitle">강사의 기본 정보를 입력하세요</p>
+
+        <div class="card" style="max-width: 560px;">
+            <form action="/instructor/profile-register" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="user-id" name="userId" th:value="${#authentication.principal.id}">
+
+                <div class="form-group">
+                    <label class="form-label-custom">강사 이름</label>
+                    <input type="text" class="form-input" name="instructor-name" th:value="${#authentication.name}" readonly style="background:#eee;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">경력</label>
+                    <textarea class="form-input" name="biography" rows="3" placeholder="강사의 경력을 입력하세요"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">소개</label>
+                    <textarea class="form-input" name="introduction" rows="3" placeholder="강사의 소개를 입력하세요"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">인사말</label>
+                    <textarea class="form-input" name="greeting" rows="3" placeholder="강사의 인사말을 입력하세요"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label-custom">프로필 사진</label>
+                    <input type="file" class="form-input" name="mfileName" accept="image/*" onchange="previewImg(this)">
+                    <img id="preview" src="" alt="" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-top:12px;display:none;">
+                </div>
+
+                <button type="submit" class="btn-primary-custom" style="margin-top:8px;">프로필 등록</button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
     <i class="bi bi-list"></i>
-</div>
-
-<!-- 네비게이션바 (사이드바) -->
-<div class="sidebar">
-    <a href="/home"><i class="bi bi-house-door"></i> 홈으로 돌아가기</a>
-    <a href="/instructor/myinstructor"><i class="bi bi-house-door"></i> 강사 홈페이지</a>
-    <a href="/instructor/profile-register"><i class="bi bi-person-plus"></i> 강사 프로필 등록</a>
-    <a href="/instructor/profile-update"><i class="bi bi-person-circle"></i> 강사 정보 수정</a>
-    <a href="/instructor/course-register"><i class="bi bi-file-earmark-plus"></i> 강의 등록</a>
-    <a href="#"><i class="bi bi-pencil-square"></i> 테스트</a>
-    <a href="#"><i class="bi bi-upload"></i> 문제 올리기</a>
-    <a href="#"><i class="bi bi-chat-dots"></i> Q&A 관리</a>
-    <a href="/course-detail"><i class="bi bi-info-circle"></i> 강의 상세보기</a>
-</div>
-
-
-<!-- 강사 프로필 콘텐츠 (중앙) -->
-<div class="content">
-    <h2>강사 프로필 등록</h2>
-    <p>강사의 기본 정보를 입력하세요.</p>
-
-    <!-- 강사 프로필 등록 폼 -->
-    <form action="/instructor/profile-register" method="post" enctype="multipart/form-data">
-        <!-- 강사 이름 (읽기 전용) -->
-        <div class="form-group">
-            <label for="instructor-name">강사 이름</label>
-            <input type="text" class="form-control" id="instructor-name" name="instructor-name"
-                   th:value="${#authentication.name}" readonly>
-        </div>
-
-        <!-- 강사 ID (히든 필드로 전송) -->
-        <input type="hidden" id="user-id" name="userId" th:value="${#authentication.principal.id}">
-
-        <!-- 강사 경력 -->
-        <div class="form-group">
-            <label for="instructor-bio">강사 경력</label>
-            <textarea class="form-control" id="instructor-bio" name="biography" rows="4" placeholder="강사의 경력을 입력하세요"></textarea>
-        </div>
-
-        <!-- 강사 소개 -->
-        <div class="form-group">
-            <label for="instructor-introduction">강사 소개</label>
-            <textarea class="form-control" id="instructor-introduction" name="introduction" rows="4" placeholder="강사의 소개를 입력하세요"></textarea>
-        </div>
-
-        <!-- 강사 인사말 -->
-        <div class="form-group">
-            <label for="instructor-greeting">강사 인사말</label>
-            <textarea class="form-control" id="instructor-greeting" name="greeting" rows="4" placeholder="강사의 인사말을 입력하세요"></textarea>
-        </div>
-
-        <!-- 강사 프로필 사진 등록 -->
-        <div class="form-group">
-            <label for="profile-image">강사 프로필 사진</label>
-            <input type="file" class="form-control" id="profile-image" name="mfileName" accept="image/*">
-            <!-- 기본 이미지가 있을 경우 표시 -->
-            <img id="profile-image-preview" class="profile-image-preview default" src="" alt="프로필 사진 미리보기">
-        </div>
-
-        <button type="submit" class="btn btn-primary">프로필 등록</button>
-    </form>
-</div>
-
-<!-- 부트스트랩 JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
+</button>
 
 <script>
-    $(document).ready(function() {
-        // 이미지 미리보기
-        $('#profile-image').on('change', function(event) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $("#profile-image-preview").attr("src", e.target.result).show().removeClass('default');
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        });
-    });
+function previewImg(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.getElementById('preview');
+            img.src = e.target.result;
+            img.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 </script>
-
 </body>
 </html>

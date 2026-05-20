@@ -1,255 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>유저 관리 페이지</title>
-    <!-- Bootstrap CSS 추가 -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - 코스런</title>
     <link rel="stylesheet" th:href="@{/css/header/header.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- 이미지 아이콘 부트스트랩 -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> <!-- Google Fonts -->
-    <style>
-        /* 기본 글꼴 설정 */
-        body {
-            font-family: 'Roboto', sans-serif;
-        }
-
-        /* 왼쪽 사이드바 스타일 */
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            position: fixed;
-            top: 114px; /* 상단 네비게이션 바 바로 아래에 위치하도록 수정 */
-            left: 0;
-            background-color: #2c3e50;
-            padding-top: 20px;
-            padding-left: 20px;
-            padding-right: 20px;
-            color: white;
-            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1; /* 다른 콘텐츠보다 위에 표시되도록 */
-        }
-
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            font-size: 16px;
-            padding: 12px 20px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar a:hover {
-            background-color: #f39c12;
-        }
-
-        .sidebar .active {
-            background-color: #e67e22;
-        }
-
-        /* 마이페이지 콘텐츠 */
-        .content {
-            margin-left: 270px; /* 사이드바 너비만큼 오른쪽 여백 추가 */
-            padding: 30px;
-        }
-
-        .profile-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .profile-header h2 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .profile-header button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .profile-header button:hover {
-            background-color: #2980b9;
-        }
-
-        /* 프로필 정보 섹션 */
-        .profile-container {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .profile-image img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-info {
-            font-size: 18px;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .profile-info p {
-            margin-bottom: 10px;
-        }
-
-        .profile-info span {
-            font-weight: bold;
-            color: #2980b9;
-        }
-
-        .profile-info i {
-            color: #3498db;
-        }
-
-        /* 더미 데이터 섹션 */
-        .dummy-data {
-            margin-top: 30px;
-        }
-
-        .dummy-data .dummy-item {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .dummy-data .dummy-item h4 {
-            color: #333;
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .dummy-data .dummy-item p {
-            color: #777;
-            font-size: 1rem;
-        }
-
-        .dummy-data .dummy-item .icon {
-            font-size: 24px;
-            color: #e67e22;
-            margin-right: 10px;
-        }
-
-        .dummy-data .dummy-item .badge {
-            background-color: #3498db;
-            color: white;
-            font-size: 14px;
-            padding: 5px 10px;
-            border-radius: 20px;
-            margin-left: 10px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
 
 <div th:insert="fragments/header :: header"></div>
 
-<!-- 왼쪽 사이드바 -->
-<div class="sidebar">
-    <a href="/my/mypage"  class="active" >내 프로필</a>
-    <a href="/my/profile-update">내 프로필 수정</a>
-    <a href="/my/courses"      >진행 중인 강의</a>
-    <a href="#">수료한 강의</a>
-    <a href="/cart/purchase">나의 장바구니</a>
-    <a href="/mypay/pay">나의 결제내역</a>
-</div>
-<!-- 마이페이지 콘텐츠 -->
-<div class="content">
-    <div id="Myprofile" class="profile-header">
-        <div class="profile-container">
-            <!-- 프로필 이미지 -->
-            <div class="profile-image">
-                <img id="profileImage" src="/images/default-image.jpg" alt="프로필 이미지">
+<div class="layout-sidebar">
+    <nav class="sidebar">
+        <div class="sidebar-title">마이페이지</div>
+        <a href="/my/mypage" class="active"><i class="bi bi-person-circle"></i> 내 프로필</a>
+        <a href="/my/profile-update"><i class="bi bi-pencil"></i> 프로필 수정</a>
+        <a href="/my/courses"><i class="bi bi-play-btn"></i> 진행 중인 강의</a>
+        <a href="/mypay/pay"><i class="bi bi-receipt"></i> 결제 내역</a>
+        <a href="/cart/purchase"><i class="bi bi-cart"></i> 장바구니</a>
+    </nav>
+
+    <main class="content-area">
+        <h1 class="page-title">내 프로필</h1>
+        <p class="page-subtitle">회원 정보를 확인하세요</p>
+
+        <div class="card">
+            <div class="profile-card">
+                <img id="profileImage" src="/images/default-image.jpg" alt="프로필" class="profile-avatar">
+                <div class="profile-info">
+                    <h3 id="name">로딩 중...</h3>
+                    <p><i class="bi bi-person"></i> 닉네임: <span id="nickname">-</span></p>
+                    <p><i class="bi bi-envelope"></i> 이메일: <span id="email">-</span></p>
+                    <p><i class="bi bi-phone"></i> 연락처: <span id="phone_number">-</span></p>
+                    <p><i class="bi bi-calendar"></i> 가입일: <span id="created_at">-</span></p>
+                </div>
             </div>
-
-            <!-- 사용자 정보 -->
-            <div class="profile-info">
-                <p><strong>이름:</strong> <span id="name">홍길동</span></p>
-                <p><strong>닉네임:</strong> <span id="nickname">길동이</span></p>
-                <p><strong>이메일:</strong> <span id="email">gildong@example.com</span></p>
-                <p><strong>휴대폰:</strong> <span id="phone_number">010-1234-5678</span></p>
-                <p><strong>가입일:</strong> <span id="created_at">2024-01-01</span></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 더미 데이터 섹션 -->
-    <div class="dummy-data">
-        <div class="dummy-item">
-            <h4><i class="bi bi-gear"></i> 시스템 설정 <span class="badge">완료</span></h4>
-            <p>시스템이 정상적으로 작동 중입니다. 필요시 설정을 수정할 수 있습니다.</p>
         </div>
 
-        <div class="dummy-item">
-            <h4><i class="bi bi-bell"></i> 알림 <span class="badge">새로운 알림</span></h4>
-            <p>새로운 알림이 도착했습니다. 지금 바로 확인하세요.</p>
+        <div style="margin-top: 16px;">
+            <a href="/my/profile-update" class="btn-primary-custom">프로필 수정</a>
         </div>
-
-        <div class="dummy-item">
-            <h4><i class="bi bi-heart"></i> 즐겨찾기 <span class="badge">1개 항목</span></h4>
-            <p>즐겨찾기 항목이 있습니다. 나중에 다시 확인하세요.</p>
-        </div>
-    </div>
+    </main>
 </div>
 
-<!-- 숨겨진 input 필드 추가 (Thymeleaf로 로그인한 사용자 ID 전달) -->
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+    <i class="bi bi-list"></i>
+</button>
+
 <input type="hidden" id="user-id" th:value="${#authentication.principal.id}">
 
-</body>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // HTML이 완전히 로드된 후 실행
-        const userIdElement = document.getElementById('user-id');
-        if (!userIdElement) {
-            console.error("user-id 요소를 찾을 수 없습니다. HTML 구조를 확인하세요.");
-            return;
-        }
-
-        const userId = userIdElement.value;
-
-        fetch(`/my/getMyInfo?userId=${userId}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('서버 응답이 올바르지 않습니다.');
-            })
-            .then(data => {
-                // HTML 요소 업데이트
-                document.getElementById('name').innerText = data.name;
-                document.getElementById('nickname').innerText = data.nickname;
-                document.getElementById('email').innerText = data.email;
-                document.getElementById('phone_number').innerText = data.phone_number;
-                if (data.created_at) {
-                    const createdAtDate = new Date(data.created_at);
-                    const formattedDate = createdAtDate.toISOString().split('T')[0]; // YYYY-MM-DD 포맷으로 변환
-                    document.getElementById('created_at').innerText = formattedDate;
-                }
-            })
-            .catch(error => {
-                console.error('에러 발생:', error);
-            });
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    const userId = document.getElementById('user-id').value;
+    fetch('/my/getMyInfo?userId=' + userId)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('name').innerText = data.name || '-';
+            document.getElementById('nickname').innerText = data.nickname || '-';
+            document.getElementById('email').innerText = data.email || '-';
+            document.getElementById('phone_number').innerText = data.phone_number || '-';
+            if (data.created_at) {
+                document.getElementById('created_at').innerText = new Date(data.created_at).toISOString().split('T')[0];
+            }
+        })
+        .catch(() => {});
+});
 </script>
+</body>
 </html>
