@@ -151,7 +151,7 @@
                     </div>
 
 
-                    <button type="button" class="btn btn-primary btn-spacing w-100" id="loginButton">로그인</button>
+                    <button type="submit" class="btn btn-primary btn-spacing w-100" id="loginButton">로그인</button>
                 </form>
 
                 <!-- 아이디 찾기, 비밀번호 찾기, 회원가입하기 링크 -->
@@ -171,39 +171,23 @@
 
 <script>
     $(document).ready(function () {
-        $('#loginButton').on('click', function () {
+        $('#loginForm').on('submit', function (e) {
             const username = $('#username').val().trim();
             const password = $('#password').val().trim();
 
             if (username === '') {
+                e.preventDefault();
                 alert('아이디를 입력해주세요.');
                 $('#username').focus();
                 return;
             }
             if (password === '') {
+                e.preventDefault();
                 alert('비밀번호를 입력해주세요.');
                 $('#password').focus();
                 return;
             }
-            $('#loginForm').submit();
         });
-
-        // 폼 필드에 포커스 시, 스타일 변경
-        $('.form-control').on('focus', function () {
-            $(this).css('box-shadow', '0 0 5px rgba(111, 195, 223, 0.5)');
-        }).on('blur', function () {
-            $(this).css('box-shadow', 'none');
-        });
-
-        // 로그인 버튼 호버 시 효과
-        $('#loginButton').hover(
-            function () {
-                $(this).css('background-color', '#5ab4c4');
-            },
-            function () {
-                $(this).css('background-color', '#6fc3df');
-            }
-        );
     });
 </script>
 </body>
