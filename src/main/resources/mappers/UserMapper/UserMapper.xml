@@ -6,7 +6,7 @@
     <!-- 회원 정보 삽입 -->
     <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users (username, password, name, nickname, phone_number, email, gender, role, terms_agreement, marketing_agreement)
-        VALUES (#{username}, #{password}, #{name}, #{nickname}, #{phone_number}, #{email}, #{gender}, 'ADMIN', #{termsAgreement}, #{marketingAgreement})
+        VALUES (#{username}, #{password}, #{name}, #{nickname}, #{phone_number}, #{email}, #{gender}, 'STUDENT', #{termsAgreement}, #{marketingAgreement})
     </insert>
 
     <select id="findUserByUsername" parameterType="String" resultType="user">
