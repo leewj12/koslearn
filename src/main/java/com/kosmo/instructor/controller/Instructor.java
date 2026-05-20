@@ -29,17 +29,17 @@ public class Instructor {
 
     @GetMapping("/instructor/myinstructor")
     public String myinstructor(){
-        return "/instructor/myinstructohome";
+        return "instructor/myinstructohome";
     }
 
     @GetMapping("/instructor/course-register")
     public String courseregister(){
-        return "/instructor/course-register";
+        return "instructor/course-register";
     }
 
     @GetMapping("/instructor/profile-register")
     public String profileregister() {
-        return "/instructor/profile-register";  // 앞에 슬래시를 제거
+        return "instructor/profile-register";
     }
 
     @PostMapping("/instructor/profile-register")
@@ -62,12 +62,12 @@ public class Instructor {
         // 데이터 저장
         instructorService.saveInstructor(instructorDTO);
 
-        return "/instructor/myinstructohome";
+        return "instructor/myinstructohome";
     }
 
     @GetMapping("/instructor/profile-update")
     public String profileupdate(){
-        return "/instructor/profile-update";
+        return "instructor/profile-update";
     }
 
 
@@ -136,12 +136,12 @@ public class Instructor {
         // 4. 강의 정보 저장
         instructorService.CourseDatasave(courseDataDTO);
 
-        return "/instructor/myinstructohome";
+        return "instructor/myinstructohome";
     }
 
     @GetMapping("/course-detail")
     public String coursedetail(){
-        return "/instructor/course-detail";
+        return "instructor/course-detail";
     }
 
 

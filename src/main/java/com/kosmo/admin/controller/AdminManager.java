@@ -32,7 +32,7 @@ public class AdminManager {
     public String admincourselist(Model model) {
         List<AdminCourselistDTO> courselist = adminCourselistService.Courselist();  // 강의 목록 조회
         model.addAttribute("courselist", courselist);  // 강의 목록을 모델에 추가
-        return "/admin/admincourselist";  // 뷰로 전달
+        return "admin/admincourselist";  // 뷰로 전달
     }
 
     @GetMapping("/admin/payment")
@@ -43,7 +43,7 @@ public class AdminManager {
         model.addAttribute("adminPaymentList", adminPaymentDTO);
 
         // "/admin/payment" 페이지로 이동
-        return "/admin/payment";
+        return "admin/payment";
     }
 
 
@@ -60,7 +60,7 @@ public class AdminManager {
     public String detail(@PathVariable("id") Long courseId, Model model) {
         AdminCourselistDTO courseDetail = adminCourselistService.Coursedetail(courseId);
         model.addAttribute("course", courseDetail);  // Add the course details to the model
-        return "/course/coursedetail";  // Returns the view name
+        return "course/coursedetail";  // Returns the view name
     }
 
     @GetMapping("/course/edit/{id}")
@@ -72,7 +72,7 @@ public class AdminManager {
 //        model.addAttribute("course", courseDetail);
 
         // Return the view name for editing course
-        return "/course/courseedit";
+        return "course/courseedit";
 
     }
 

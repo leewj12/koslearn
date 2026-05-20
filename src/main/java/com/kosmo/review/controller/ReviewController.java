@@ -56,7 +56,7 @@ public class ReviewController {
 
 
             //고쳐야함 로그인으로 가기에 loc
-            return "/error/utility"; // 리뷰 작성 불가 시 오류 페이지로 리다이렉트
+            return "error/utility"; // 리뷰 작성 불가 시 오류 페이지로 리다이렉트
         }
 
         // 리뷰 저장
@@ -71,7 +71,7 @@ public class ReviewController {
 
         // 리뷰 작성 후 결과 페이지로 이동
         if (result > 0) {
-            return "/error/utility"; // 저장 성공시
+            return "error/utility"; // 저장 성공시
         } else {
             return "redirect:/course/error"; // 실패시 오류 페이지로 리다이렉트
         }

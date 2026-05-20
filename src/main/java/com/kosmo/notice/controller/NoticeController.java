@@ -39,13 +39,13 @@ public class NoticeController {
         model.addAttribute("searchKeyword", searchKeyword);
         model.addAttribute("searchOption", searchOption);
 
-        return "/notice/notice";
+        return "notice/notice";
     }
 
     // 관리자가 공지사항 만드는 곳
     @GetMapping("/admin/notice")
     public String adminnotice() {
-        return "/notice/adminnotice";
+        return "notice/adminnotice";
     }
 
 
@@ -117,7 +117,7 @@ public class NoticeController {
         boolean updated = noticeService.increaseViews(id);
         NoticeDTO noticeviewall = noticeService.noticeview(id);
         model.addAttribute("noticeviewall", noticeviewall);  // NoticeDTO 객체를 모델에 추가
-        return "/notice/noticeview";
+        return "notice/noticeview";
     }
 
 

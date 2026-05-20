@@ -48,7 +48,7 @@ public class MyPage {
 
         userService.updateUser(userDTO);
 
-        return "/mypage/mypage";
+        return "mypage/mypage";
     }
 
 

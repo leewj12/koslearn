@@ -20,13 +20,13 @@ public class MyPageController {
     //마이페이지 홈
     @GetMapping("/my/mypage")
     public String mypage(){
-        return "/mypage/mypage";
+        return "mypage/mypage";
     }
 
     //마이페이지 수정
     @GetMapping("/my/profile-update")
     public String profileUpdate(){
-        return "/mypage/profile-update";
+        return "mypage/profile-update";
     }
 
 

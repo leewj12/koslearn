@@ -9,6 +9,6 @@ public class MyPayController {
 
     @GetMapping("/mypay/pay")
     public String mypaypay(){
-        return "/mypage/mypay";
+        return "mypage/mypay";
     }
 }

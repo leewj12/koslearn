@@ -19,7 +19,7 @@ public class CourseMyViewController {
     //내가 구매한 강의목록
     @GetMapping("/my/courses")
     public String mycourses() {
-        return "/coursemyview/coursemyview";  // 뷰 이름 반환 테스트버젼
+        return "coursemyview/coursemyview";  // 뷰 이름 반환 테스트버젼
     }
 
     //구매한 강의 상세보기
@@ -27,7 +27,7 @@ public class CourseMyViewController {
     public String coursemyview(@PathVariable("course_id") Long courseId, Model model) {
         CourseMyViewDTO courseMyViewDTO = courseMyViewService.CourseMyView(courseId);
         model.addAttribute("course", courseMyViewDTO);
-        return "/coursemyview/courseviewpay";  // 강의 상세 페이지 (Thymeleaf 뷰)
+        return "coursemyview/courseviewpay";  // 강의 상세 페이지 (Thymeleaf 뷰)
     }
 
 

@@ -29,7 +29,7 @@ public class CourseAllController {
         model.addAttribute("course", couresallview);
 
         // 강의 상세 페이지로 이동
-        return "/course/course";
+        return "course/course";
     }
 
 

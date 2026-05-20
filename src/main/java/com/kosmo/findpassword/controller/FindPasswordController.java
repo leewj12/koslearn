@@ -58,14 +58,14 @@ public class FindPasswordController {
         model.addAttribute("loc", loc);
 
         // 결과적으로 "/error/utility" 페이지를 반환하여 메시지와 리다이렉트 위치를 처리
-        return "/error/utility";
+        return "error/utility";
     }
 
 
     // 인증번호 확인 페이지
     @GetMapping("/findpassword/verify-code")
     public String showVerifyCodePage() {
-        return "/member/verify-code"; // 인증번호 입력 폼을 보여주는 페이지
+        return "member/verify-code"; // 인증번호 입력 폼을 보여주는 페이지
     }
 
     // 인증번호 확인 및 비밀번호 변경
@@ -95,7 +95,7 @@ public class FindPasswordController {
         model.addAttribute("loc", loc);
 
         // 메시지와 리다이렉트 URL을 처리하는 페이지로 이동
-        return "/error/utility";
+        return "error/utility";
     }
 
 
@@ -132,7 +132,7 @@ public class FindPasswordController {
         model.addAttribute("loc", loc);
 
         // 결과적으로 메시지와 리다이렉트 URL을 처리하는 페이지로 이동
-        return "/error/utility";
+        return "error/utility";
     }
 
 

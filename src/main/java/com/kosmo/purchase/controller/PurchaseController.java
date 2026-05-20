@@ -75,6 +75,6 @@ public class PurchaseController {
         model.addAttribute("msg", msg);
         model.addAttribute("loc", loc);
 
-        return "/error/pay";  // utility 페이지로 이동
+        return "error/pay";  // utility 페이지로 이동
     }
 }

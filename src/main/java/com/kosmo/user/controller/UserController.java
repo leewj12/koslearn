@@ -61,7 +61,7 @@ public class UserController {
         }
         model.addAttribute("msg", msg);
         model.addAttribute("loc", loc);
-        return "/error/utility";
+        return "error/utility";
     }
 
 
