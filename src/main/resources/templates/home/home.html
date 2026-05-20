@@ -1,218 +1,225 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>코스런</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="stylesheet" th:href="@{/css/homecss/homestyles.css}">
     <link rel="stylesheet" th:href="@{/css/homecss/footer.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- 이미지 아이콘 부트스트랩 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
 
 <div th:insert="fragments/header :: header"></div>
 
-<!-- 이미지 슬라이더 -->
-<div class="slider">
-
-    <img src="/homeimages/banner/b1.png" alt="슬라이드 이미지 1" class="slider-img" >
-    <img src="/homeimages/banner/b2.png" alt="슬라이드 이미지 2" class="slider-img">
-    <img src="/homeimages/banner/b3.png" alt="슬라이드 이미지 3" class="slider-img">
-    <img src="/homeimages/banner/b4.png" alt="슬라이드 이미지 4" class="slider-img">
-    <!--    <img src="/homeimages/banner/img7.jpg" alt="슬라이드 이미지 5" class="slider-img">-->
-
+<!-- 히어로 -->
+<div class="hero">
+    <img src="/homeimages/banner/b1.png" alt="" class="slider-img">
+    <img src="/homeimages/banner/b2.png" alt="" class="slider-img">
+    <img src="/homeimages/banner/b3.png" alt="" class="slider-img">
+    <img src="/homeimages/banner/b4.png" alt="" class="slider-img">
+    <div class="hero-overlay">
+        <h1>배움의 시작, 코스런</h1>
+        <p>개발, 디자인, 비즈니스 — 원하는 분야의 강의를 지금 시작하세요.</p>
+        <form action="/course/view" method="get" class="hero-search">
+            <input type="text" name="searchQuery" placeholder="배우고 싶은 강의를 검색하세요">
+            <button type="submit"><i class="bi bi-search"></i> 검색</button>
+        </form>
+        <a href="/course/view" class="hero-cta">전체 강의 둘러보기 <i class="bi bi-arrow-right"></i></a>
+    </div>
 </div>
 
-<section class="main-banner">
-    <h2><i class="bi bi-laptop"></i> 온라인 강의 플랫폼에 오신 것을 환영합니다!</h2>
-
-    <a href="/course/view"><button>강의 시작하기 <i class="bi bi-play-circle-fill"></i></button></a>
-</section>
-
-<form action="/course/view" method="get" class="search-bar">
-    <input type="text" name="searchQuery" placeholder="강의 찾기...">
-    <button type="submit"><i class="bi bi-search"></i> 검색</button>
-</form>
-
-<!-- 카테고리 섹션 -->
+<!-- 카테고리 -->
 <section class="categories">
-    <h2><i class="bi bi-list-task"></i> 카테고리</h2>
+    <div class="section-header">
+        <h2><i class="bi bi-grid-3x3-gap"></i> 카테고리</h2>
+        <p>관심 분야를 선택하고 강의를 탐색하세요</p>
+    </div>
     <div class="category-list">
         <a href="/course/view?searchQuery=웹" class="category-card">
             <img src="/homeimages/category/webDev.png" alt="웹 개발">
-            <h3># 웹 개발</h3>
+            <h3>웹 개발</h3>
         </a>
         <a href="/course/view?searchQuery=데이터" class="category-card">
             <img src="/homeimages/category/dataScience.png" alt="데이터 과학">
-            <h3># 데이터 과학</h3>
+            <h3>데이터 과학</h3>
         </a>
         <a href="/course/view?searchQuery=디자인" class="category-card">
             <img src="/homeimages/category/design.png" alt="디자인">
-            <h3># 디자인</h3>
+            <h3>디자인</h3>
         </a>
         <a href="/course/view?searchQuery=마케팅" class="category-card">
             <img src="/homeimages/category/marketing.png" alt="마케팅">
-            <h3># 마케팅</h3>
+            <h3>마케팅</h3>
         </a>
         <a href="/course/view?searchQuery=AI" class="category-card">
             <img src="/homeimages/category/AI.png" alt="AI/머신러닝">
-            <h3># AI/머신러닝</h3>
+            <h3>AI/머신러닝</h3>
         </a>
         <a href="/course/view?searchQuery=경영" class="category-card">
             <img src="/homeimages/category/business.png" alt="경영">
-            <h3># 경영</h3>
+            <h3>경영</h3>
         </a>
         <a href="/course/view?searchQuery=요리" class="category-card">
             <img src="/homeimages/category/cooking.png" alt="요리">
-            <h3># 요리</h3>
+            <h3>요리</h3>
         </a>
         <a href="/course/view?searchQuery=프론트" class="category-card">
-            <img src="/homeimages/category/front.png" alt="프론트">
-            <h3># 프론트 엔드</h3>
+            <img src="/homeimages/category/front.png" alt="프론트엔드">
+            <h3>프론트엔드</h3>
         </a>
         <a href="/course/view?searchQuery=엑셀" class="category-card">
             <img src="/homeimages/category/excel.png" alt="엑셀">
-            <h3># 엑셀</h3>
+            <h3>엑셀</h3>
         </a>
     </div>
 </section>
 
-
 <!-- 추천 강의 -->
 <section class="courses">
-    <h2><i class="bi bi-lightbulb"></i> 추천 강의</h2>
-    <div class="course-list">
+    <div class="section-header">
+        <h2><i class="bi bi-lightbulb"></i> 추천 강의</h2>
+        <p>입문자를 위한 기초 강의를 만나보세요</p>
+    </div>
+    <div class="course-grid">
         <div class="course-card">
             <img src="/homeimages/banner/c1.png" alt="웹개발 기초">
-            <h3>웹개발 기초</h3>
-            <p>웹개발의 기초부터 배우세요.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>웹개발 기초</h3>
+                <p>HTML, CSS, JavaScript로 시작하는 웹개발의 첫걸음</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c2.png" alt="자바스크립트 입문">
-            <h3>자바스크립트 입문</h3>
-            <p>자바스크립트를 처음 시작하는 분들을 위한 강의.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>자바스크립트 입문</h3>
+                <p>자바스크립트를 처음 시작하는 분들을 위한 강의</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c3.png" alt="웹디자인 기초">
-            <h3>웹디자인 기초</h3>
-            <p>웹디자인의 기초부터 배우기.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>웹디자인 기초</h3>
+                <p>UI/UX 디자인 원리와 실전 웹디자인 기법</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c4.png" alt="파이썬 프로그래밍">
-            <h3>파이썬 프로그래밍</h3>
-            <p>파이썬 프로그래밍의 기초를 배우세요.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>파이썬 프로그래밍</h3>
+                <p>파이썬 기초 문법부터 실전 프로젝트까지</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c5.png" alt="데이터 분석">
-            <h3>데이터 분석</h3>
-            <p>데이터 분석의 기본을 배우세요.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>데이터 분석</h3>
+                <p>Pandas와 시각화 도구로 데이터를 다루는 방법</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- 특별 강의 -->
 <section class="special-courses">
-    <h2><i class="bi bi-trophy"></i> 특별 강의</h2>
-    <div class="course-list">
+    <div class="section-header">
+        <h2><i class="bi bi-trophy"></i> 특별 강의</h2>
+        <p>비즈니스와 커리어 성장을 위한 특별 강의</p>
+    </div>
+    <div class="course-grid">
         <div class="course-card">
             <img src="/homeimages/banner/c6.png" alt="스타트업 전략">
-            <h3>스타트업 전략</h3>
-            <p>스타트업을 시작하는 데 필요한 전략을 배우세요.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>스타트업 전략</h3>
+                <p>스타트업을 시작하는 데 필요한 전략과 사례 분석</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c7.png" alt="리더십 개발">
-            <h3>리더십 개발</h3>
-            <p>효과적인 리더십을 발휘하는 방법을 배우세요.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>리더십 개발</h3>
+                <p>효과적인 리더십을 발휘하는 실전 노하우</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c8.png" alt="디지털 마케팅">
-            <h3>디지털 마케팅</h3>
-            <p>디지털 마케팅을 배우세요.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>디지털 마케팅</h3>
+                <p>SNS, SEO, 광고 운영까지 디지털 마케팅 입문</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
         <div class="course-card">
-            <img src="/homeimages/banner/c9.png" alt="혁신적 비즈니스 모델">
-            <h3>혁신적 비즈니스 모델</h3>
-            <p>비즈니스 혁신 전략을 배우세요.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <img src="/homeimages/banner/c9.png" alt="비즈니스 모델">
+            <div class="course-card-body">
+                <h3>비즈니스 모델</h3>
+                <p>비즈니스 혁신 전략과 수익 모델 설계</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c10.png" alt="소프트웨어 개발">
-            <h3>소프트웨어 개발</h3>
-            <p>소프트웨어 개발을 위한 필수 지식을 배워보세요.</p>
-            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
+            <div class="course-card-body">
+                <h3>소프트웨어 개발</h3>
+                <p>소프트웨어 개발을 위한 필수 지식과 설계 방법론</p>
+                <button onclick="alert('준비중인 강의입니다.')">강의 보기</button>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- 서비스 섹션 -->
-<!--    <section class="service-section">-->
-<!--        <h2>서비스 내용</h2>-->
-<!--        <p>우리는 다양한 분야의 강의를 제공하며, 실력을 향상시킬 수 있는 기회를 제공합니다. 웹개발, 데이터 과학, 디자인 등 여러 분야에서 전문가들의 강의를 제공합니다.</p>-->
-<!--    </section>-->
-
+<!-- 서비스 -->
 <div class="service-container">
-    <div class="service-title">다양한 서비스를 신청하세요.</div>
-    <div class="service-subtitle">코스런의 지식공유자 · 비즈니스 · 대학생 방법에 대해 알아보세요.</div>
+    <div class="service-title">다양한 서비스를 신청하세요</div>
+    <div class="service-subtitle">코스런의 지식공유자 · 비즈니스 · 제휴 프로그램에 대해 알아보세요</div>
     <div class="service-cards">
         <div class="service-card">
-            <h3>지식공유자 되기</h3>
-            <p>9개월간 온라인 기술 강의로만 역일! 나의 지식을 나눠 사람들에게 배우의 기회를 주고, 의미있는 대가를 가져가세요.</p>
-            <a href="#">지식공유자 참여하기 →</a>
+            <h3><i class="bi bi-person-video3"></i> 지식공유자 되기</h3>
+            <p>나의 지식을 나눠 사람들에게 배움의 기회를 주고, 의미있는 수익을 만들어 보세요.</p>
+            <a href="javascript:void(0)" onclick="alert('준비중인 기능입니다.')">지식공유자 참여하기 →</a>
         </div>
         <div class="service-card">
-            <h3>코스런 비즈니스 신청</h3>
-            <p>모든 팀원의 코스런의 강의들을 자유롭게 학습하는 환경을 제공해 주세요! 업무 스킬에 정통된 콘텐츠를 통해 최신 트렌드와 업무역량을 습득할 수 있습니다.</p>
-            <a href="#">비즈니스 신청하기 →</a>
+            <h3><i class="bi bi-building"></i> 코스런 비즈니스</h3>
+            <p>모든 팀원이 자유롭게 학습하는 환경을 제공하세요. 최신 트렌드와 업무역량을 한번에.</p>
+            <a href="javascript:void(0)" onclick="alert('준비중인 기능입니다.')">비즈니스 신청하기 →</a>
         </div>
         <div class="service-card">
-            <h3>코스런 제휴</h3>
-            <p>국비과정(KDT, SeSAC 등), 대학교, 기업 등과 연계된 코스런만의 혜택을 만나보세요. 여러분의 조직에 딱 적합한 프로그램을 누릴 수 있습니다.</p>
-            <a href="#">제휴 둘러보기 →</a>
+            <h3><i class="bi bi-mortarboard"></i> 코스런 제휴</h3>
+            <p>국비과정, 대학교, 기업 등과 연계된 코스런만의 혜택을 만나보세요.</p>
+            <a href="javascript:void(0)" onclick="alert('준비중인 기능입니다.')">제휴 둘러보기 →</a>
         </div>
     </div>
 </div>
 
 <div th:insert="fragments/footer :: footer"></div>
 
-</body>
 <script>
-    // 이미지 슬라이더 자동으로 전환
-    let currentIndex = 0;
-const images = document.querySelectorAll(".slider-img");
+let currentIndex = 0;
+const images = document.querySelectorAll(".hero .slider-img");
 
-// 초기 상태 설정: 첫 번째 이미지는 보이고 나머지는 숨김
 function initSlider() {
-    images.forEach((image, index) => {
-        if (index === currentIndex) {
-            image.classList.add("visible");
-        } else {
-            image.classList.add("hidden");
-        }
-    });
+    if (images.length === 0) return;
+    images[0].classList.add("visible");
 }
 
-// 슬라이드 변경 함수
 function changeSlide() {
+    if (images.length === 0) return;
     images[currentIndex].classList.remove("visible");
-    images[currentIndex].classList.add("hidden");
-
     currentIndex = (currentIndex + 1) % images.length;
-
-    images[currentIndex].classList.remove("hidden");
     images[currentIndex].classList.add("visible");
 }
 
-initSlider(); // 초기화 함수 호출
-setInterval(changeSlide, 5000); // 5초마다 이미지 변경
+initSlider();
+setInterval(changeSlide, 5000);
 </script>
 <script th:src="@{/js/header.js}"></script>
 </html>

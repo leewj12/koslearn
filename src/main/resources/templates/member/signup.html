@@ -7,140 +7,154 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(120deg, #6fc3df 25%, #a2d5ab 75%);
-            background-size: 200% 200%;
+            background: #1a1a2e;
             min-height: 100vh;
-            padding-top: 50px;
-            font-family: 'Arial', sans-serif;
-            animation: gradient-flow 6s infinite alternate;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 16px;
+            font-family: -apple-system, 'Segoe UI', sans-serif;
         }
 
-        @keyframes gradient-flow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
         .form-container {
-            max-width: 550px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            max-width: 480px;
+            width: 100%;
+            background: #fff;
+            padding: 44px 36px 36px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.3);
             text-align: left;
-            margin-bottom: 30px;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
 
-        .form-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-        }
         .form-container h3 {
-            margin-bottom: 30px;
-            color: #2b5a80;
-            font-weight: bold;
+            margin: 0 0 6px;
+            color: #1a1a2e;
+            font-weight: 800;
+            font-size: 1.6rem;
             text-align: center;
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        .form-group input, .form-group select {
-            border-radius: 5px;
-            padding: 12px;
-            font-size: 14px;
-            width: 100%;
-            border: 1px solid #ced4da;
-            box-sizing: border-box;
-        }
-        .input-group .form-control {
-            border-radius: 5px;
-        }
-        .btn-primary {
-            width: 100%;
-            font-size: 16px;
-            padding: 12px;
-            border-radius: 5px;
-            background-color: #6fc3df;
-            border: none;
-            font-weight: bold;
-        }
-        .btn-primary:hover {
-            background-color: #5ab4c4;
-        }
-        .login-link {
-            margin-top: 20px;
-            font-size: 14px;
-            text-align: center;
-        }
+
         .signup-msg {
             text-align: center;
-            margin-top: 20px;
+            margin: 0 0 28px;
             font-size: 14px;
-            color: #6c757d;
+            color: #888;
         }
-        .divider {
-            margin: 20px 0;
-        }
-        .divider span {
-            font-size: 16px;
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label {
             font-weight: 600;
+            font-size: 13px;
+            color: #444;
+            margin-bottom: 6px;
+            display: block;
         }
-        .divider hr {
-            border: 0;
-            border-top: 1px solid #ccc;
-            width: 50%;
-            margin: auto;
+
+        .validation-icon {
+            font-size: 13px;
         }
-        .footer {
-            text-align: center;
-            margin-top: 20px;
+
+        .form-group input, .form-group select {
+            border-radius: 8px;
+            padding: 11px 14px;
             font-size: 14px;
+            width: 100%;
+            border: 1.5px solid #e0e0e0;
+            box-sizing: border-box;
+            transition: border-color .2s;
+            background: #fafafa;
         }
-        .footer a {
-            color: #007bff;
-            text-decoration: none;
+        .form-group input:focus, .form-group select:focus {
+            border-color: #6c63ff;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(108,99,255,.1);
         }
-        .footer a:hover {
-            text-decoration: underline;
+
+        .input-group {
+            display: flex;
+            gap: 8px;
         }
-        .checkbox-group {
-            font-size: 14px;
-            color: #6c757d;
-            display: inline-block;
-            margin-left: 10px;
+        .input-group .form-control {
+            border-radius: 8px;
+            flex: 1;
         }
+        .input-group button,
+        #checkUsernameBtn {
+            background: #6c63ff;
+            color: #fff;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: background .2s;
+        }
+        .input-group button:hover,
+        #checkUsernameBtn:hover {
+            background: #5a52d5;
+        }
+
+        .btn-primary {
+            width: 100%;
+            font-size: 15px;
+            padding: 13px;
+            border-radius: 10px;
+            background: #6c63ff;
+            border: none;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: background .2s;
+            margin-top: 8px;
+        }
+        .btn-primary:hover { background: #5a52d5; }
+
         .form-check {
             font-size: 14px;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
         }
-        .input-group button {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 12px 15px;
-            border-radius: 5px;
-            cursor: pointer;
+
+        .checkbox-group {
+            font-size: 13px;
+            color: #666;
+            display: inline-block;
+            margin-left: 8px;
         }
-        .input-group button:hover {
-            background-color: #218838;
+
+        .login-link {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+            color: #888;
+        }
+        .login-link a {
+            color: #6c63ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-link a:hover { text-decoration: underline; }
+
+        .footer {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #aaa;
+        }
+        .footer a {
+            color: #6c63ff;
+            text-decoration: none;
         }
 
         @media (max-width: 480px) {
-            body {
-                padding-top: 20px;
-            }
-
-            .form-container {
-                padding: 25px 20px;
-                margin: 0 10px 20px;
-            }
+            body { padding: 20px 12px; }
+            .form-container { padding: 28px 20px 24px; }
+            .form-container h3 { font-size: 1.3rem; }
         }
     </style>
 </head>

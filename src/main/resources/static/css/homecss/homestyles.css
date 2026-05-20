@@ -1,235 +1,213 @@
-/* 기본 스타일 */
+/* ===== 기본 ===== */
+* { box-sizing: border-box; }
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Pretendard', -apple-system, 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fff; /* 전체 배경색 */
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
 }
 
-/* 상단바 */
+h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+/* ===== 헤더(homestyles 전용 오버라이드) ===== */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 30px;
-    background-color: #333;
+    background-color: #1a1a2e;
     color: white;
     font-size: 16px;
     position: relative;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 20px rgba(0,0,0,.15);
 }
 
-header .logo {
-    cursor: pointer;
-}
-
-header .logo h1 {
-    font-size: 33px;
-}
-
+header .logo { cursor: pointer; }
+header .logo h1 { font-size: 28px; margin: 0; }
 header .logo a {
     text-decoration: none;
     color: white;
-    font-size: 18px;
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: color .3s;
 }
-
-header .logo a:hover {
-    color: #f39c12;
-}
+header .logo a:hover { color: #6c63ff; }
 
 header nav ul {
     display: flex;
-    justify-content: center;
     align-items: center;
     padding: 0;
     margin: 0;
     list-style: none;
 }
-
-header nav ul li {
-    margin: 0;
-    padding: 0;
-}
-
+header nav ul li { margin: 0; padding: 0; }
 header nav ul li a {
-    color: white;
+    color: rgba(255,255,255,.85);
     text-decoration: none;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 5px 10px;
-    transition: color 0.3s ease;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: all .3s;
 }
-
 header nav ul li a:hover {
-    color: #f39c12;
+    color: #fff;
+    background: rgba(108,99,255,.2);
 }
 
-/* 햄버거 메뉴 */
 .hamburger {
     display: none;
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
 }
-
 .hamburger div {
-    width: 25px;
-    height: 3px;
-    background-color: white;
+    width: 24px;
+    height: 2.5px;
+    background: white;
+    border-radius: 2px;
 }
 
-@media (max-width: 768px) {
-    header nav {
-        display: none;
-        width: 100%;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        background-color: #333;
-        padding: 10px 0;
-    }
-
-    header nav ul {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    header nav ul li {
-        margin-left: 0;
-        margin-bottom: 15px;
-    }
-
-    .hamburger {
-        display: flex;
-    }
-
-    header nav.active {
-        display: block;
-    }
-}
-
-/* 이미지 슬라이더 */
-.slider {
+/* ===== 히어로 (슬라이더 + 오버레이) ===== */
+.hero {
     position: relative;
     width: 100%;
-    height: 350px;
+    height: 420px;
     overflow: hidden;
-    margin-top: 30px; /* 배너 이미지 위쪽 여백을 추가하여 내리기 */
 }
 
-.slider img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    transition: opacity 1s ease;
-}
-
-.slider img.hidden {
-    opacity: 0;
-}
-
-.slider-img {
+.hero .slider-img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
     opacity: 0;
-    transform: scale(0.95); /* 살짝 축소 효과 */
-    transition: opacity 1s ease, transform 1s ease;
-    z-index: 0; /* 다른 이미지 아래로 배치 */
-}
-
-.slider-img.hidden {
-    opacity: 0;
-    transform: scale(0.95);
+    transition: opacity 1.2s ease;
     z-index: 0;
 }
-
-.slider-img.visible {
+.hero .slider-img.visible {
     opacity: 1;
-    transform: scale(1);
-    z-index: 1; /* 보이는 이미지 위로 배치 */
+    z-index: 1;
 }
 
-/* 메인 배너 */
-.main-banner {
-    text-align: center;
-    padding: 60px 20px;
-    background-color: #fff;
-    color: #333;
-}
-
-.main-banner h2 {
-    font-size: 30px;
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-.main-banner button {
-    padding: 12px 25px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-}
-
-.main-banner button:hover {
-    background-color: #e67e22;
-}
-
-/* 검색 바 */
-.search-bar {
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(26,26,46,.85) 0%, rgba(108,99,255,.6) 100%);
+    z-index: 2;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin-top: 10px;
+    text-align: center;
+    padding: 0 20px;
 }
 
-.search-bar input {
-    padding: 12px 18px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    width: 500px;
-    background-color: transparent;
+.hero-overlay h1 {
+    color: #fff;
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin: 0 0 12px;
+    text-shadow: 0 2px 10px rgba(0,0,0,.3);
 }
 
-.search-bar button {
-    padding: 12px 25px;
-    background-color: #f39c12;
+.hero-overlay p {
+    color: rgba(255,255,255,.85);
+    font-size: 1.1rem;
+    margin: 0 0 28px;
+    max-width: 500px;
+}
+
+.hero-search {
+    display: flex;
+    gap: 0;
+    width: 100%;
+    max-width: 520px;
+}
+
+.hero-search input {
+    flex: 1;
+    padding: 14px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+}
+
+.hero-search button {
+    padding: 14px 24px;
+    background: #6c63ff;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 0 8px 8px 0;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
+    transition: background .3s;
+}
+.hero-search button:hover { background: #5a52d5; }
+
+.hero-cta {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 12px 28px;
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid rgba(255,255,255,.3);
+    transition: all .3s;
+}
+.hero-cta:hover {
+    background: rgba(255,255,255,.25);
 }
 
-.search-bar button:hover {
-    background-color: #e67e22;
+/* ===== 섹션 공통 ===== */
+.section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 24px;
 }
 
-/* 카테고리 섹션 */
-.categories {
-    padding: 40px 20px;
+.section-header {
     text-align: center;
-    background-color: #fff;
+    margin-bottom: 36px;
+}
+
+.section-header h2 {
+    margin-bottom: 8px;
+}
+
+.section-header p {
+    color: #777;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ===== 카테고리 ===== */
+.categories {
+    padding: 50px 24px;
+    text-align: center;
+    background: #fff;
 }
 
 .category-list {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 20px;
     flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 a.category-card {
@@ -243,246 +221,230 @@ a.category-card {
     align-items: center;
     text-align: center;
     cursor: pointer;
-    transition: transform 0.3s ease;
-    width: 120px;
+    width: 100px;
+    padding: 16px 8px;
+    border-radius: 12px;
+    transition: all .3s;
 }
-
 .category-card:hover {
-    transform: scale(1.1);
+    background: #f0eeff;
+    transform: translateY(-4px);
 }
 
 .category-card img {
-    width: 90px;
-    height: 90px;
+    width: 56px;
+    height: 56px;
     object-fit: cover;
     margin-bottom: 10px;
+    border-radius: 12px;
 }
 
 .category-card h3 {
-    font-size: 15px;
-    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
     margin: 0;
 }
 
-/* 추천 강의 및 특별 강의 섹션 */
+/* ===== 강의 카드 그리드 ===== */
 .courses, .special-courses {
-    padding: 50px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 24px;
     text-align: center;
-    background-color: #fff;
-    margin-bottom: 40px;
 }
 
-.course-list, .special-course-list {
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.course-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
     display: flex;
-    justify-content: space-between; /* 간격 균등 배치 */
-    align-items: stretch;
-    gap: 15px; /* 강의 카드 간 간격 */
-    width: 100%; /* 전체 화면 폭 */
-    max-width: 1500px; /* 최대 폭 설정 */
-    margin: 0 auto; /* 가운데 정렬 */
+    flex-direction: column;
+    transition: transform .3s, box-shadow .3s;
+}
+.course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
 }
 
-/* 강의 카드 스타일 수정 */
-.course-card, .special-course-card {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 19%;
-    box-sizing: border-box;
-    transition: transform 0.3s ease;
+.course-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.course-card-body {
+    padding: 16px;
+    flex: 1;
     display: flex;
-    flex-direction: column; /* 세로 방향 배치 */
-    justify-content: space-between; /* 버튼을 아래로 고정 */
-    height: 300px; /* 카드의 높이 고정 */
+    flex-direction: column;
 }
 
-.course-card:hover, .special-course-card:hover {
-    transform: scale(1.05);
+.course-card-body h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: #222;
 }
 
-.course-card img, .special-course-card img {
-    width: 100%; /* 카드 폭에 맞춤 */
-    height: 150px; /* 고정된 높이 설정 */
-    object-fit: cover; /* 비율 유지하며 크기에 맞게 자르기 */
-    border-radius: 5px; /* 모서리 둥글게 유지 */
-    aspect-ratio: 16 / 9; /* 비율 고정 (선택 사항) */
-}
-
-.course-card h3, .special-course-card h3 {
-    font-size: 16px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.course-card p, .special-course-card p {
-    min-height: 50px; /* 최소 높이 설정 */
-    line-height: 1.5; /* 줄 간격 설정 */
-    overflow: hidden; /* 넘치는 텍스트 숨김 */
+.course-card-body p {
+    font-size: 13px;
+    color: #888;
+    margin: 0 0 16px;
+    flex: 1;
+    line-height: 1.5;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 최대 2줄 표시 */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.course-card button, .special-course-card button {
-    padding: 10px 20px;
-    background-color: #f39c12;
+.course-card-body button {
+    padding: 10px 0;
+    background: #6c63ff;
     color: white;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 8px;
     font-size: 14px;
-    margin-top: auto; /* 버튼을 항상 아래쪽으로 고정 */
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .3s;
+    width: 100%;
+}
+.course-card-body button:hover {
+    background: #5a52d5;
 }
 
-.course-card button:hover, .special-course-card button:hover {
-    background-color: #e67e22;
-}
-
-/* 서비스 섹션 */
+/* ===== 서비스 섹션 ===== */
 .service-container {
-    max-width: 100%; /* 최대 폭을 화면 전체로 설정 */
-    margin: 0 auto; /* 가운데 정렬 */
-    margin-bottom: 20px;
-    padding: 10px; /* 최소 패딩으로 조정 */
+    background: #fff;
+    padding: 50px 24px;
     text-align: center;
+}
+
+.service-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.service-subtitle {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 28px;
 }
 
 .service-cards {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-evenly; /* 카드 간격 균등 분배 */
-    gap: 15px; /* 카드 간 간격 최소화 */
-    flex-wrap: nowrap; /* 줄바꿈 방지 */
-    overflow-x: auto; /* 화면에 맞지 않으면 가로 스크롤 */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .service-card {
-    flex: 0 0 30%; /* 각 카드가 화면의 30%를 차지 */
-    max-width: 30%; /* 최대 크기 제한 */
-    min-width: 280px; /* 최소 크기 설정 */
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 28px 24px;
     text-align: left;
-    display: flex; /* Flexbox 레이아웃 적용 */
-    flex-direction: column; /* 세로 방향 배치 */
-    justify-content: space-between; /* 요소 간 여백 분배 */
-    height: 300px; /* 카드 높이 고정 */
-    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    transition: transform .3s, box-shadow .3s;
+}
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
 }
 
 .service-card h3 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 10px;
 }
 
 .service-card p {
     font-size: 14px;
-    color: #555;
-    margin-bottom: 20px;
-    flex-grow: 1; /* 본문 내용이 가변적으로 공간을 채움 */
+    color: #666;
+    margin: 0 0 20px;
+    flex: 1;
+    line-height: 1.6;
 }
 
 .service-card a {
     display: inline-block;
     text-decoration: none;
-    background-color: #f39c12;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
+    color: #6c63ff;
+    font-weight: 600;
     font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: auto; /* 버튼을 항상 하단에 고정 */
+    transition: color .3s;
 }
+.service-card a:hover { color: #5a52d5; }
 
-.service-card a:hover {
-    background-color: #e67e22;
-}
+.hidden { display: none; }
 
-.service-title{
-    font-size: 18px;
-    font-weight: bold;
-}
-
-  .hidden {
-        display: none;
-    }
-
-/* 반응형 */
+/* ===== 반응형 ===== */
 @media (max-width: 1200px) {
-    .course-card, .special-course-card {
-        width: 30%;
+    .course-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 768px) {
-    .slider {
-        height: 200px;
-        margin-top: 15px;
+    header {
+        padding: 12px 20px;
     }
 
-    .main-banner h2 {
-        font-size: 22px;
-    }
-
-    .search-bar {
-        flex-direction: column;
-        padding: 0 20px;
-    }
-
-    .search-bar input {
+    header nav {
+        display: none;
         width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #1a1a2e;
+        padding: 10px 0;
+        z-index: 100;
     }
-
-    .category-list {
-        gap: 15px;
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
     }
+    header nav ul li { margin-bottom: 10px; }
+    .hamburger { display: flex; }
+    header nav.active { display: block; }
 
-    .category-card {
-        width: 80px;
-    }
+    .hero { height: 320px; }
+    .hero-overlay h1 { font-size: 1.6rem; }
+    .hero-overlay p { font-size: 0.95rem; }
+    .hero-search { max-width: 90%; }
 
-    .category-card img {
-        width: 60px;
-        height: 60px;
-    }
+    .category-list { gap: 12px; }
+    .category-card { width: 70px; padding: 10px 4px; }
+    .category-card img { width: 42px; height: 42px; }
+    .category-card h3 { font-size: 11px; }
 
-    .category-card h3 {
-        font-size: 12px;
-    }
-
-    .course-list, .special-course-list {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .course-card, .special-course-card {
-        width: 45%;
-        height: auto;
-        min-height: 250px;
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .service-cards {
-        flex-wrap: wrap;
-    }
-
-    .service-card {
-        flex: 0 0 100%;
-        max-width: 100%;
-        min-width: 0;
-        height: auto;
+        grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 480px) {
-    .course-card, .special-course-card {
-        width: 100%;
+    .hero { height: 280px; }
+    .hero-overlay h1 { font-size: 1.3rem; }
+
+    .course-grid {
+        grid-template-columns: 1fr;
     }
 }

@@ -312,6 +312,12 @@
         </form>
     </div>
 
+    <!-- 강의 없을 때 -->
+    <div th:if="${paging.courseviewList == null or paging.courseviewList.isEmpty()}" style="text-align:center; padding: 60px 20px;">
+        <i class="bi bi-journal-x" style="font-size: 3rem; color: #aaa;"></i>
+        <p style="margin-top: 12px; color: #888; font-size: 1.05rem;">등록된 강의가 없습니다.</p>
+    </div>
+
     <!-- 강의 목록 -->
     <div class="course-list">
         <div th:each="course : ${paging.courseviewList}" class="course-item">
@@ -346,12 +352,12 @@
     </div>
 
     <!-- 페이지네이션 -->
-    <div class="pagination">
+    <div th:if="${paging.totalPages > 0}" class="pagination">
         <ul class="pagination">
             <li class="page-item" th:classappend="${paging.currentPage == 1} ? 'disabled'">
                 <a class="page-link" th:href="@{/course/view(currentPage=${paging.currentPage - 1}, searchQuery=${searchQuery})}">&laquo; 이전</a>
             </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:classappend="${paging.currentPage == i} ? 'active'">
+            <li class="page-item" th:if="${paging.startPage <= paging.endPage}" th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:classappend="${paging.currentPage == i} ? 'active'">
                 <a class="page-link" th:href="@{/course/view(currentPage=${i}, searchQuery=${searchQuery})}" th:text="${i}"></a>
             </li>
             <li class="page-item" th:classappend="${paging.currentPage == paging.totalPages} ? 'disabled'">

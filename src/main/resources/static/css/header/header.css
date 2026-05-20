@@ -3,13 +3,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 114px; /* 높이 고정 */
-    padding: 0 30px; /* 좌우 패딩만 설정 */
-    background-color: #333;
+    height: 70px;
+    padding: 0 30px;
+    background-color: #1a1a2e;
     color: white;
     font-size: 16px;
     position: relative;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
 }
 
 header .logo {
@@ -17,10 +17,10 @@ header .logo {
 }
 
 header .logo h1 {
-    font-size: 33px;
-    line-height: 70px; /* 높이에 맞춰 가운데 정렬 */
-    margin: 0; /* 여백 제거 */
-    font-weight: bold; /* 굵기 설정 */
+    font-size: 24px;
+    line-height: 70px;
+    margin: 0;
+    font-weight: 800;
 }
 
 header .logo a {
@@ -32,7 +32,7 @@ header .logo a {
 }
 
 header .logo a:hover {
-    color: #f39c12;
+    color: #6c63ff;
 }
 
 header nav ul {
@@ -61,7 +61,7 @@ header nav ul li a {
 }
 
 header nav ul li a:hover {
-    color: #f39c12;
+    color: #6c63ff;
 }
 
 /* 햄버거 메뉴 */
@@ -88,10 +88,11 @@ header nav ul li a:hover {
         display: none;
         width: 100%;
         position: absolute;
-        top: 60px; /* 모바일 상단바 높이에 맞춤 */
+        top: 60px;
         left: 0;
-        background-color: #333;
+        background-color: #1a1a2e;
         padding: 10px 0;
+        z-index: 100;
     }
 
     header nav ul {
@@ -126,6 +127,6 @@ nav ul li a i {
 }
 
 nav ul li a:hover i {
-  color: #f39c12;  /* 마우스 오버 시 아이콘 색상 */
+  color: #6c63ff;
 }
 
