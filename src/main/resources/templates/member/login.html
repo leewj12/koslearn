@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>코스런 로그인</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -134,8 +135,24 @@
         }
 
         .d-inline-flex a {
-            margin-right: 10px; /* 링크 간격 */
-            white-space: nowrap; /* 줄 바꿈 방지 */
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 1.5rem;
+                margin: 0 10px;
+            }
+
+            .card h2 {
+                font-size: 1.3rem;
+            }
+
+            .d-inline-flex a {
+                font-size: 0.85rem;
+                margin-right: 5px;
+            }
         }
     </style>
 </head>

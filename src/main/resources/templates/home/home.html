@@ -30,51 +30,51 @@
     <a href="/course/view"><button>강의 시작하기 <i class="bi bi-play-circle-fill"></i></button></a>
 </section>
 
-<section class="search-bar">
-    <input type="text" placeholder="강의 찾기...">
-    <button><i class="bi bi-search"></i> 검색</button>
-</section>
+<form action="/course/view" method="get" class="search-bar">
+    <input type="text" name="searchQuery" placeholder="강의 찾기...">
+    <button type="submit"><i class="bi bi-search"></i> 검색</button>
+</form>
 
 <!-- 카테고리 섹션 -->
 <section class="categories">
     <h2><i class="bi bi-list-task"></i> 카테고리</h2>
     <div class="category-list">
-        <div class="category-card">
+        <a href="/course/view?searchQuery=웹" class="category-card">
             <img src="/homeimages/category/webDev.png" alt="웹 개발">
             <h3># 웹 개발</h3>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/course/view?searchQuery=데이터" class="category-card">
             <img src="/homeimages/category/dataScience.png" alt="데이터 과학">
             <h3># 데이터 과학</h3>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/course/view?searchQuery=디자인" class="category-card">
             <img src="/homeimages/category/design.png" alt="디자인">
             <h3># 디자인</h3>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/course/view?searchQuery=마케팅" class="category-card">
             <img src="/homeimages/category/marketing.png" alt="마케팅">
             <h3># 마케팅</h3>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/course/view?searchQuery=AI" class="category-card">
             <img src="/homeimages/category/AI.png" alt="AI/머신러닝">
             <h3># AI/머신러닝</h3>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/course/view?searchQuery=경영" class="category-card">
             <img src="/homeimages/category/business.png" alt="경영">
             <h3># 경영</h3>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/course/view?searchQuery=요리" class="category-card">
             <img src="/homeimages/category/cooking.png" alt="요리">
             <h3># 요리</h3>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/course/view?searchQuery=프론트" class="category-card">
             <img src="/homeimages/category/front.png" alt="프론트">
             <h3># 프론트 엔드</h3>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/course/view?searchQuery=엑셀" class="category-card">
             <img src="/homeimages/category/excel.png" alt="엑셀">
             <h3># 엑셀</h3>
-        </div>
+        </a>
     </div>
 </section>
 
@@ -87,31 +87,31 @@
             <img src="/homeimages/banner/c1.png" alt="웹개발 기초">
             <h3>웹개발 기초</h3>
             <p>웹개발의 기초부터 배우세요.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c2.png" alt="자바스크립트 입문">
             <h3>자바스크립트 입문</h3>
             <p>자바스크립트를 처음 시작하는 분들을 위한 강의.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c3.png" alt="웹디자인 기초">
             <h3>웹디자인 기초</h3>
             <p>웹디자인의 기초부터 배우기.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c4.png" alt="파이썬 프로그래밍">
             <h3>파이썬 프로그래밍</h3>
             <p>파이썬 프로그래밍의 기초를 배우세요.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c5.png" alt="데이터 분석">
             <h3>데이터 분석</h3>
             <p>데이터 분석의 기본을 배우세요.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
     </div>
 </section>
@@ -124,31 +124,31 @@
             <img src="/homeimages/banner/c6.png" alt="스타트업 전략">
             <h3>스타트업 전략</h3>
             <p>스타트업을 시작하는 데 필요한 전략을 배우세요.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c7.png" alt="리더십 개발">
             <h3>리더십 개발</h3>
             <p>효과적인 리더십을 발휘하는 방법을 배우세요.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c8.png" alt="디지털 마케팅">
             <h3>디지털 마케팅</h3>
             <p>디지털 마케팅을 배우세요.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c9.png" alt="혁신적 비즈니스 모델">
             <h3>혁신적 비즈니스 모델</h3>
             <p>비즈니스 혁신 전략을 배우세요.</p>
-            <button>강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
         <div class="course-card">
             <img src="/homeimages/banner/c10.png" alt="소프트웨어 개발">
             <h3>소프트웨어 개발</h3>
             <p>소프트웨어 개발을 위한 필수 지식을 배워보세요.</p>
-            <button onclick="location.href='course/course1'">강의 시작</button>
+            <button onclick="alert('준비중인 강의입니다.')">강의 시작</button>
         </div>
     </div>
 </section>

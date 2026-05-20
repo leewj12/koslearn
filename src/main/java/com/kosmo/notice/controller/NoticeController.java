@@ -29,16 +29,17 @@ public class NoticeController {
             @RequestParam(defaultValue = "all") String searchOption,
             Model model) {
 
-        // 서비스 호출하여 페이징 처리된 공지사항 목록을 받음
-        NoticePagingDTO pagingDTO = noticeService.getNoticeListWithPagination(currentPage, searchKeyword, searchOption);
-
-        // 모델에 데이터 추가
-        model.addAttribute("pagingDTO", pagingDTO);
-        model.addAttribute("noticeList", pagingDTO.getNoticeList());
+        try {
+            NoticePagingDTO pagingDTO = noticeService.getNoticeListWithPagination(currentPage, searchKeyword, searchOption);
+            model.addAttribute("pagingDTO", pagingDTO);
+            model.addAttribute("noticeList", pagingDTO.getNoticeList());
+        } catch (Exception e) {
+            model.addAttribute("pagingDTO", null);
+        }
         model.addAttribute("searchKeyword", searchKeyword);
         model.addAttribute("searchOption", searchOption);
 
-        return "/notice/notice";  // 공지사항 목록을 보여주는 뷰로 이동
+        return "/notice/notice";
     }
 
     // 관리자가 공지사항 만드는 곳

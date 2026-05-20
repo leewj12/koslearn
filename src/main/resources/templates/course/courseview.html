@@ -199,6 +199,53 @@
             background-color: #f8f9fa;
             color: #0056b3;
         }
+
+        /* 반응형 */
+        @media (max-width: 1200px) {
+            .course-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .category-bar {
+                gap: 10px;
+                padding: 10px;
+                flex-wrap: wrap;
+            }
+
+            .category-bar a {
+                font-size: 0.8rem;
+            }
+
+            .category-bar i {
+                font-size: 1.3rem;
+            }
+
+            .course-list {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .course-item img {
+                height: 140px;
+            }
+
+            .search-form .input-group {
+                flex-direction: column;
+            }
+
+            .search-form .custom-select {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .course-list {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -206,35 +253,35 @@
 
 <!-- 카테고리 섹션 -->
 <div class="category-bar">
-    <a href="#">
+    <a href="/course/view?searchQuery=웹">
         <i class="bi bi-code-slash"></i>
         <p>웹 개발</p>
     </a>
-    <a href="#">
+    <a href="/course/view?searchQuery=데이터">
         <i class="bi bi-bar-chart-line"></i>
         <p>데이터 과학</p>
     </a>
-    <a href="#">
+    <a href="/course/view?searchQuery=디자인">
         <i class="bi bi-palette"></i>
         <p>디자인</p>
     </a>
-    <a href="#">
+    <a href="/course/view?searchQuery=마케팅">
         <i class="bi bi-megaphone"></i>
         <p>마케팅</p>
     </a>
-    <a href="#">
+    <a href="/course/view?searchQuery=AI">
         <i class="bi bi-cpu"></i>
         <p>AI/머신러닝</p>
     </a>
-    <a href="#">
+    <a href="/course/view?searchQuery=경영">
         <i class="bi bi-briefcase"></i>
         <p>경영</p>
     </a>
-    <a href="#">
+    <a href="/course/view?searchQuery=자기계발">
         <i class="bi bi-mortarboard"></i>
         <p>자기계발</p>
     </a>
-    <a href="#">
+    <a href="/course/view?searchQuery=엑셀">
         <i class="bi bi-graph-up-arrow"></i>
         <p>엑셀</p>
     </a>

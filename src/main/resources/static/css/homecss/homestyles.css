@@ -232,6 +232,11 @@ header nav ul li a:hover {
     flex-wrap: wrap;
 }
 
+a.category-card {
+    text-decoration: none;
+    color: inherit;
+}
+
 .category-card {
     display: flex;
     flex-direction: column;
@@ -409,3 +414,75 @@ header nav ul li a:hover {
   .hidden {
         display: none;
     }
+
+/* 반응형 */
+@media (max-width: 1200px) {
+    .course-card, .special-course-card {
+        width: 30%;
+    }
+}
+
+@media (max-width: 768px) {
+    .slider {
+        height: 200px;
+        margin-top: 15px;
+    }
+
+    .main-banner h2 {
+        font-size: 22px;
+    }
+
+    .search-bar {
+        flex-direction: column;
+        padding: 0 20px;
+    }
+
+    .search-bar input {
+        width: 100%;
+    }
+
+    .category-list {
+        gap: 15px;
+    }
+
+    .category-card {
+        width: 80px;
+    }
+
+    .category-card img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .category-card h3 {
+        font-size: 12px;
+    }
+
+    .course-list, .special-course-list {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .course-card, .special-course-card {
+        width: 45%;
+        height: auto;
+        min-height: 250px;
+    }
+
+    .service-cards {
+        flex-wrap: wrap;
+    }
+
+    .service-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .course-card, .special-course-card {
+        width: 100%;
+    }
+}
