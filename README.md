@@ -169,7 +169,8 @@ cp .env.example .env
 ### 3. 빌드 및 실행
 
 ```bash
-docker compose up --build
+cp build/libs/*-SNAPSHOT.jar app.jar
+docker compose up -d
 ```
 
 MySQL 헬스체크가 통과된 후 앱이 기동됩니다 (약 1~2분 소요).
@@ -216,8 +217,10 @@ vi .env
 ### 동작 방식
 
 1. GitHub Actions 러너에서 `./gradlew bootJar` 빌드
-2. 빌드된 JAR을 EC2의 `~/koslearn/app.jar`로 SCP
-3. SSH로 `git pull origin main && docker compose up -d --build` 실행
+2. Docker 이미지를 빌드하여 `ghcr.io/leewj12/koslearn:latest`로 Push
+3. SSH로 EC2 접속 → `git pull` → `docker compose pull` → `docker compose up -d`
+
+EC2에서는 이미지를 Pull만 하므로 서버 리소스를 절약하고 배포 안정성이 높습니다.
 
 ### 업로드 파일 영속성
 
