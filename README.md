@@ -71,7 +71,7 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 |------|------|
 | Language | Java 17 |
 | Framework | Spring Boot 3.3.4 |
-| ORM | MyBatis 3.0, Spring Data JPA |
+| ORM | MyBatis 3.0 |
 | View | Thymeleaf |
 | Security | Spring Security 6 |
 | Database | MySQL 8.0 |
