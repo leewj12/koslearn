@@ -3,6 +3,8 @@
 Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.  
 수강생·강사·관리자 역할을 구분하고, 강의 구매부터 수강까지 전 과정을 지원합니다.
 
+> ⚠️ **라이브 데모 종료 (2026-09)** — 포트폴리오 인프라(AWS) 비용 정리로 배포 서비스를 종료했습니다. 아래 배포 주소는 더 이상 정상 동작하지 않으며, 코드·구성 문서는 참고용으로 유지됩니다.
+
 ---
 
 ## 목차
@@ -26,7 +28,7 @@ Spring Boot 기반의 온라인 강의 판매 팀 프로젝트입니다.
 | 개발 기간 | 2024.11 ~ 2024.12 |
 | 서버 포트 | 9090 (로컬) / 8080 (Docker 컨테이너 내부) |
 | 데이터베이스 | MySQL 8.0, 스키마: `project` |
-| 배포 주소 | https://koslearn.wonjae.cloud |
+| 배포 주소 | ~~https://koslearn.wonjae.cloud~~ (서비스 종료 2026-09) |
 
 ---
 
@@ -240,7 +242,7 @@ EC2에서는 이미지를 Pull만 하므로 서버 리소스를 절약하고 배
 ## EC2 배포
 
 - **서버**: AWS EC2 t3.small (Ubuntu 24.04 LTS)
-- **도메인**: [koslearn.wonjae.cloud](https://koslearn.wonjae.cloud)
+- **도메인**: ~~koslearn.wonjae.cloud~~ (서비스 종료 2026-09)
 - **SSL**: Let's Encrypt (Certbot, 자동 갱신)
 - **리버스 프록시**: Nginx (포트 80/443 → 앱 8080)
 - **실행 방식**: Docker Compose (mysql + app 컨테이너)
